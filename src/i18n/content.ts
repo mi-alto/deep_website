@@ -82,7 +82,6 @@ export interface Content {
     choices: CapabilityItem[];
     cta: { label: string; href: string };
     tagline: string;
-    wordmark: string;
     contacts: {
       label: string;
       lines: string[];
@@ -296,7 +295,6 @@ export const content: Record<Lang, Content> = {
         href: 'mailto:info@deep4it.com?subject=Il%20mio%20progetto',
       },
       tagline: 'Dalle intenzioni del business a risultati che puoi verificare.',
-      wordmark: 'DEEP4',
       contacts: {
         label: 'Contatti',
         lines: ['Via Italia, 44', '20900 Monza, Italia'],
@@ -495,7 +493,6 @@ export const content: Record<Lang, Content> = {
         href: 'mailto:info@deep4it.com?subject=My%20project',
       },
       tagline: 'From business intent to results you can verify.',
-      wordmark: 'DEEP4',
       contacts: {
         label: 'Contact',
         lines: ['Via Italia, 44', '20900 Monza, Italy'],

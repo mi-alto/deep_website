@@ -26,11 +26,11 @@ export default function Header() {
     >
       <div className="progress" style={{ '--p': progress } as CSSProperties} aria-hidden="true" />
       <div className="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-4 md:px-10">
-        {/* radiating mark + wordmark */}
-        <a href="#top" className="group flex items-center gap-3">
-          <LogoMark className="h-7 w-7 shrink-0 transition-transform duration-500 group-hover:-translate-y-0.5" />
-          <span className="font-mono text-[13px] font-medium uppercase tracking-[0.28em] text-white">
-            Deep4
+        {/* mark + wordmark */}
+        <a href="#top" className="group flex items-center gap-2.5">
+          <LogoMark className="h-[26px] w-[26px] shrink-0 transition-transform duration-500 group-hover:-translate-y-0.5" />
+          <span className="font-display text-[19px] font-semibold uppercase leading-none tracking-[0.12em] text-white">
+            Deep4IT
           </span>
         </a>
 
@@ -63,7 +63,7 @@ export default function Header() {
             ))}
           </div>
           <a
-            href="#deep4it"
+            href="#contatti"
             className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/80 underline-offset-4 hover:underline"
           >
             {t.navCta} ↗

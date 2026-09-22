@@ -1,6 +1,5 @@
 import { useLang } from '../i18n/LanguageProvider';
 import { WordReveal } from './Reveal';
-import LogoMark from './LogoMark';
 
 export default function Hero() {
   const { t } = useLang();
@@ -11,11 +10,6 @@ export default function Hero() {
       {/* vignette to keep type readable */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(0,0,0,0.72)_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/80 to-transparent" />
-      {/* the mark, breathing layer by layer, fills the right half */}
-      <LogoMark
-        animated
-        className="pointer-events-none absolute right-[5vw] top-[18vh] hidden w-[30vw] max-w-[460px] opacity-95 [filter:drop-shadow(0_0_48px_hsl(var(--brand-1)/0.45))] lg:block"
-      />
 
       <div className="relative z-10 flex flex-1 flex-col justify-between px-5 pb-6 pt-20 md:px-10 md:pt-24">
         {/* headline, with the audience line right under it */}

@@ -217,7 +217,6 @@ body::before {
   --brand-1: 253 100% 77%; /* lavender #a98cff — top layer of the mark */
   --brand-2: 251 70% 45%;  /* deep purple — shadows, aurora, glow depth */
   --brand-3: 158 81% 67%;  /* mint #66efbe — middle layer, secondary accent */
-  --brand-4: 48 100% 50%;  /* yellow #ffcc00 — bottom layer, used sparingly */
 }
 
 /* aurora: two slow, blurred colour fields drifting behind the hero */
@@ -320,7 +319,7 @@ body::before {
   width: 100%;
   transform-origin: left;
   transform: scaleX(var(--p, 0));
-  background: linear-gradient(90deg, hsl(var(--brand-1)), hsl(var(--brand-3)), hsl(var(--brand-4)));
+  background: linear-gradient(90deg, hsl(var(--brand-2)), hsl(var(--brand-1)), hsl(var(--brand-3)));
   pointer-events: none;
 }
 
@@ -389,17 +388,3 @@ body::before {
   animation: numeral-float 10s ease-in-out infinite;
 }
 
-/* the mark's three layers breathe on different phases */
-.logo-float .d4-l1,
-.logo-float .d4-l2,
-.logo-float .d4-l3 {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: layer-float 7s ease-in-out infinite;
-}
-.logo-float .d4-l2 { animation-delay: -2.3s; }
-.logo-float .d4-l3 { animation-delay: -4.6s; }
-@keyframes layer-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-12px); }
-}
