@@ -29,17 +29,17 @@ export default function Capabilities({ variant }: { variant: 'business' | 'tech'
         >
           {data.items.map((item, i) => (
             <Reveal key={i} delay={100 + i * 110} className="h-full">
-              <article className="group flex h-full flex-col bg-black/90 p-7 transition-colors duration-500 hover:bg-[#0b0b0b] md:p-9">
+              <article className="group spot flex h-full flex-col bg-black/90 p-7 transition-colors duration-500 hover:bg-[#0b0b0b] md:p-9">
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
                   {String(i + 1).padStart(2, '0')} / {String(data.items.length).padStart(2, '0')}
                 </span>
                 <h3 className="font-display mt-5 text-xl font-semibold leading-tight tracking-tight text-white md:text-2xl">
                   {item.title}
                 </h3>
-                <p className="mt-5 border-l-2 border-white/30 pl-4 text-[15px] leading-relaxed text-[#B7B7B7] md:text-base">
+                <p className="mt-5 border-l-2 border-[hsl(var(--brand-1)/0.6)] pl-4 text-[15px] leading-relaxed text-[#B7B7B7] md:text-base">
                   {item.body}
                 </p>
-                <span className="mt-auto block h-px w-16 bg-white/50 pt-0 transition-all duration-700 group-hover:w-32 group-hover:bg-white" />
+                <span className="mt-auto block h-px w-16 accent-line pt-0 transition-all duration-700 group-hover:w-32" />
               </article>
             </Reveal>
           ))}

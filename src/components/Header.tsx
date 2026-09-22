@@ -1,12 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { useLang } from '../i18n/LanguageProvider';
 
 export default function Header() {
   const { t, lang, setLang } = useLang();
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 40);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(max > 0 ? Math.min(window.scrollY / max, 1) : 0);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -18,6 +23,7 @@ export default function Header() {
         scrolled ? 'backdrop-blur-md bg-black/55 border-b border-white/10' : 'bg-transparent border-b border-transparent'
       }`}
     >
+      <div className="progress" style={{ '--p': progress } as CSSProperties} aria-hidden="true" />
       <div className="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-4 md:px-10">
         {/* radiating mark + wordmark */}
         <a href="#top" className="group flex items-center gap-3">

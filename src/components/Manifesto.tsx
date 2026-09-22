@@ -12,12 +12,12 @@ export default function Manifesto() {
                 <span key={i} className="flex items-center">
                   <span
                     className={`font-display mx-6 text-3xl font-bold uppercase tracking-tight md:mx-8 md:text-7xl ${
-                      i % 2 === 0 ? 'text-white/90' : 'text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.4)]'
+                      i % 2 === 0 ? 'text-white/90' : 'text-transparent [-webkit-text-stroke:1px_hsl(var(--brand-1)/0.7)]'
                     }`}
                   >
                     {m.marquee}
                   </span>
-                  <svg width="22" height="22" viewBox="0 0 22 22" className="text-white/50" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 22 22" className="text-[hsl(var(--brand-1))]" aria-hidden="true">
                     <g stroke="currentColor" strokeWidth="1.3">
                       <circle cx="11" cy="11" r="2.2" fill="currentColor" stroke="none" />
                       {Array.from({ length: 8 }).map((_, j) => {

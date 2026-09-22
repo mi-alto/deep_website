@@ -43,9 +43,12 @@ void main() {
   float r = length(c);
   if (r > 0.5) discard;
   float soft = smoothstep(0.5, 0.08, r);
-  // desaturated gray, alpha driven by wave displacement
+  // brand gradient: violet in the troughs, magenta on the slopes, white on the crests
   float a = clamp(0.26 + vElev * 0.28, 0.08, 1.0);
-  vec3 col = vec3(0.82) + vec3(vElev * 0.14);
+  vec3 violet  = vec3(0.42, 0.02, 0.68);
+  vec3 magenta = vec3(0.86, 0.22, 1.00);
+  vec3 col = mix(violet, magenta, smoothstep(-1.6, 1.4, vElev));
+  col = mix(col, vec3(1.0), smoothstep(1.3, 2.6, vElev) * 0.7);
   gl_FragColor = vec4(col, a * soft);
 }
 `;
@@ -88,7 +91,7 @@ void main() {
   float r = length(c);
   if (r > 0.5) discard;
   float soft = smoothstep(0.5, 0.05, r);
-  gl_FragColor = vec4(vec3(0.9), vAlpha * soft);
+  gl_FragColor = vec4(vec3(0.96, 0.78, 1.0), vAlpha * soft);
 }
 `;
 

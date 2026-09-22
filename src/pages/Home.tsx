@@ -9,8 +9,10 @@ import Layer from '../components/Layer';
 import Projects from '../components/Projects';
 import Credibility from '../components/Credibility';
 import AboutFooter from '../components/AboutFooter';
+import { useSpotlight } from '../hooks/use-spotlight';
 
 export default function Home() {
+  useSpotlight();
   return (
     <LanguageProvider>
       <div className="min-h-screen overflow-x-clip bg-black text-white antialiased">

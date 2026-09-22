@@ -53,12 +53,15 @@ export function WordReveal({
   baseDelay = 0,
   step = 55,
   as: Tag = 'span',
+  wordClassName = '',
 }: {
   text: string;
   className?: string;
   baseDelay?: number;
   step?: number;
   as?: 'span' | 'div';
+  /** applied to each word — background-clip:text must live on the glyph's own box */
+  wordClassName?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const [on, setOn] = useState(false);
@@ -87,7 +90,7 @@ export function WordReveal({
       {words.map((w, i) => (
         <span key={i} className="inline-block overflow-hidden align-bottom pb-[0.08em] -mb-[0.08em]" aria-hidden="true">
           <span
-            className="inline-block will-change-transform"
+            className={`inline-block will-change-transform ${wordClassName}`}
             style={{
               transform: on ? 'translateY(0)' : 'translateY(110%)',
               transition: `transform 0.55s cubic-bezier(0.22,1,0.36,1) ${baseDelay + i * step}ms`,

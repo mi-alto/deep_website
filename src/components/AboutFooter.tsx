@@ -16,17 +16,17 @@ export default function AboutFooter() {
         <div className="grid grid-cols-1 gap-px border border-white/15 bg-white/10 sm:grid-cols-2">
           {a.choices.map((c, i) => (
             <Reveal key={i} delay={i * 110} className="h-full">
-              <article className="group flex h-full flex-col bg-black/90 p-7 transition-colors duration-500 hover:bg-[#0b0b0b] md:p-9">
+              <article className="group spot flex h-full flex-col bg-black/90 p-7 transition-colors duration-500 hover:bg-[#0b0b0b] md:p-9">
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
                   {String(i + 1).padStart(2, '0')} / {String(a.choices.length).padStart(2, '0')}
                 </span>
                 <h3 className="font-display mt-5 text-xl font-semibold leading-tight tracking-tight text-white md:text-2xl">
                   {c.title}
                 </h3>
-                <p className="mt-5 border-l-2 border-white/30 pl-4 text-[15px] leading-relaxed text-[#B7B7B7] md:text-base">
+                <p className="mt-5 border-l-2 border-[hsl(var(--brand-1)/0.6)] pl-4 text-[15px] leading-relaxed text-[#B7B7B7] md:text-base">
                   {c.body}
                 </p>
-                <span className="mt-auto block h-px w-16 bg-white/50 pt-0 transition-all duration-700 group-hover:w-32 group-hover:bg-white" />
+                <span className="mt-auto block h-px w-16 accent-line pt-0 transition-all duration-700 group-hover:w-32" />
               </article>
             </Reveal>
           ))}
@@ -35,7 +35,7 @@ export default function AboutFooter() {
         <Reveal delay={260}>
           <a
             href={a.cta.href}
-            className="mt-10 inline-block bg-white px-6 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-black transition-colors duration-300 hover:bg-white/85"
+            className="btn-accent mt-10 inline-block px-6 py-3 font-mono text-[11px] uppercase tracking-[0.22em]"
           >
             {a.cta.label} ↗
           </a>
