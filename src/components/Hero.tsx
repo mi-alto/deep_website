@@ -1,5 +1,6 @@
 import { useLang } from '../i18n/LanguageProvider';
 import { WordReveal } from './Reveal';
+import LogoMark from './LogoMark';
 
 export default function Hero() {
   const { t } = useLang();
@@ -10,6 +11,11 @@ export default function Hero() {
       {/* vignette to keep type readable */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(0,0,0,0.72)_100%)]" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/80 to-transparent" />
+      {/* the mark, breathing layer by layer, fills the right half */}
+      <LogoMark
+        animated
+        className="pointer-events-none absolute right-[5vw] top-[18vh] hidden w-[30vw] max-w-[460px] opacity-95 [filter:drop-shadow(0_0_48px_hsl(var(--brand-1)/0.45))] lg:block"
+      />
 
       <div className="relative z-10 flex flex-1 flex-col justify-between px-5 pb-6 pt-20 md:px-10 md:pt-24">
         {/* headline, with the audience line right under it */}
@@ -24,7 +30,7 @@ export default function Hero() {
           <div className="mt-6 flex flex-wrap items-center gap-3 md:gap-4">
             {t.hero.audience.map((a, i) => (
               <span key={i} className="contents">
-                {i > 0 && <span className="font-mono text-sm text-[hsl(var(--brand-1))] md:text-base">+</span>}
+                {i > 0 && <span className="font-mono text-sm text-[hsl(var(--brand-3))] md:text-base">+</span>}
                 <span className="border border-[hsl(var(--brand-1)/0.6)] bg-black/70 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-white backdrop-blur-sm md:px-5 md:py-2.5 md:text-xs">
                   {a}
                 </span>

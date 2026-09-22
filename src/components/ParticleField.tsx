@@ -45,10 +45,12 @@ void main() {
   float soft = smoothstep(0.5, 0.08, r);
   // brand gradient: violet in the troughs, magenta on the slopes, white on the crests
   float a = clamp(0.26 + vElev * 0.28, 0.08, 1.0);
-  vec3 violet  = vec3(0.42, 0.02, 0.68);
-  vec3 magenta = vec3(0.86, 0.22, 1.00);
-  vec3 col = mix(violet, magenta, smoothstep(-1.6, 1.4, vElev));
-  col = mix(col, vec3(1.0), smoothstep(1.3, 2.6, vElev) * 0.7);
+  vec3 deep     = vec3(0.24, 0.16, 0.70);
+  vec3 lavender = vec3(0.66, 0.55, 1.00);
+  vec3 mint     = vec3(0.55, 0.98, 0.80);
+  vec3 col = mix(deep, lavender, smoothstep(-1.6, 1.2, vElev));
+  col = mix(col, mint, smoothstep(1.0, 2.2, vElev));
+  col = mix(col, vec3(1.0), smoothstep(2.0, 2.8, vElev) * 0.6);
   gl_FragColor = vec4(col, a * soft);
 }
 `;
@@ -91,7 +93,7 @@ void main() {
   float r = length(c);
   if (r > 0.5) discard;
   float soft = smoothstep(0.5, 0.05, r);
-  gl_FragColor = vec4(vec3(0.96, 0.78, 1.0), vAlpha * soft);
+  gl_FragColor = vec4(vec3(0.85, 0.82, 1.0), vAlpha * soft);
 }
 `;
 

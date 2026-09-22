@@ -214,8 +214,10 @@ body::before {
    Everything below is the "visual impact" layer: colour, glow, motion.
    ══════════════════════════════════════════════════════════════════════ */
 :root {
-  --brand-1: 291 100% 58%; /* magenta */
-  --brand-2: 279 100% 34%; /* violet  */
+  --brand-1: 253 100% 77%; /* lavender #a98cff — top layer of the mark */
+  --brand-2: 251 70% 45%;  /* deep purple — shadows, aurora, glow depth */
+  --brand-3: 158 81% 67%;  /* mint #66efbe — middle layer, secondary accent */
+  --brand-4: 48 100% 50%;  /* yellow #ffcc00 — bottom layer, used sparingly */
 }
 
 /* aurora: two slow, blurred colour fields drifting behind the hero */
@@ -245,7 +247,7 @@ body::before {
 .aurora::after {
   right: -18vw;
   bottom: -30vw;
-  background: radial-gradient(circle, hsl(var(--brand-1) / 0.42), transparent 62%);
+  background: radial-gradient(circle, hsl(var(--brand-3) / 0.28), transparent 62%);
   animation: aurora-b 26s ease-in-out infinite alternate;
 }
 @keyframes aurora-a {
@@ -318,7 +320,7 @@ body::before {
   width: 100%;
   transform-origin: left;
   transform: scaleX(var(--p, 0));
-  background: linear-gradient(90deg, hsl(var(--brand-2)), hsl(var(--brand-1)), #fff);
+  background: linear-gradient(90deg, hsl(var(--brand-1)), hsl(var(--brand-3)), hsl(var(--brand-4)));
   pointer-events: none;
 }
 
@@ -368,7 +370,7 @@ body::before {
 }
 .glitch::after {
   opacity: 0.18;
-  color: rgba(150, 205, 255, 0.95);
+  color: hsl(var(--brand-3) / 0.95);
   animation: ghost-b 11s ease-in-out infinite;
 }
 @keyframes ghost-a {
@@ -385,4 +387,19 @@ body::before {
 }
 .numeral-float {
   animation: numeral-float 10s ease-in-out infinite;
+}
+
+/* the mark's three layers breathe on different phases */
+.logo-float .d4-l1,
+.logo-float .d4-l2,
+.logo-float .d4-l3 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: layer-float 7s ease-in-out infinite;
+}
+.logo-float .d4-l2 { animation-delay: -2.3s; }
+.logo-float .d4-l3 { animation-delay: -4.6s; }
+@keyframes layer-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
 }

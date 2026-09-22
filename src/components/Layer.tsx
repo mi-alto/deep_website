@@ -4,7 +4,7 @@ import SectionHeading from './SectionHeading';
 
 const DownArrow = () => (
   <div className="flex items-center justify-center py-1" aria-hidden="true">
-    <svg width="14" height="30" viewBox="0 0 14 30" className="text-[hsl(var(--brand-1))]">
+    <svg width="14" height="30" viewBox="0 0 14 30" className="text-[hsl(var(--brand-3))]">
       <path className="flow-line" d="M7 0 V22" stroke="currentColor" strokeWidth="1.4" fill="none" />
       <path d="M1 18 L7 24 L13 18" stroke="currentColor" strokeWidth="1.4" fill="none" />
     </svg>

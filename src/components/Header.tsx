@@ -1,5 +1,6 @@
 import { useEffect, useState, type CSSProperties } from 'react';
 import { useLang } from '../i18n/LanguageProvider';
+import LogoMark from './LogoMark';
 
 export default function Header() {
   const { t, lang, setLang } = useLang();
@@ -27,26 +28,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-[1600px] items-center justify-between px-5 py-4 md:px-10">
         {/* radiating mark + wordmark */}
         <a href="#top" className="group flex items-center gap-3">
-          <svg width="26" height="26" viewBox="0 0 26 26" fill="none" className="shrink-0" aria-hidden="true">
-            <g stroke="currentColor" strokeWidth="1.4" className="text-white/90">
-              <circle cx="13" cy="13" r="2.6" fill="currentColor" stroke="none" />
-              {Array.from({ length: 12 }).map((_, i) => {
-                const a = (i * Math.PI) / 6;
-                const r1 = 6.5;
-                const r2 = 12;
-                return (
-                  <line
-                    key={i}
-                    x1={13 + Math.cos(a) * r1}
-                    y1={13 + Math.sin(a) * r1}
-                    x2={13 + Math.cos(a) * r2}
-                    y2={13 + Math.sin(a) * r2}
-                    opacity={0.35 + (i % 3) * 0.3}
-                  />
-                );
-              })}
-            </g>
-          </svg>
+          <LogoMark className="h-7 w-7 shrink-0 transition-transform duration-500 group-hover:-translate-y-0.5" />
           <span className="font-mono text-[13px] font-medium uppercase tracking-[0.28em] text-white">
             Deep4
           </span>
