@@ -218,14 +218,6 @@ body::before {
   --brand-2: 279 100% 34%; /* violet  */
 }
 
-/* gradient-filled display text (used on the hero's second line) */
-.text-brand-gradient {
-  background: linear-gradient(180deg, #fff 0%, #fff 28%, hsl(var(--brand-1)) 78%, hsl(var(--brand-2)) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
 /* aurora: two slow, blurred colour fields drifting behind the hero */
 .aurora {
   position: absolute;
@@ -356,4 +348,41 @@ body::before {
 ::selection {
   background: hsl(var(--brand-1));
   color: #000;
+}
+
+/* ── idle life on display titles ─────────────────────────────────────
+   Every word levitates on its own phase (--i), and the two chromatic
+   ghosts of .glitch stay faintly on and drift, so a title moves even
+   when nobody is hovering it. Hover still triggers the hard glitch. */
+@keyframes word-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+.word-float {
+  animation: word-float 6.5s ease-in-out calc(var(--i, 0) * -1.1s) infinite;
+}
+.glitch::before {
+  opacity: 0.24;
+  color: hsl(var(--brand-1) / 0.95);
+  animation: ghost-a 8s ease-in-out infinite;
+}
+.glitch::after {
+  opacity: 0.18;
+  color: rgba(150, 205, 255, 0.95);
+  animation: ghost-b 11s ease-in-out infinite;
+}
+@keyframes ghost-a {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-3px, 1.5px); }
+}
+@keyframes ghost-b {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(3px, -1.5px); }
+}
+@keyframes numeral-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+.numeral-float {
+  animation: numeral-float 10s ease-in-out infinite;
 }

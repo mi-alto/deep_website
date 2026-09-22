@@ -17,7 +17,7 @@ export default function Hero() {
           <h1 className="font-display text-[9.5vw] font-semibold uppercase leading-[0.95] tracking-[-0.02em] text-white sm:text-[8.2vw] lg:text-[5.6vw]">
             {t.hero.titleLines.map((line, i) => (
               <span key={i} className="block">
-                <WordReveal text={line} baseDelay={150 + i * 160} wordClassName={i === 1 ? 'text-brand-gradient' : ''} />
+                <WordReveal text={line} baseDelay={150 + i * 160} />
               </span>
             ))}
           </h1>
