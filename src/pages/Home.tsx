@@ -4,16 +4,10 @@ import Header from '../components/Header';
 import Hero from '../components/Hero';
 import Manifesto from '../components/Manifesto';
 import Problem from '../components/Problem';
-import AiReadiness from '../components/AiReadiness';
-import DataKnowledge from '../components/DataKnowledge';
+import Capabilities from '../components/Capabilities';
 import Layer from '../components/Layer';
-import Operations from '../components/Operations';
-import Method from '../components/Method';
-import Deliverables from '../components/Deliverables';
 import Projects from '../components/Projects';
-import TechDelivery from '../components/TechDelivery';
-import Industries from '../components/Industries';
-import Recognition from '../components/Recognition';
+import Credibility from '../components/Credibility';
 import AboutFooter from '../components/AboutFooter';
 
 export default function Home() {
@@ -28,16 +22,11 @@ export default function Home() {
             <Hero />
             <Manifesto />
             <Problem />
-            <DataKnowledge />
-            <AiReadiness />
+            <Capabilities variant="business" />
+            <Capabilities variant="tech" />
             <Layer />
-            <Operations />
-            <Method />
-            <Deliverables />
             <Projects />
-            <TechDelivery />
-            <Industries />
-            <Recognition />
+            <Credibility />
           </main>
           <AboutFooter />
         </div>

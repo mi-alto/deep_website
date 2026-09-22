@@ -1,5 +1,5 @@
 export default function Manifesto() {
-  const m = { marquee: 'Agent-Ready Product Knowledge' };
+  const m = { marquee: 'Accelerate and de-risk change' };
 
   return (
     <section className="relative bg-black/55 px-0 py-8 md:py-20">

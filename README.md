@@ -1,6 +1,7 @@
 # Deep4it — sito
 
-One-pager di Deep4it (IT/EN), costruito con React 19 + TypeScript + Vite e Tailwind CSS.
+One-pager di Deep4IT (IT/EN), costruito con React 19 + TypeScript + Vite e Tailwind CSS.
+Il racconto parte dal cambiamento da realizzare: problema, business & IT, le quattro domande, Indexable, progetti, credibilità.
 Lo sfondo è un particle field WebGL (three.js) e il wordmark del footer è composto dalle stesse particelle.
 
 ## Sviluppo
@@ -23,7 +24,7 @@ L'output è statico: il contenuto di `dist/` può essere pubblicato su qualsiasi
 
 - `index.html` — entry point, meta e font (Archivo + IBM Plex Mono da Google Fonts)
 - `src/pages/Home.tsx` — composizione delle sezioni della pagina
-- `src/components/` — sezioni (`Hero`, `Manifesto`, `Knowledge`, `Workflows`, `Critical`, `Sectors`, `AboutFooter`), effetti (`ParticleField`, `ParticleWord`, `Reveal`) e primitive shadcn/ui in `ui/`
+- `src/components/` — sezioni (`Hero`, `Manifesto`, `Problem`, `Audiences`, `Questions`, `Layer`, `Projects`, `Credibility`, `AboutFooter`), effetti (`ParticleField`, `ParticleWord`, `Reveal`), l'intestazione condivisa `SectionHeading` e le primitive shadcn/ui in `ui/`
 - `src/i18n/content.ts` — **tutti i testi del sito**, in italiano e inglese; `LanguageProvider` sceglie la lingua dal browser e la memorizza in `localStorage`
 - `public/` — asset serviti così come sono (`favicon.ico`, `michele/` + `michele.vcf`, `images/`)
 

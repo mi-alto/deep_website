@@ -2,38 +2,36 @@ import { useLang } from '../i18n/LanguageProvider';
 import { Reveal } from './Reveal';
 import SectionHeading from './SectionHeading';
 
-export default function Projects() {
+/** Renders one persona's half of the Business & IT pair — same shape, own section. */
+export default function Capabilities({ variant }: { variant: 'business' | 'tech' }) {
   const { t } = useLang();
-  const p = t.projects;
+  const data = variant === 'business' ? t.businessCapabilities : t.techCapabilities;
+  const id = variant === 'business' ? 'business-it' : 'tecnologia';
 
   return (
     <section className="relative bg-black/75 pb-20 md:pb-36">
-      <SectionHeading index={p.index} label={p.label} title={p.title} id="progetti" />
+      <SectionHeading index={data.index} label={data.label} title={data.title} id={id} />
 
       <div className="mx-auto mt-10 max-w-[1600px] px-5 md:mt-16 md:px-10">
-        {/* aggregate results — not yet tied to a single project below */}
-        <div className="grid grid-cols-1 gap-px border border-white/15 bg-white/10 sm:grid-cols-2">
-          {p.results.map((r, i) => (
-            <Reveal key={i} delay={i * 100} className="h-full">
-              <div className="flex h-full items-center bg-black/90 p-7 md:p-9">
-                <p className="font-display text-xl font-semibold leading-snug text-white md:text-2xl">{r}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={160}>
-          <p className="mt-12 font-mono text-[10px] uppercase tracking-[0.3em] text-white/45 md:text-[11px]">
-            {p.itemsLabel}
+        <Reveal>
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/70 md:text-xs">
+            {data.kicker}
+          </span>
+          <p className="font-display mt-3 max-w-3xl text-xl font-semibold leading-snug text-white md:text-3xl">
+            {data.subtitle}
           </p>
         </Reveal>
 
-        <div className="mt-6 grid grid-cols-1 gap-px border border-white/15 bg-white/10 md:grid-cols-3">
-          {p.items.map((item, i) => (
+        <div
+          className={`mt-10 grid grid-cols-1 gap-px border border-white/15 bg-white/10 ${
+            data.items.length === 4 ? 'sm:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'
+          }`}
+        >
+          {data.items.map((item, i) => (
             <Reveal key={i} delay={100 + i * 110} className="h-full">
               <article className="group flex h-full flex-col bg-black/90 p-7 transition-colors duration-500 hover:bg-[#0b0b0b] md:p-9">
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
-                  {String(i + 1).padStart(2, '0')} / {String(p.items.length).padStart(2, '0')}
+                  {String(i + 1).padStart(2, '0')} / {String(data.items.length).padStart(2, '0')}
                 </span>
                 <h3 className="font-display mt-5 text-xl font-semibold leading-tight tracking-tight text-white md:text-2xl">
                   {item.title}
