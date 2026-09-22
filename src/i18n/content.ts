@@ -139,7 +139,7 @@ export const content: Record<Lang, Content> = {
         {
           question: 'Conosci davvero il tuo prodotto digitale?',
           body:
-            'Documentazione obsoleta, incompleta o assente rende difficile sapere cosa fa davvero il prodotto. Ricostruisci funzionalità, regole ed eccezioni per partire da una conoscenza condivisa e verificabile.',
+            'Documentazione obsoleta, incompleta o assente, e chi la conosceva davvero ha lasciato l’azienda: sapere cosa fa il prodotto diventa difficile. Ricostruisci funzionalità, regole ed eccezioni per partire da una conoscenza condivisa e verificabile.',
         },
         {
           question: 'Quanto puoi fidarti della sua qualità?',
@@ -339,7 +339,7 @@ export const content: Record<Lang, Content> = {
         {
           question: 'Do you really know your digital product?',
           body:
-            'Outdated, incomplete or missing documentation makes it hard to know what the product actually does. Rebuild features, rules and exceptions to start from shared, verifiable knowledge.',
+            'Outdated, incomplete or missing documentation, and the people who really knew it have left the company: knowing what the product actually does gets hard. Rebuild features, rules and exceptions to start from shared, verifiable knowledge.',
         },
         {
           question: 'How much can you trust its quality?',
