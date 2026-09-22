@@ -8,7 +8,7 @@ export default function AboutFooter() {
   const a = t.about;
 
   return (
-    <footer className="relative overflow-hidden bg-black/60 pb-14 pt-20 md:pb-20 md:pt-36">
+    <footer className="relative overflow-hidden bg-black/40 pb-14 pt-20 md:pb-20 md:pt-36">
       <SectionHeading index={a.index} label={a.label} title={a.headline} id="deep4it" />
 
       <div className="mx-auto mt-10 max-w-[1600px] px-5 md:mt-16 md:px-10">
@@ -16,7 +16,7 @@ export default function AboutFooter() {
         <div className="grid grid-cols-1 gap-px border border-white/15 bg-white/10 sm:grid-cols-2">
           {a.choices.map((c, i) => (
             <Reveal key={i} delay={i * 110} className="h-full">
-              <article className="group spot flex h-full flex-col bg-black/90 p-7 transition-colors duration-500 hover:bg-[#0b0b0b] md:p-9">
+              <article className="group spot flex h-full flex-col bg-black/80 p-7 transition-colors duration-500 hover:bg-black/70 md:p-9">
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
                   {String(i + 1).padStart(2, '0')} / {String(a.choices.length).padStart(2, '0')}
                 </span>

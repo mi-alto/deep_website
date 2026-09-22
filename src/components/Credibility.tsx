@@ -34,7 +34,7 @@ export default function Credibility() {
   const c = t.credibility;
 
   return (
-    <section className="relative bg-black/60 pb-20 md:pb-36">
+    <section className="relative bg-black/35 pb-20 md:pb-36">
       <SectionHeading index={c.index} label={c.label} title={c.title} id="credibilita" />
 
       <div className="mx-auto mt-10 max-w-[1600px] px-5 md:mt-16 md:px-10">

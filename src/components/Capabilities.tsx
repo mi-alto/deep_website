@@ -9,7 +9,7 @@ export default function Capabilities({ variant }: { variant: 'business' | 'tech'
   const id = variant === 'business' ? 'business-it' : 'tecnologia';
 
   return (
-    <section className="relative bg-black/75 pb-20 md:pb-36">
+    <section className="relative bg-black/35 pb-20 md:pb-36">
       <SectionHeading index={data.index} label={data.label} title={data.title} id={id} />
 
       <div className="mx-auto mt-10 max-w-[1600px] px-5 md:mt-16 md:px-10">
@@ -29,7 +29,7 @@ export default function Capabilities({ variant }: { variant: 'business' | 'tech'
         >
           {data.items.map((item, i) => (
             <Reveal key={i} delay={100 + i * 110} className="h-full">
-              <article className="group spot flex h-full flex-col bg-black/90 p-7 transition-colors duration-500 hover:bg-[#0b0b0b] md:p-9">
+              <article className="group spot flex h-full flex-col bg-black/80 p-7 transition-colors duration-500 hover:bg-black/70 md:p-9">
                 <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
                   {String(i + 1).padStart(2, '0')} / {String(data.items.length).padStart(2, '0')}
                 </span>

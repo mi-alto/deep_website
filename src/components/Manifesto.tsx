@@ -2,7 +2,7 @@ export default function Manifesto() {
   const m = { marquee: 'Accelerate and de-risk change' };
 
   return (
-    <section className="relative bg-black/55 px-0 py-8 md:py-20">
+    <section className="relative bg-black/30 px-0 py-8 md:py-20">
       {/* kinetic marquee band */}
       <div className="overflow-hidden border-y border-white/10 py-5" aria-hidden="true">
         <div className="marquee-track flex w-max items-center whitespace-nowrap">

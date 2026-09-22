@@ -16,7 +16,7 @@ export default function Layer() {
   const ix = t.indexable;
 
   return (
-    <section className="relative bg-black/75 pb-20 md:pb-36">
+    <section className="relative bg-black/35 pb-20 md:pb-36">
       <SectionHeading index={ix.index} label={ix.label} title={ix.title} id="indexable" />
 
       <div className="mx-auto mt-10 grid max-w-[1600px] grid-cols-1 gap-14 px-5 md:mt-16 md:px-10 lg:grid-cols-12">
