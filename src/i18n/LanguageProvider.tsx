@@ -19,15 +19,20 @@ function detectLang(): Lang {
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>(() => {
+  // Starts as 'it' both in the prerendered HTML and on the first client render
+  // (hydration needs them equal); the saved or browser language kicks in after mount.
+  const [lang, setLangState] = useState<Lang>('it');
+
+  useEffect(() => {
+    let l = detectLang();
     try {
       const saved = localStorage.getItem('d4it-lang');
-      if (saved === 'it' || saved === 'en') return saved;
+      if (saved === 'it' || saved === 'en') l = saved;
     } catch {
       /* ignore */
     }
-    return detectLang();
-  });
+    if (l !== 'it') setLangState(l);
+  }, []);
 
   const setLang = (l: Lang) => {
     setLangState(l);

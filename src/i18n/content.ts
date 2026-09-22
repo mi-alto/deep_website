@@ -94,14 +94,14 @@ export interface Content {
 /* Villanova.AI is the Tiscali group company we work with: the logo carries the
    brand, the caption carries the group named in the copy. */
 const clientLogos: LogoItem[] = [
-  { src: '/images/villanova-ai.png', alt: 'Villanova.AI', note: 'Gruppo Tiscali' },
+  { src: '/images/villanova-ai.webp', alt: 'Villanova.AI', note: 'Gruppo Tiscali' },
   { src: '/images/nexi.svg', alt: 'Nexi', note: 'Gruppo Nexi' },
 ];
 
 const innovationLogos: LogoItem[] = [
-  { src: '/images/deloitte.png', alt: 'Deloitte' },
+  { src: '/images/deloitte.webp', alt: 'Deloitte' },
   { src: '/images/polihub.webp', alt: 'PoliHub — Politecnico di Milano' },
-  { src: '/images/levillage.png', alt: 'Le Village' },
+  { src: '/images/levillage.webp', alt: 'Le Village' },
 ];
 
 export const content: Record<Lang, Content> = {

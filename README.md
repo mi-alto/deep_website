@@ -14,11 +14,18 @@ npm run dev      # http://localhost:3000
 ## Build
 
 ```bash
-npm run build    # tsc -b && vite build → dist/
+npm run build    # tsc -b, build client, build SSR, prerender → dist/
 npm run preview  # serve dist/ in locale
 ```
 
 L'output è statico: il contenuto di `dist/` può essere pubblicato su qualsiasi hosting statico.
+
+### Come è ottimizzata la consegna
+
+- **Pre-render**: `scripts/prerender.mjs` esegue `src/entry-server.tsx` in build e scrive l'HTML dell'intera pagina in `dist/index.html`; il browser dipinge il testo prima del JS, che poi si limita a idratare (`hydrateRoot` in `main.tsx`). `Reveal`/`WordReveal` partono visibili e nascondono solo ciò che è sotto la piega.
+- **three.js fuori dal percorso critico**: `ParticleField` è importato con `lazy()` e montato solo dopo il primo paint, in idle time; saltato con `prefers-reduced-motion` o `saveData`. Sui telefoni usa meno particelle.
+- **Font self-hosted** in `public/fonts/` (Archivo variabile, IBM Plex Mono), precaricati da `index.html`.
+- **Chunk vendor stabile** (`react`) e cache immutabile per `assets/` e `fonts/` in `vercel.json`.
 
 ## Struttura
 

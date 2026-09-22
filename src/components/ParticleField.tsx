@@ -105,7 +105,9 @@ export default function ParticleField({ className }: { className?: string }) {
     if (!mount) return;
 
     const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // phones get a lighter field: fewer points, lower DPR cap — same look, a fraction of the GPU work
+    const small = mount.clientWidth < 768;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, small ? 1.5 : 2));
     renderer.setSize(mount.clientWidth, mount.clientHeight);
     mount.appendChild(renderer.domElement);
 
@@ -114,8 +116,8 @@ export default function ParticleField({ className }: { className?: string }) {
     camera.position.set(0, 3.4, 9.2);
     camera.lookAt(0, 0.4, 0);
 
-    const COLS = 200;
-    const ROWS = 200;
+    const COLS = small ? 120 : 200;
+    const ROWS = COLS;
     const W = 22;
     const H = 22;
     const count = COLS * ROWS;
@@ -151,7 +153,7 @@ export default function ParticleField({ className }: { className?: string }) {
     scene.add(points);
 
     // ── drifting current streams ─────────────────────────────────────────────
-    const S_COUNT = 1300;
+    const S_COUNT = small ? 600 : 1300;
     const sPos = new Float32Array(S_COUNT * 3);
     const sSeed = new Float32Array(S_COUNT);
     for (let j = 0; j < S_COUNT; j++) {
@@ -247,5 +249,5 @@ export default function ParticleField({ className }: { className?: string }) {
     };
   }, []);
 
-  return <div ref={mountRef} className={className} aria-hidden="true" />;
+  return <div ref={mountRef} className={`fx-in ${className ?? ''}`} aria-hidden="true" />;
 }

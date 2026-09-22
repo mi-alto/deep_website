@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 
 /** Scroll-triggered reveal: opacity + translate, once. */
 export function Reveal({
@@ -13,11 +13,15 @@ export function Reveal({
   y?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [on, setOn] = useState(false);
+  // Visible by default so the prerendered HTML paints at once; only what
+  // starts below the fold gets hidden (before paint, in a layout effect)
+  // and revealed on scroll.
+  const [on, setOn] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || el.getBoundingClientRect().top < window.innerHeight * 0.92) return;
+    setOn(false);
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) {
@@ -38,7 +42,7 @@ export function Reveal({
       style={{
         opacity: on ? 1 : 0,
         transform: on ? 'translateY(0)' : `translateY(${y}px)`,
-        transition: `opacity 0.9s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.9s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+        transition: on ? `opacity 0.9s cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 0.9s cubic-bezier(0.22,1,0.36,1) ${delay}ms` : 'none',
       }}
     >
       {children}
@@ -61,11 +65,12 @@ export function WordReveal({
   as?: 'span' | 'div';
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [on, setOn] = useState(false);
+  const [on, setOn] = useState(true); // same visible-first logic as Reveal
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || el.getBoundingClientRect().top < window.innerHeight * 0.92) return;
+    setOn(false);
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) {
@@ -95,7 +100,7 @@ export function WordReveal({
             className="inline-block will-change-transform"
             style={{
               transform: on ? 'translateY(0)' : 'translateY(110%)',
-              transition: `transform 0.55s cubic-bezier(0.22,1,0.36,1) ${baseDelay + i * step}ms`,
+              transition: on ? `transform 0.55s cubic-bezier(0.22,1,0.36,1) ${baseDelay + i * step}ms` : 'none',
             }}
           >
             {w}
