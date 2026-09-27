@@ -441,7 +441,7 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   );
   const s6verdict = h('g', {}, s6);
   h('text', { x: COLX[0], y: 580, 'font-size': 27, fill: C.warn, 'font-weight': 600, class: 'font-display' }, s6verdict, pr.leftVerdict);
-  mono(s6verdict, COLX[0], 610, pr.leftSource, 12, C.grey, 'start', 0.16, 500);
+  pr.leftSources.forEach((src, i) => mono(s6verdict, COLX[0], 610 + i * 22, src, 11, C.grey, 'start', 0.06, 500));
   h('text', { x: COLX[1], y: 580, 'font-size': 27, fill: C.b3, 'font-weight': 600, class: 'font-display' }, s6verdict, pr.rightVerdict);
   // beat B: audit trail
   const s6trace = h('g', {}, s6);

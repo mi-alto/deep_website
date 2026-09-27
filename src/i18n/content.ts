@@ -59,7 +59,7 @@ export interface MotionCopy {
     leftTags: [string, string, string];
     rightTags: [string, string, string];
     leftVerdict: string;
-    leftSource: string;
+    leftSources: string[];
     rightVerdict: string;
     traceLabel: string;
     steps: { label: string; text: string; why?: string }[];
@@ -405,12 +405,15 @@ export const content: Record<Lang, Content> = {
         proof: {
           questionLabel: 'GLI STESSI DOCUMENTI, TRE COSTRUZIONI DEL GRAFO',
           question: 'Il grafo della conoscenza è sempre lo stesso?',
-          leftLabel: 'COSTRUITO DA TRE LLM DIVERSI',
+          leftLabel: 'COSTRUITO DA UN LLM, TRE VOLTE',
           rightLabel: 'COSTRUITO DA INDEXABLE, TRE VOLTE',
-          leftTags: ['LLM A', 'LLM B', 'LLM C'],
+          leftTags: ['1ª VOLTA', '2ª VOLTA', '3ª VOLTA'],
           rightTags: ['1ª VOLTA', '2ª VOLTA', '3ª VOLTA'],
-          leftVerdict: 'Solo il 6-11% delle relazioni in comune',
-          leftSource: 'STUDIO SU 4 LLM  ·  FRONTIERS IN IMMUNOLOGY, 2026',
+          leftVerdict: 'Un grafo diverso a ogni costruzione',
+          leftSources: [
+            'STESSO LLM: SOLO 1/3 DEGLI ELEMENTI UGUALI TRA DUE ESECUZIONI (GIORDANO E RAZNIEWSKI, 2025)',
+            'LLM DIVERSI: SOLO IL 6-11% DELLE RELAZIONI IN COMUNE (FRONTIERS IN IMMUNOLOGY, 2026)',
+          ],
           rightVerdict: 'Sempre lo stesso grafo',
           traceLabel: 'TRACCIA DI VERIFICA  ·  PERCHÉ QUESTA RISPOSTA',
           steps: [
@@ -433,7 +436,7 @@ export const content: Record<Lang, Content> = {
         label: 'Perché fidarsi',
         title: 'AI spiegabile e verificabile per i settori regolamentati.',
         lead:
-          'Molti strumenti costruiscono un “cervello aziendale” tutto con l’AI generativa: la base di conoscenza cambia a seconda del modello, e non sempre si sa perché arriva una certa risposta. Indexable costruisce la base di conoscenza in modo deterministico e la mette a disposizione di persone e agenti: risposte più complete, con una traccia verificabile di ogni passaggio.',
+          'Molti strumenti costruiscono un “cervello aziendale” tutto con l’AI generativa: la base di conoscenza cambia a ogni costruzione, anche con lo stesso modello, e non sempre si sa perché arriva una certa risposta. Indexable costruisce la base di conoscenza in modo deterministico e la mette a disposizione di persone e agenti: risposte più complete, con una traccia verificabile di ogni passaggio.',
         pillars: [
           {
             title: 'Ripetibile.',
@@ -460,7 +463,7 @@ export const content: Record<Lang, Content> = {
           caption: 'Il confronto',
           head: ['', 'Solo AI generativa', 'Con Indexable'],
           rows: [
-            ['Ricostruire la base di conoscenza', 'Grafo diverso a seconda del modello', 'Sempre lo stesso grafo'],
+            ['Ricostruire la base di conoscenza', 'Grafo diverso a ogni costruzione', 'Sempre lo stesso grafo'],
             ['Da dove viene la risposta', 'Non sempre dichiarato', 'Citazioni esatte, per ogni affermazione'],
             ['Perché il sistema ha risposto così', 'Difficile da ricostruire', 'Traccia passo per passo'],
             ['Completezza delle risposte', 'Dipende dai documenti caricati', 'Tutte le fonti collegate nel grafo'],
@@ -781,12 +784,15 @@ export const content: Record<Lang, Content> = {
         proof: {
           questionLabel: 'THE SAME DOCUMENTS, THREE GRAPH BUILDS',
           question: 'Is the knowledge graph always the same?',
-          leftLabel: 'BUILT BY THREE DIFFERENT LLMS',
+          leftLabel: 'BUILT BY AN LLM, THREE TIMES',
           rightLabel: 'BUILT BY INDEXABLE, THREE TIMES',
-          leftTags: ['LLM A', 'LLM B', 'LLM C'],
+          leftTags: ['RUN 1', 'RUN 2', 'RUN 3'],
           rightTags: ['RUN 1', 'RUN 2', 'RUN 3'],
-          leftVerdict: 'Only 6-11% of relations in common',
-          leftSource: 'STUDY ON 4 LLMS  ·  FRONTIERS IN IMMUNOLOGY, 2026',
+          leftVerdict: 'A different graph every time',
+          leftSources: [
+            'SAME LLM: ONLY 1/3 OF ELEMENTS MATCH BETWEEN TWO RUNS (GIORDANO AND RAZNIEWSKI, 2025)',
+            'DIFFERENT LLMS: ONLY 6-11% OF RELATIONS IN COMMON (FRONTIERS IN IMMUNOLOGY, 2026)',
+          ],
           rightVerdict: 'Always the same graph',
           traceLabel: 'AUDIT TRAIL  ·  WHY THIS ANSWER',
           steps: [
@@ -809,7 +815,7 @@ export const content: Record<Lang, Content> = {
         label: 'Why you can trust it',
         title: 'Explainable, auditable AI for regulated industries.',
         lead:
-          'Many tools build a “company brain” entirely with generative AI: the knowledge base changes with the model, and it is not always clear why a given answer comes back. Indexable builds the knowledge base deterministically and makes it available to people and agents: more complete answers, with a verifiable trail of every step.',
+          'Many tools build a “company brain” entirely with generative AI: the knowledge base changes with every build, even with the same model, and it is not always clear why a given answer comes back. Indexable builds the knowledge base deterministically and makes it available to people and agents: more complete answers, with a verifiable trail of every step.',
         pillars: [
           {
             title: 'Repeatable.',
@@ -836,7 +842,7 @@ export const content: Record<Lang, Content> = {
           caption: 'The comparison',
           head: ['', 'Generative AI only', 'With Indexable'],
           rows: [
-            ['Rebuilding the knowledge base', 'A different graph for each model', 'Always the same graph'],
+            ['Rebuilding the knowledge base', 'A different graph every build', 'Always the same graph'],
             ['Where the answer comes from', 'Not always stated', 'Exact citations, for every statement'],
             ['Why the system answered that way', 'Hard to reconstruct', 'Step-by-step trail'],
             ['How complete the answers are', 'Depends on the uploaded documents', 'Every source linked in the graph'],
