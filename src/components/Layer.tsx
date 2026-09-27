@@ -1,6 +1,8 @@
 import { useLang } from '../i18n/LanguageProvider';
 import { Reveal } from './Reveal';
 import SectionHeading from './SectionHeading';
+import IndexableMotion from './indexable-motion/IndexableMotion';
+import Trust from './Trust';
 
 const DownArrow = () => (
   <div className="flex items-center justify-center py-1" aria-hidden="true">
@@ -72,6 +74,12 @@ export default function Layer() {
           </div>
         </div>
       </div>
+
+      {/* animated walkthrough: from grammatical extraction to code verification */}
+      <IndexableMotion />
+
+      {/* the differentiator: no generative AI, so results are repeatable and auditable */}
+      <Trust />
     </section>
   );
 }

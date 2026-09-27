@@ -421,3 +421,17 @@ body::before {
 .fx-in {
   animation: fx-in 1.6s ease-out both;
 }
+
+/* ── language switch: text dissolves out and back in ── */
+.lang-fade {
+  transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1), filter 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+html.lang-out .lang-fade {
+  opacity: 0;
+  filter: blur(2px);
+  transition-duration: 0.18s;
+  transition-timing-function: ease-in;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lang-fade { transition: none; }
+}

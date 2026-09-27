@@ -20,6 +20,60 @@ export interface LogoItem {
   note?: string;
 }
 
+/** Copy for the "how Indexable works" motion graphic (Layer section). */
+export interface MotionCopy {
+  label: string;
+  ariaLabel: string;
+  controls: { play: string; pause: string; replay: string; goTo: string };
+  introSub: string;
+  steps: { eyebrow: string; title: string; caption: string; short: string }[];
+  sentence: {
+    header: string;
+    /** each word with the index of its role in `roles` */
+    words: [string, number][];
+    roles: string[];
+    /** claim formula tokens, colored by role index (-1 = neutral, 5 = modality) */
+    claim: [string, number][];
+  };
+  docs: [string, string, string];
+  nodes: string[];
+  modality: { obligation: string; permission: string };
+  reqs: { id: string; text: string; source: string; permission?: boolean }[];
+  chips: { ok: string; conflict: string; covered: string; missing: string };
+  conflict: [string, string, string];
+  reqsLabel: string;
+  summaryCheck: string;
+  summaryCode: string;
+  missingComment: string;
+  outroLine: string;
+  outroChain: string;
+  proof: {
+    questionLabel: string;
+    question: string;
+    genLabel: string;
+    ixLabel: string;
+    run: string;
+    print: string;
+    genAnswers: [string, string, string];
+    genPrints: [string, string, string];
+    ixAnswer: string;
+    ixPrint: string;
+    genVerdict: string;
+    ixVerdict: string;
+    traceLabel: string;
+    traceSource: string;
+  };
+}
+
+/** "Why trust it" block under the animation: repeatable, auditable, built for regulated industries. */
+export interface TrustCopy {
+  label: string;
+  title: string;
+  lead: string;
+  pillars: CapabilityItem[];
+  table: { caption: string; head: [string, string, string]; rows: [string, string, string][] };
+}
+
 export interface Content {
   nav: { label: string; href: string }[];
   navCta: string;
@@ -55,6 +109,8 @@ export interface Content {
       output: string;
       consumers: string;
     };
+    motion: MotionCopy;
+    trust: TrustCopy;
   };
   projects: {
     index: string;
@@ -233,6 +289,143 @@ export const content: Record<Lang, Content> = {
         ops: 'Collega le informazioni e le riconduce alle fonti.',
         output: 'Funzionalità · Regole · Requisiti · Dipendenze',
         consumers: 'Una base di conoscenza consultabile da persone e agenti AI.',
+      },
+      motion: {
+        label: 'Come funziona',
+        ariaLabel:
+          'Animazione: come funziona Indexable, dall’estrazione grammaticale alla verifica del codice',
+        controls: { play: 'Riproduci', pause: 'Pausa', replay: 'Da capo', goTo: 'Vai al passaggio' },
+        introSub: 'DAI DOCUMENTI AL CODICE VERIFICATO',
+        steps: [
+          {
+            eyebrow: '01 / 06 · Estrazione grammaticale',
+            title: 'Analizza il linguaggio',
+            caption: 'Ogni frase diventa un insieme di affermazioni elementari: chi deve fare cosa, e a quale condizione.',
+            short: 'Linguaggio',
+          },
+          {
+            eyebrow: '02 / 06 · Grafo della conoscenza',
+            title: 'Costruisci il grafo',
+            caption: 'Le affermazioni di specifiche, verbali e manuali si collegano in un unico grafo. Ogni nodo conserva la sua fonte.',
+            short: 'Grafo',
+          },
+          {
+            eyebrow: '03 / 06 · Requisiti',
+            title: 'Estrai i requisiti',
+            caption: 'Partendo dal grafo, l’AI generativa propone i requisiti. Ciascuno resta collegato al passaggio da cui nasce.',
+            short: 'Requisiti',
+          },
+          {
+            eyebrow: '04 / 06 · Coerenza',
+            title: 'Verifica la coerenza',
+            caption: 'Controlli deterministici, senza AI generativa: le contraddizioni emergono prima di scrivere una riga di codice.',
+            short: 'Coerenza',
+          },
+          {
+            eyebrow: '05 / 06 · Verifica del codice',
+            title: 'Verifica il codice',
+            caption: 'I requisiti vengono confrontati con l’implementazione: cosa è coperto e cosa manca.',
+            short: 'Codice',
+          },
+          {
+            eyebrow: '06 / 06 · Ripetibile e auditabile',
+            title: 'Stessa risposta, ogni volta',
+            caption: 'La base di conoscenza e i controlli non usano AI generativa: stesse fonti, stessa risposta. E ogni risultato torna alla sua fonte.',
+            short: 'Ripetibile',
+          },
+        ],
+        sentence: {
+          header: 'SPECIFICA v2.3  ·  §4.5 VALIDAZIONE DEL MANDATO',
+          words: [
+            ['La', 0], ['banca', 0], ['del', 0], ['debitore', 0], ['deve', 1], ['rifiutare', 2], ['il', 3], ['mandato', 3],
+            ['se', 4], ['manca', 4], ['la', 4], ['data', 4], ['di', 4], ['firma.', 4],
+          ],
+          roles: ['CHI AGISCE', 'OBBLIGO', 'AZIONE', 'OGGETTO', 'CONDIZIONE'],
+          claim: [
+            ['c-014 = ', -1], ['obbligo', 1], ['(', -1], ['banca_debitore', 0], [', ', -1], ['rifiuta', 2], [', ', -1],
+            ['mandato', 3], [' | ', -1], ['data_firma = null', 4], [')', -1],
+          ],
+        },
+        docs: ['SPECIFICA', 'VERBALI', 'MANUALE'],
+        nodes: [
+          'rifiuta mandato', 'banca debitore', 'mandato', 'data di firma', 'creditore', 'invia incasso', 'scadenza D-1',
+          'operatore', 'accetta senza firma', 'avvisa debitore', 'codice di rifiuto', 'stato mandato', 'incasso',
+          'registro attività', 'rimborso',
+        ],
+        modality: { obligation: 'OBBLIGO', permission: 'PERMESSO' },
+        reqs: [
+          { id: 'REQ-014', text: 'La banca deve rifiutare i mandati senza data di firma.', source: 'FONTE  ·  SPECIFICA v2.3  §4.5' },
+          { id: 'REQ-022', text: 'Il creditore deve inviare gli incassi entro la scadenza D-1.', source: 'FONTE  ·  SPECIFICA v2.3  §5.2' },
+          { id: 'REQ-031', text: 'Gli operatori possono accettare mandati senza data di firma.', source: 'FONTE  ·  VERBALE 12 MAR 2026', permission: true },
+          { id: 'REQ-045', text: 'Ogni rifiuto deve essere comunicato al debitore.', source: 'FONTE  ·  VERBALE 12 MAR 2026' },
+        ],
+        chips: { ok: 'COERENTE', conflict: 'CONFLITTO', covered: 'COPERTO', missing: 'MANCANTE' },
+        conflict: ['CONFLITTO', 'deve rifiutare', 'vs può accettare'],
+        reqsLabel: 'PROPOSTE DALL’AI GENERATIVA  ·  OGNUNA COLLEGATA AL GRAFO',
+        summaryCheck: 'CONTROLLO DETERMINISTICO  ·  4 REQUISITI  ·  3 COERENTI  ·  1 CONFLITTO',
+        summaryCode: '2 COPERTI  ·  1 MANCANTE  ·  3 TEST GENERATI',
+        missingComment: '// nessuna chiamata a notifyDebtor()',
+        outroLine: 'L’AI propone. Il grafo verifica.',
+        outroChain: 'PENSATO PER I SETTORI REGOLAMENTATI',
+        proof: {
+          questionLabel: 'STESSA DOMANDA, STESSE FONTI, TRE VOLTE',
+          question: 'Quando va rifiutato un mandato?',
+          genLabel: 'SOLO AI GENERATIVA',
+          ixLabel: 'INDEXABLE',
+          run: 'PROVA',
+          print: 'IMPRONTA',
+          genAnswers: [
+            'Quando la firma manca o non è leggibile.',
+            'Se i dati sono incompleti. Meglio chiedere all’ufficio.',
+            'Senza data di firma si può accettare comunque.',
+          ],
+          genPrints: ['a91c·04e2', '3e07·b1f9', 'd52b·7a30'],
+          ixAnswer: 'Va rifiutato se manca la data di firma.  c-014',
+          ixPrint: '7f3a·9c1d',
+          genVerdict: '3 PROVE  ·  3 RISPOSTE DIVERSE',
+          ixVerdict: '3 PROVE  ·  STESSA RISPOSTA  ·  STESSA IMPRONTA',
+          traceLabel: 'PERCORSO DI VERIFICA',
+          traceSource: 'SPECIFICA v2.3 §4.5',
+        },
+      },
+      trust: {
+        label: 'Perché fidarsi',
+        title: 'L’AI propone. Il grafo verifica.',
+        lead:
+          'Molti strumenti costruiscono un “cervello aziendale” tutto su AI generativa: la stessa domanda può avere risposte diverse, e non sempre si sa da dove vengono. In Indexable l’AI generativa ha un solo compito: proporre i requisiti. Tutto il resto, dalla lettura dei documenti al grafo fino ai controlli, è deterministico e ripetibile.',
+        pillars: [
+          {
+            title: 'Ripetibile.',
+            body:
+              'Estrazione, grafo e controlli di coerenza non usano AI generativa: a parità di fonti il risultato è sempre lo stesso, oggi come tra un anno. Quando un documento cambia, vedi cosa cambia e perché.',
+          },
+          {
+            title: 'Auditabile.',
+            body:
+              'Ogni affermazione, requisito e conflitto è collegato alla frase del documento o alla riga di codice da cui nasce. Un revisore ripercorre tutto il ragionamento, passo dopo passo.',
+          },
+          {
+            title: 'AI generativa sotto controllo.',
+            body:
+              'L’AI generativa scrive le proposte di requisito partendo dal grafo. Ogni proposta resta collegata alle sue fonti e deve superare i controlli deterministici prima di essere accettata.',
+          },
+          {
+            title: 'Pensato per i settori regolamentati.',
+            body:
+              'Nato sulle specifiche di banche centrali, sistemi di pagamento e sistemi di difesa, dove una risposta che non si può spiegare non ha valore.',
+          },
+        ],
+        table: {
+          caption: 'Il confronto',
+          head: ['', 'Solo AI generativa', 'Indexable'],
+          rows: [
+            ['Stessa domanda, due volte', 'Può dare risposte diverse', 'Stessa risposta, dal grafo'],
+            ['Da dove viene la risposta', 'Non sempre dichiarato', 'Fonte esatta, per ogni affermazione'],
+            ['Controllo dei requisiti', 'Probabilistico', 'Deterministico, con regole esplicite'],
+            ['Controllo di un revisore', 'Difficile da ricostruire', 'Percorso completo e verificabile'],
+            ['Cambia un documento', 'Si riparte da capo', 'Si vede cosa cambia e dove'],
+          ],
+        },
       },
     },
     projects: {
@@ -432,6 +625,142 @@ export const content: Record<Lang, Content> = {
         ops: 'Connects information and traces it back to its sources.',
         output: 'Features · Rules · Requirements · Dependencies',
         consumers: 'A knowledge base people and AI agents can query.',
+      },
+      motion: {
+        label: 'How it works',
+        ariaLabel: 'Animation: how Indexable works, from grammatical extraction to code verification',
+        controls: { play: 'Play', pause: 'Pause', replay: 'Replay', goTo: 'Go to step' },
+        introSub: 'FROM DOCUMENTS TO VERIFIED CODE',
+        steps: [
+          {
+            eyebrow: '01 / 06 · Grammatical extraction',
+            title: 'Parse the language',
+            caption: 'Every sentence becomes atomic claims: who must do what, under which condition.',
+            short: 'Language',
+          },
+          {
+            eyebrow: '02 / 06 · Knowledge graph',
+            title: 'Build the graph',
+            caption: 'Claims from specs, minutes and manuals are linked in one graph. Every node keeps its source.',
+            short: 'Graph',
+          },
+          {
+            eyebrow: '03 / 06 · Requirements',
+            title: 'Extract requirements',
+            caption: 'Starting from the graph, generative AI proposes the requirements. Each stays linked to the passage it comes from.',
+            short: 'Requirements',
+          },
+          {
+            eyebrow: '04 / 06 · Consistency',
+            title: 'Check consistency',
+            caption: 'Deterministic checks, no generative AI: contradictions surface before anyone writes a line of code.',
+            short: 'Consistency',
+          },
+          {
+            eyebrow: '05 / 06 · Code verification',
+            title: 'Verify the code',
+            caption: 'Requirements are matched against the implementation: what is covered, and what is missing.',
+            short: 'Code',
+          },
+          {
+            eyebrow: '06 / 06 · Repeatable and auditable',
+            title: 'Same answer, every time',
+            caption: 'The knowledge base and the checks use no generative AI: same sources, same answer. And every result traces back to its source.',
+            short: 'Repeatable',
+          },
+        ],
+        sentence: {
+          header: 'SPECIFICATION v2.3  ·  §4.5 MANDATE VALIDATION',
+          words: [
+            ['The', 0], ['debtor', 0], ['bank', 0], ['shall', 1], ['reject', 2], ['the', 3], ['mandate', 3],
+            ['if', 4], ['the', 4], ['signature', 4], ['date', 4], ['is', 4], ['missing.', 4],
+          ],
+          roles: ['AGENT', 'OBLIGATION', 'ACTION', 'OBJECT', 'CONDITION'],
+          claim: [
+            ['c-014 = ', -1], ['obligation', 1], ['(', -1], ['debtor_bank', 0], [', ', -1], ['reject', 2], [', ', -1],
+            ['mandate', 3], [' | ', -1], ['signature_date = null', 4], [')', -1],
+          ],
+        },
+        docs: ['SPEC', 'MINUTES', 'MANUAL'],
+        nodes: [
+          'reject mandate', 'debtor bank', 'mandate', 'signature date', 'creditor', 'submit collection', 'D-1 cut-off',
+          'operator', 'accept w/o signature', 'notify debtor', 'rejection code', 'mandate status', 'collection',
+          'audit log', 'refund',
+        ],
+        modality: { obligation: 'OBLIGATION', permission: 'PERMISSION' },
+        reqs: [
+          { id: 'REQ-014', text: 'Debtor bank shall reject mandates with no signature date.', source: 'SOURCE  ·  SPEC v2.3  §4.5' },
+          { id: 'REQ-022', text: 'Creditor shall submit collections before the D-1 cut-off.', source: 'SOURCE  ·  SPEC v2.3  §5.2' },
+          { id: 'REQ-031', text: 'Operators may accept mandates without a signature date.', source: 'SOURCE  ·  MINUTES  12 MAR 2026', permission: true },
+          { id: 'REQ-045', text: 'Every rejection shall be notified to the debtor.', source: 'SOURCE  ·  MINUTES  12 MAR 2026' },
+        ],
+        chips: { ok: 'CONSISTENT', conflict: 'CONFLICT', covered: 'COVERED', missing: 'MISSING' },
+        conflict: ['CONFLICT', 'shall reject', 'vs may accept'],
+        reqsLabel: 'PROPOSED BY GENERATIVE AI  ·  EACH LINKED TO THE GRAPH',
+        summaryCheck: 'DETERMINISTIC CHECK  ·  4 REQUIREMENTS  ·  3 CONSISTENT  ·  1 CONFLICT',
+        summaryCode: '2 COVERED  ·  1 MISSING  ·  3 TESTS GENERATED',
+        missingComment: '// no call to notifyDebtor() found',
+        outroLine: 'AI proposes. The graph verifies.',
+        outroChain: 'BUILT FOR REGULATED INDUSTRIES',
+        proof: {
+          questionLabel: 'SAME QUESTION, SAME SOURCES, THREE TIMES',
+          question: 'When must a mandate be rejected?',
+          genLabel: 'GENERATIVE AI ONLY',
+          ixLabel: 'INDEXABLE',
+          run: 'RUN',
+          print: 'FINGERPRINT',
+          genAnswers: [
+            'When the signature is missing or unreadable.',
+            'If data is incomplete. Better check with ops.',
+            'Without a signature date it can still be accepted.',
+          ],
+          genPrints: ['a91c·04e2', '3e07·b1f9', 'd52b·7a30'],
+          ixAnswer: 'Reject it if the signature date is missing.  c-014',
+          ixPrint: '7f3a·9c1d',
+          genVerdict: '3 RUNS  ·  3 DIFFERENT ANSWERS',
+          ixVerdict: '3 RUNS  ·  SAME ANSWER  ·  SAME FINGERPRINT',
+          traceLabel: 'AUDIT TRAIL',
+          traceSource: 'SPEC v2.3 §4.5',
+        },
+      },
+      trust: {
+        label: 'Why you can trust it',
+        title: 'AI proposes. The graph verifies.',
+        lead:
+          'Many tools build a “company brain” entirely on generative AI: the same question can get different answers, and it is not always clear where they come from. In Indexable, generative AI has one job: proposing requirements. Everything else, from reading the documents to the graph and the checks, is deterministic and repeatable.',
+        pillars: [
+          {
+            title: 'Repeatable.',
+            body:
+              'Extraction, graph and consistency checks use no generative AI: given the same sources, the result is always the same, today or a year from now. When a document changes, you see what changes and why.',
+          },
+          {
+            title: 'Auditable.',
+            body:
+              'Every statement, requirement and conflict is linked to the sentence in a document or the line of code it comes from. A reviewer can retrace the whole reasoning, step by step.',
+          },
+          {
+            title: 'Generative AI, kept in check.',
+            body:
+              'Generative AI drafts requirement proposals from the graph. Each proposal stays linked to its sources and must pass the deterministic checks before it is accepted.',
+          },
+          {
+            title: 'Built for regulated industries.',
+            body:
+              'Born on specifications for central banks, payment systems and defence systems, where an answer that cannot be explained has no value.',
+          },
+        ],
+        table: {
+          caption: 'The comparison',
+          head: ['', 'Generative AI only', 'Indexable'],
+          rows: [
+            ['Same question, twice', 'May give different answers', 'Same answer, from the graph'],
+            ['Where the answer comes from', 'Not always stated', 'Exact source, for every statement'],
+            ['Checking requirements', 'Probabilistic', 'Deterministic, with explicit rules'],
+            ['An auditor’s review', 'Hard to reconstruct', 'Complete, verifiable trail'],
+            ['A document changes', 'Start over', 'See what changes, and where'],
+          ],
+        },
       },
     },
     projects: {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { content, type Content, type Lang } from './content';
 
 interface LangCtx {
@@ -34,14 +34,62 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (l !== 'it') setLangState(l);
   }, []);
 
+  // Switching language: fade the text out, swap it, keep the reader on the
+  // same spot (the two languages have different lengths), fade back in.
+  const anchor = useRef<{ el: Element; top: number } | null>(null);
+  const busy = useRef(false);
+
+  const findAnchor = () => {
+    const y = window.innerHeight * 0.4;
+    let el = document.elementFromPoint(window.innerWidth / 2, y);
+    // climb to a block that is part of the page flow (not the fixed header)
+    while (el && el.parentElement && el.getBoundingClientRect().height < 40) el = el.parentElement;
+    if (!el || el.closest('header')) return null;
+    return { el, top: el.getBoundingClientRect().top };
+  };
+
   const setLang = (l: Lang) => {
-    setLangState(l);
     try {
       localStorage.setItem('d4it-lang', l);
     } catch {
       /* ignore */
     }
+    if (l === lang || busy.current) return;
+    const root = document.documentElement;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) {
+      anchor.current = findAnchor();
+      setLangState(l);
+      return;
+    }
+    busy.current = true;
+    root.classList.add('lang-out');
+    window.setTimeout(() => {
+      anchor.current = findAnchor();
+      setLangState(l);
+    }, 200);
   };
+
+  useLayoutEffect(() => {
+    const a = anchor.current;
+    anchor.current = null;
+    if (a && a.el.isConnected) {
+      const diff = a.el.getBoundingClientRect().top - a.top;
+      if (Math.abs(diff) > 1) {
+        const root = document.documentElement;
+        const prev = root.style.scrollBehavior;
+        root.style.scrollBehavior = 'auto';
+        window.scrollBy(0, diff);
+        root.style.scrollBehavior = prev;
+      }
+    }
+    if (busy.current) {
+      requestAnimationFrame(() => {
+        document.documentElement.classList.remove('lang-out');
+        busy.current = false;
+      });
+    }
+  }, [lang]);
 
   useEffect(() => {
     document.documentElement.lang = lang;

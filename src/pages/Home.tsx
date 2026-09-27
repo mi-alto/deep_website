@@ -43,7 +43,7 @@ export default function Home() {
         )}
         <div className="relative z-10">
           <Header />
-          <main>
+          <main className="lang-fade">
             <Hero />
             <Manifesto />
             <Problem />
@@ -53,7 +53,9 @@ export default function Home() {
             <Projects />
             <Credibility />
           </main>
-          <AboutFooter />
+          <div className="lang-fade">
+            <AboutFooter />
+          </div>
         </div>
       </div>
     </LanguageProvider>

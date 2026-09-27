@@ -34,7 +34,7 @@ export default function Header() {
           </span>
         </a>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="lang-fade hidden items-center gap-8 lg:flex">
           {t.nav.map((n) => (
             <a
               key={n.href}
@@ -47,14 +47,24 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-4 md:gap-6">
-          {/* language switch */}
-          <div className="flex items-center rounded-full border border-white/15 p-[3px] font-mono text-[10px] uppercase tracking-[0.18em]">
+          {/* language switch: the white pill slides under the active language */}
+          <div
+            role="group"
+            aria-label="Lingua / Language"
+            className="relative grid grid-cols-2 rounded-full border border-white/15 p-[3px] font-mono text-[10px] uppercase tracking-[0.18em]"
+          >
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-[3px] left-[3px] w-[calc(50%-3px)] rounded-full bg-white shadow-[0_0_18px_hsl(var(--brand-1)/0.35)] transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{ transform: lang === 'en' ? 'translateX(100%)' : 'translateX(0)' }}
+            />
             {(['it', 'en'] as const).map((l) => (
               <button
                 key={l}
+                type="button"
                 onClick={() => setLang(l)}
-                className={`rounded-full px-3 py-1 transition-all duration-300 ${
-                  lang === l ? 'bg-white text-black' : 'text-white/50 hover:text-white'
+                className={`relative z-10 rounded-full px-3 py-1 text-center transition-colors duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[hsl(var(--brand-1))] ${
+                  lang === l ? 'text-black' : 'text-white/50 hover:text-white'
                 }`}
                 aria-pressed={lang === l}
               >
@@ -64,7 +74,7 @@ export default function Header() {
           </div>
           <a
             href="#contatti"
-            className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/80 underline-offset-4 hover:underline"
+            className="lang-fade font-mono text-[11px] uppercase tracking-[0.22em] text-white/80 underline-offset-4 hover:underline"
           >
             {t.navCta} ↗
           </a>
