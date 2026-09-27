@@ -393,69 +393,72 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   mono(conflictLab, 0, 54, copy.conflict[2], 15, C.grey, 'start', 0.04);
   const s4sum = mono(s4, 960, 748, copy.summaryCheck, 15, C.grey, 'middle', 0.22);
 
-  /* ---------- scene 6: repeatable and traceable ----------
-     Beat A: the same question three times; generative-only gives three
-     different answers, Indexable always the same one.
-     Beat B: the Indexable answer moves up and is traced back, through the
-     graph, to the sentence of the specification it comes from. */
+  /* ---------- scene 7: repeatable and auditable ----------
+     Beat A: the same documents, graph built three times. Three different LLMs
+     give three different graphs; Indexable gives the same graph every time.
+     Beat B: the audit trail of one answer: what was retrieved and why. */
   const pr = copy.proof;
   const s6 = h('g');
   const s6q = h('g', {}, s6);
   mono(s6q, 960, 182, pr.questionLabel, 15, C.grey, 'middle', 0.24, 500);
-  h('text', { x: 960, y: 234, 'font-size': 40, fill: C.ink, 'font-weight': 600, 'text-anchor': 'middle' }, s6q, pr.question);
+  h('text', { x: 960, y: 232, 'font-size': 38, fill: C.ink, 'font-weight': 600, 'text-anchor': 'middle' }, s6q, pr.question);
   const COLX = [160, 1000];
   const COLW = 760;
   const s6head = COLX.map((x, k) => {
     const g = h('g', {}, s6);
-    mono(g, x, 298, k ? pr.ixLabel : pr.genLabel, 16, k ? C.b3 : C.warn, 'start', 0.24, 500);
-    h('path', { d: `M${x} 312 h${COLW}`, stroke: k ? C.b3 : C.warn, 'stroke-opacity': 0.55, 'stroke-width': 1.4 }, g);
+    mono(g, x, 294, k ? pr.rightLabel : pr.leftLabel, 15, k ? C.b3 : C.warn, 'start', 0.22, 500);
+    h('path', { d: `M${x} 308 h${COLW}`, stroke: k ? C.b3 : C.warn, 'stroke-opacity': 0.55, 'stroke-width': 1.4 }, g);
     return g;
   });
-  function scramble(str: string, p: number, seed: number) {
-    const chars = 'abcdefghilmnoprstuvz';
-    const keep = Math.floor(str.length * p);
-    let out = str.slice(0, keep);
-    for (let i = keep; i < str.length; i++) out += str[i] === ' ' ? ' ' : chars[(i * 7 + seed * 13) % chars.length];
-    return out;
-  }
-  const ROW_Y = (r: number) => 334 + r * 98;
-  const s6rows = COLX.map((x, k) =>
-    [0, 1, 2].map((r) => {
-      const y = ROW_Y(r);
+  // small deterministic pseudo-random generator, so every frame draws the same "different" graphs
+  const rng = (seed: number) => () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+  const MINI = NODES.slice(0, 9);
+  const MINI_EDGES = EDGES.filter(([a2, b2]) => a2 < 9 && b2 < 9);
+  type Mini = { g: SVGGElement; edges: Path[]; dots: SVGElement[] };
+  const minis: Mini[][] = COLX.map((x, k) =>
+    [0, 1, 2].map((j) => {
+      const bx = x + j * 262;
       const g = h('g', {}, s6);
-      const box = h('rect', { x, y, width: COLW, height: 80, rx: 10, fill: C.panel, 'fill-opacity': 0.94, stroke: 'rgba(255,255,255,.16)', 'stroke-width': 1.2 }, g);
-      h('circle', { cx: x + 40, cy: y + 40, r: 15, fill: 'none', stroke: 'rgba(255,255,255,.3)', 'stroke-width': 1.2 }, g);
-      mono(g, x + 40, y + 45, String(r + 1), 14, C.grey, 'middle', 0, 500);
-      const final = k ? pr.ixAnswer : pr.genAnswers[r];
-      const txt = h('text', { x: x + 76, y: y + 49, 'font-size': 27, fill: C.ink, 'font-weight': 500 }, g, final);
-      const flag = h('g', { opacity: 0 }, g);
-      const fx = x + COLW - 42;
-      const fy = y + 40;
-      if (k) h('path', { d: `M${fx - 10} ${fy} l7 7 l13 -15`, stroke: C.b3, 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, flag);
-      else h('path', { d: `M${fx - 9} ${fy - 9} l18 18 M${fx + 9} ${fy - 9} l-18 18`, stroke: C.warn, 'stroke-width': 2.8, 'stroke-linecap': 'round' }, flag);
-      return { g, box, txt, flag, final };
+      h('rect', { x: bx, y: 326, width: 236, height: 196, rx: 10, fill: C.panel, 'fill-opacity': 0.94, stroke: 'rgba(255,255,255,.16)', 'stroke-width': 1.2 }, g);
+      mono(g, bx + 118, 510, k ? pr.rightTags[j] : pr.leftTags[j], 12, C.grey, 'middle', 0.2, 500);
+      const r = rng(7 + j * 31);
+      const pos = MINI.map((n, i) => {
+        const jx = k || i === 0 ? 0 : (r() - 0.5) * 260;
+        const jy = k || i === 0 ? 0 : (r() - 0.5) * 180;
+        return [bx + 118 + (n.x + jx) * 0.19, 414 + (n.y + jy) * 0.26] as [number, number];
+      });
+      let pairs: [number, number][] = MINI_EDGES;
+      if (!k) {
+        pairs = MINI_EDGES.filter(() => r() > 0.5);
+        for (let e = 0; e < 4; e++) pairs.push([Math.floor(r() * 9), Math.floor(r() * 9)]);
+        pairs = pairs.filter(([a2, b2]) => a2 !== b2);
+      }
+      const edges = pairs.map(([a2, b2]) => h('path', { d: `M${pos[a2][0].toFixed(1)} ${pos[a2][1].toFixed(1)} L${pos[b2][0].toFixed(1)} ${pos[b2][1].toFixed(1)}`, stroke: k ? C.b3 : C.warn, 'stroke-opacity': 0.6, 'stroke-width': 1.4, fill: 'none' }, g) as Path);
+      const dropped = k ? -1 : 1 + Math.floor(r() * 8);
+      const dots = MINI.map((n, i) => h('circle', { cx: pos[i][0].toFixed(1), cy: pos[i][1].toFixed(1), r: n.k === 'obl' || n.k === 'perm' ? 6 : 4.5, fill: KIND[n.k], opacity: i === dropped ? 0 : 1 }, g));
+      return { g, edges, dots };
     })
   );
-  const s6verdict = COLX.map((x, k) =>
-    h('text', { x, y: 664, 'font-size': 28, fill: k ? C.b3 : C.warn, 'font-weight': 600, class: 'font-display' }, s6, k ? pr.ixVerdict : pr.genVerdict)
-  );
-  // beat B: trace chain
+  const s6verdict = h('g', {}, s6);
+  h('text', { x: COLX[0], y: 580, 'font-size': 27, fill: C.warn, 'font-weight': 600, class: 'font-display' }, s6verdict, pr.leftVerdict);
+  mono(s6verdict, COLX[0], 610, pr.leftSource, 12, C.grey, 'start', 0.16, 500);
+  h('text', { x: COLX[1], y: 580, 'font-size': 27, fill: C.b3, 'font-weight': 600, class: 'font-display' }, s6verdict, pr.rightVerdict);
+  // beat B: audit trail
   const s6trace = h('g', {}, s6);
-  const traceLab = mono(s6trace, 960, 186, pr.traceLabel, 16, C.b3, 'middle', 0.24, 500);
-  const arrow1 = h('path', { d: 'M960 318 V398', stroke: C.b3, 'stroke-width': 2, fill: 'none' }, s6trace) as Path;
-  const gnode = h('g', {}, s6trace);
-  h('circle', { cx: 960, cy: 430, r: 34, fill: C.b3, 'fill-opacity': 0.25, filter: soft }, gnode);
-  h('circle', { cx: 960, cy: 430, r: 15, fill: C.bg, stroke: C.b3, 'stroke-width': 3 }, gnode);
-  h('circle', { cx: 960, cy: 430, r: 6, fill: C.b3 }, gnode);
-  h('text', { x: 1000, y: 438, 'font-size': 22, fill: C.grey }, gnode, pr.graphLabel);
-  const arrow2 = h('path', { d: 'M960 462 V532', stroke: C.b3, 'stroke-width': 2, fill: 'none' }, s6trace) as Path;
-  const srcBox = h('g', {}, s6trace);
-  h('rect', { x: 330, y: 540, width: 1260, height: 132, rx: 10, fill: C.panel, 'fill-opacity': 0.94, stroke: C.b3, 'stroke-opacity': 0.6, 'stroke-width': 1.4 }, srcBox);
-  mono(srcBox, 960, 578, pr.traceSource, 15, C.b3, 'middle', 0.24, 500);
-  const srcSentence = copy.sentence.words.map((w) => w[0]).join(' ');
-  const srcTxt = h('text', { x: 960, y: 628, 'font-size': 28, fill: C.ink, 'font-weight': 500, 'text-anchor': 'middle' }, srcBox, srcSentence);
-  const srcW = srcTxt.getComputedTextLength();
-  const srcLine = h('path', { d: `M${960 - srcW / 2} 646 L${960 + srcW / 2} 646`, stroke: C.b3, 'stroke-width': 2.5, fill: 'none', 'stroke-linecap': 'round' }, srcBox) as Path;
+  const traceLab = mono(s6trace, 960, 184, pr.traceLabel, 16, C.b3, 'middle', 0.24, 500);
+  const TX = 330;
+  const ROWS_Y = [252, 352, 468, 590];
+  const traceLine = h('path', { d: `M${TX} ${ROWS_Y[0]} V${ROWS_Y[3]}`, stroke: C.b3, 'stroke-opacity': 0.5, 'stroke-width': 2, fill: 'none' }, s6trace) as Path;
+  const traceRows = pr.steps.map((st, i) => {
+    const y = ROWS_Y[i];
+    const g = h('g', {}, s6trace);
+    const last = i === pr.steps.length - 1;
+    h('circle', { cx: TX, cy: y, r: 9, fill: C.bg, stroke: last ? C.b3 : C.b1, 'stroke-width': 3 }, g);
+    mono(g, TX + 34, y - 14, st.label, 13, last ? C.b3 : C.b1, 'start', 0.22, 500);
+    h('text', { x: TX + 34, y: y + 20, 'font-size': last ? 27 : 23, fill: C.ink, 'font-weight': last ? 600 : 500 }, g, st.text);
+    if (st.why) h('text', { x: TX + 34, y: y + 50, 'font-size': 19, fill: C.grey }, g, st.why);
+    return g;
+  });
 
   /* ---------- outro ---------- */
   const outro = h('g');
@@ -741,49 +744,34 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
       set(s4sum, eo(seg(t, 46.9, 47.5)) * allOut, 0, (1 - eo(seg(t, 46.9, 47.5))) * 10);
     }
 
-    // scene 6: repeatable and traceable
+    // scene 7: repeatable and auditable
     const s6on = t >= 48.9 && t < 57.2;
     s6.style.display = s6on ? '' : 'none';
     if (s6on) {
-      const all = 1 - eio(seg(t, 56.3, 57));
-      const beatB = eio(seg(t, 52.9, 53.7)); // 0 = comparison, 1 = trace
+      const all = 1 - eio(seg(t, 56.4, 57.0));
+      const beatB = eio(seg(t, 52.8, 53.5)); // 0 = graphs, 1 = audit trail
       const q = eo(seg(t, 49.2, 49.8));
       set(s6q, q * (1 - beatB), 0, (1 - q) * 12);
-      const hp = eo(seg(t, 49.6, 50.1));
-      set(s6head[0], hp * (1 - beatB));
-      set(s6head[1], hp * (1 - beatB));
-      [0, 1, 2].forEach((r) => {
-        const st = 50 + r * 0.7;
-        const p = eo(seg(t, st, st + 0.45));
-        const L = s6rows[0][r];
-        const R = s6rows[1][r];
-        set(L.g, p * (1 - beatB), (1 - p) * -24, 0);
-        // Indexable: rows 2 and 3 leave, row 1 moves up to head the trace
-        if (r === 0) {
-          const dy = lerp(0, 230 - ROW_Y(0), beatB);
-          const dx = lerp(0, 580 - COLX[1], beatB);
-          set(R.g, p * all, (1 - p) * 24 + dx, dy);
-        } else set(R.g, p * (1 - beatB), (1 - p) * 24, 0);
-        const scr = seg(t, st, st + 0.8);
-        L.txt.textContent = scr < 1 ? scramble(L.final, scr, r * 7 + Math.floor(t * 24)) : L.final;
-        const fp = eo(seg(t, st + 0.5, st + 0.8));
-        L.flag.setAttribute('opacity', fp.toFixed(3));
-        R.flag.setAttribute('opacity', fp.toFixed(3));
-      });
-      s6rows[1][0].box.setAttribute('stroke', beatB > 0.5 ? C.b3 : 'rgba(255,255,255,.16)');
-      const vv = eo(seg(t, 52, 52.5));
-      set(s6verdict[0], vv * (1 - beatB), 0, (1 - vv) * 10);
-      set(s6verdict[1], vv * (1 - beatB), 0, (1 - vv) * 10);
-      // trace chain
+      const hp = eo(seg(t, 49.5, 50.0));
+      s6head.forEach((g) => set(g, hp * (1 - beatB)));
+      minis.forEach((col) =>
+        col.forEach((m, j) => {
+          const st = 49.9 + j * 0.55;
+          const p = eo(seg(t, st, st + 0.4));
+          set(m.g, p * (1 - beatB), 0, (1 - p) * 14);
+          m.edges.forEach((e) => draw(e, eio(seg(t, st + 0.2, st + 0.7))));
+        })
+      );
+      const vv = eo(seg(t, 51.8, 52.3));
+      set(s6verdict, vv * (1 - beatB), 0, (1 - vv) * 10);
       set(s6trace, all);
-      set(traceLab, eo(seg(t, 53.5, 54)));
-      draw(arrow1, eio(seg(t, 53.8, 54.3)));
-      const gn = eo(seg(t, 54.2, 54.6));
-      set(gnode, gn, 0, (1 - gn) * 8);
-      draw(arrow2, eio(seg(t, 54.6, 55.1)));
-      const sb = eo(seg(t, 55, 55.5));
-      set(srcBox, sb, 0, (1 - sb) * 12);
-      draw(srcLine, eio(seg(t, 55.4, 56.1)));
+      set(traceLab, eo(seg(t, 53.3, 53.8)));
+      draw(traceLine, eio(seg(t, 53.5, 55.8)));
+      traceRows.forEach((g, i) => {
+        const st = 53.6 + i * 0.6;
+        const p = eo(seg(t, st, st + 0.45));
+        set(g, p, (1 - p) * 20, 0);
+      });
     }
 
     // outro

@@ -54,15 +54,15 @@ export interface MotionCopy {
   proof: {
     questionLabel: string;
     question: string;
-    genLabel: string;
-    ixLabel: string;
-    genAnswers: [string, string, string];
-    ixAnswer: string;
-    genVerdict: string;
-    ixVerdict: string;
+    leftLabel: string;
+    rightLabel: string;
+    leftTags: [string, string, string];
+    rightTags: [string, string, string];
+    leftVerdict: string;
+    leftSource: string;
+    rightVerdict: string;
     traceLabel: string;
-    graphLabel: string;
-    traceSource: string;
+    steps: { label: string; text: string; why?: string }[];
   };
 }
 
@@ -313,7 +313,7 @@ export const content: Record<Lang, Content> = {
           {
             eyebrow: '03 / 07 · Plugin per Claude Code e Codex',
             title: 'Indexable nei tuoi agenti',
-            caption: 'Un agente con Indexable batte un agente a cui carichi i documenti: risponde con la fonte e scrive le modifiche con i requisiti giusti.',
+            caption: 'Indexable potenzia i tuoi agenti: rispetto ai soli documenti caricati, risposte più complete e con la fonte, e modifiche scritte con i requisiti giusti.',
             short: 'Plugin',
           },
           {
@@ -335,9 +335,9 @@ export const content: Record<Lang, Content> = {
             short: 'Verificare',
           },
           {
-            eyebrow: '07 / 07 · Ripetibile e verificabile',
-            title: 'Stessa risposta, ogni volta',
-            caption: 'Fai tre volte la stessa domanda: un sistema solo generativo può rispondere in tre modi diversi. Indexable dà sempre la stessa risposta, e ti mostra da dove viene.',
+            eyebrow: '07 / 07 · Ripetibile e auditabile',
+            title: 'Ripetibile e auditabile',
+            caption: 'Dagli stessi documenti, sempre lo stesso grafo. E ogni risposta lascia la traccia di cosa è stato recuperato e perché, con le citazioni.',
             short: 'Ripetibile',
           },
         ],
@@ -401,41 +401,54 @@ export const content: Record<Lang, Content> = {
         summaryCode: '2 COPERTI  ·  1 MANCANTE  ·  3 TEST GENERATI',
         missingComment: '// nessuna chiamata a notifyDebtor()',
         outroLine: 'AI spiegabile e verificabile per i settori regolamentati.',
-        outroChain: 'PER PERSONE E AGENTI  ·  RIPETIBILE  ·  VERIFICABILE',
+        outroChain: 'PER PERSONE E AGENTI  ·  RIPETIBILE  ·  AUDITABILE',
         proof: {
-          questionLabel: 'LA STESSA DOMANDA, FATTA TRE VOLTE',
-          question: 'Quando va rifiutato un mandato?',
-          genLabel: 'SOLO AI GENERATIVA',
-          ixLabel: 'INDEXABLE',
-          genAnswers: ['Quando manca la firma.', 'Quando i dati sono incompleti.', 'Si può accettare comunque.'],
-          ixAnswer: 'Quando manca la data di firma.',
-          genVerdict: '3 risposte diverse',
-          ixVerdict: 'Sempre la stessa risposta',
-          traceLabel: 'DA DOVE VIENE LA RISPOSTA?',
-          graphLabel: 'dalla base di conoscenza',
-          traceSource: 'SPECIFICA v2.3  ·  §4.5',
+          questionLabel: 'GLI STESSI DOCUMENTI, TRE COSTRUZIONI DEL GRAFO',
+          question: 'Il grafo della conoscenza è sempre lo stesso?',
+          leftLabel: 'COSTRUITO DA TRE LLM DIVERSI',
+          rightLabel: 'COSTRUITO DA INDEXABLE, TRE VOLTE',
+          leftTags: ['LLM A', 'LLM B', 'LLM C'],
+          rightTags: ['1ª VOLTA', '2ª VOLTA', '3ª VOLTA'],
+          leftVerdict: 'Solo il 6-11% delle relazioni in comune',
+          leftSource: 'STUDIO SU 4 LLM  ·  FRONTIERS IN IMMUNOLOGY, 2026',
+          rightVerdict: 'Sempre lo stesso grafo',
+          traceLabel: 'TRACCIA DI VERIFICA  ·  PERCHÉ QUESTA RISPOSTA',
+          steps: [
+            { label: 'DOMANDA', text: 'Quando va rifiutato un mandato?' },
+            {
+              label: 'RECUPERATO  [1]',
+              text: 'Specifica v2.3 §4.5: «La banca del debitore deve rifiutare il mandato se manca la data di firma.»',
+              why: 'Perché: stesso oggetto (il mandato) e stessa condizione (la data di firma).',
+            },
+            {
+              label: 'RECUPERATO  [2]',
+              text: 'Verbale del 12 mar 2026: «Gli operatori possono accettare mandati senza data di firma.»',
+              why: 'Perché: tratta lo stesso caso, ed è in conflitto con [1].',
+            },
+            { label: 'RISPOSTA', text: 'Va rifiutato se manca la data di firma [1]. Attenzione: il verbale dice il contrario [2].' },
+          ],
         },
       },
       trust: {
         label: 'Perché fidarsi',
         title: 'AI spiegabile e verificabile per i settori regolamentati.',
         lead:
-          'Molti strumenti costruiscono un “cervello aziendale” tutto su AI generativa: la stessa domanda può avere risposte diverse, e non sempre si sa da dove vengono. Indexable è un’AI spiegabile e verificabile. La lettura dei documenti, la base di conoscenza e i controlli sono deterministici e ripetibili. L’AI generativa interviene in un solo punto, la stesura dei requisiti, e lavora dentro i confini della base di conoscenza.',
+          'Molti strumenti costruiscono un “cervello aziendale” tutto con l’AI generativa: la base di conoscenza cambia a seconda del modello, e non sempre si sa perché arriva una certa risposta. Indexable costruisce la base di conoscenza in modo deterministico e la mette a disposizione di persone e agenti: risposte più complete, con una traccia verificabile di ogni passaggio.',
         pillars: [
           {
             title: 'Ripetibile.',
             body:
-              'Estrazione, base di conoscenza e controlli di coerenza non usano AI generativa: a parità di fonti il risultato è sempre lo stesso, oggi come tra un anno. Quando un documento cambia, vedi cosa cambia e perché.',
+              'Dagli stessi documenti, Indexable ricostruisce sempre lo stesso grafo della conoscenza. Quando un documento cambia, vedi esattamente cosa cambia e perché.',
           },
           {
             title: 'Auditabile.',
             body:
-              'Ogni affermazione, requisito e conflitto è collegato alla frase del documento o alla riga di codice da cui nasce. Un revisore ripercorre tutto il ragionamento, passo dopo passo.',
+              'Ogni risposta lascia una traccia passo per passo: quali affermazioni sono state recuperate, perché proprio quelle, con le citazioni del testo originale.',
           },
           {
-            title: 'AI generativa sotto controllo.',
+            title: 'Potenzia i tuoi agenti.',
             body:
-              'L’AI generativa serve solo a stendere i requisiti e lavora dentro la base di conoscenza. Ogni requisito resta collegato alle sue fonti e deve superare i controlli deterministici prima di essere accettato.',
+              'Claude Code, Codex e gli altri agenti lavorano sulla base di conoscenza invece che sui soli documenti caricati: risposte più complete, dentro i confini di ciò che è scritto.',
           },
           {
             title: 'Pensato per i settori regolamentati.',
@@ -445,12 +458,13 @@ export const content: Record<Lang, Content> = {
         ],
         table: {
           caption: 'Il confronto',
-          head: ['', 'Solo AI generativa', 'Indexable'],
+          head: ['', 'Solo AI generativa', 'Con Indexable'],
           rows: [
-            ['Stessa domanda, due volte', 'Può dare risposte diverse', 'Stessa risposta, dalla base di conoscenza'],
-            ['Da dove viene la risposta', 'Non sempre dichiarato', 'Fonte esatta, per ogni affermazione'],
+            ['Ricostruire la base di conoscenza', 'Grafo diverso a seconda del modello', 'Sempre lo stesso grafo'],
+            ['Da dove viene la risposta', 'Non sempre dichiarato', 'Citazioni esatte, per ogni affermazione'],
+            ['Perché il sistema ha risposto così', 'Difficile da ricostruire', 'Traccia passo per passo'],
+            ['Completezza delle risposte', 'Dipende dai documenti caricati', 'Tutte le fonti collegate nel grafo'],
             ['Controllo dei requisiti', 'Probabilistico', 'Deterministico, con regole esplicite'],
-            ['Controllo di un revisore', 'Difficile da ricostruire', 'Percorso completo e verificabile'],
             ['Cambia un documento', 'Si riparte da capo', 'Si vede cosa cambia e dove'],
           ],
         },
@@ -675,7 +689,7 @@ export const content: Record<Lang, Content> = {
           {
             eyebrow: '03 / 07 · Plugin for Claude Code and Codex',
             title: 'Indexable in your agents',
-            caption: 'An agent with Indexable beats an agent you just feed documents to: it answers with the source and writes changes with the right requirements.',
+            caption: 'Indexable augments your agents: compared with just uploading documents, more complete answers with sources, and changes written with the right requirements.',
             short: 'Plugin',
           },
           {
@@ -697,9 +711,9 @@ export const content: Record<Lang, Content> = {
             short: 'Verify',
           },
           {
-            eyebrow: '07 / 07 · Repeatable and traceable',
-            title: 'Same answer, every time',
-            caption: 'Ask the same question three times: a generative-only system may answer three different ways. Indexable always gives the same answer, and shows you where it comes from.',
+            eyebrow: '07 / 07 · Repeatable and auditable',
+            title: 'Repeatable and auditable',
+            caption: 'The same documents always give the same graph. And every answer leaves a trail of what was retrieved and why, with citations.',
             short: 'Repeatable',
           },
         ],
@@ -763,41 +777,54 @@ export const content: Record<Lang, Content> = {
         summaryCode: '2 COVERED  ·  1 MISSING  ·  3 TESTS GENERATED',
         missingComment: '// no call to notifyDebtor() found',
         outroLine: 'Explainable, auditable AI for regulated industries.',
-        outroChain: 'FOR PEOPLE AND AGENTS  ·  REPEATABLE  ·  TRACEABLE',
+        outroChain: 'FOR PEOPLE AND AGENTS  ·  REPEATABLE  ·  AUDITABLE',
         proof: {
-          questionLabel: 'THE SAME QUESTION, ASKED THREE TIMES',
-          question: 'When must a mandate be rejected?',
-          genLabel: 'GENERATIVE AI ONLY',
-          ixLabel: 'INDEXABLE',
-          genAnswers: ['When the signature is missing.', 'When the data is incomplete.', 'It can be accepted anyway.'],
-          ixAnswer: 'When the signature date is missing.',
-          genVerdict: '3 different answers',
-          ixVerdict: 'Always the same answer',
-          traceLabel: 'WHERE DOES THE ANSWER COME FROM?',
-          graphLabel: 'from the knowledge base',
-          traceSource: 'SPECIFICATION v2.3  ·  §4.5',
+          questionLabel: 'THE SAME DOCUMENTS, THREE GRAPH BUILDS',
+          question: 'Is the knowledge graph always the same?',
+          leftLabel: 'BUILT BY THREE DIFFERENT LLMS',
+          rightLabel: 'BUILT BY INDEXABLE, THREE TIMES',
+          leftTags: ['LLM A', 'LLM B', 'LLM C'],
+          rightTags: ['RUN 1', 'RUN 2', 'RUN 3'],
+          leftVerdict: 'Only 6-11% of relations in common',
+          leftSource: 'STUDY ON 4 LLMS  ·  FRONTIERS IN IMMUNOLOGY, 2026',
+          rightVerdict: 'Always the same graph',
+          traceLabel: 'AUDIT TRAIL  ·  WHY THIS ANSWER',
+          steps: [
+            { label: 'QUESTION', text: 'When must a mandate be rejected?' },
+            {
+              label: 'RETRIEVED  [1]',
+              text: 'Spec v2.3 §4.5: “The debtor bank shall reject the mandate if the signature date is missing.”',
+              why: 'Why: same object (the mandate) and same condition (the signature date).',
+            },
+            {
+              label: 'RETRIEVED  [2]',
+              text: 'Minutes, 12 Mar 2026: “Operators may accept mandates without a signature date.”',
+              why: 'Why: it covers the same case, and conflicts with [1].',
+            },
+            { label: 'ANSWER', text: 'Reject it if the signature date is missing [1]. Note: the minutes say otherwise [2].' },
+          ],
         },
       },
       trust: {
         label: 'Why you can trust it',
         title: 'Explainable, auditable AI for regulated industries.',
         lead:
-          'Many tools build a “company brain” entirely on generative AI: the same question can get different answers, and it is not always clear where they come from. Indexable is explainable, auditable AI. Reading the documents, the knowledge base and the checks are deterministic and repeatable. Generative AI is used at one point only, writing requirements, and works within the bounds of the knowledge base.',
+          'Many tools build a “company brain” entirely with generative AI: the knowledge base changes with the model, and it is not always clear why a given answer comes back. Indexable builds the knowledge base deterministically and makes it available to people and agents: more complete answers, with a verifiable trail of every step.',
         pillars: [
           {
             title: 'Repeatable.',
             body:
-              'Extraction, knowledge base and consistency checks use no generative AI: given the same sources, the result is always the same, today or a year from now. When a document changes, you see what changes and why.',
+              'From the same documents, Indexable always rebuilds the same knowledge graph. When a document changes, you see exactly what changes and why.',
           },
           {
             title: 'Auditable.',
             body:
-              'Every statement, requirement and conflict is linked to the sentence in a document or the line of code it comes from. A reviewer can retrace the whole reasoning, step by step.',
+              'Every answer leaves a step-by-step trail: which statements were retrieved, why those, with citations from the original text.',
           },
           {
-            title: 'Generative AI, kept in check.',
+            title: 'Augments your agents.',
             body:
-              'Generative AI is used only to write requirements, and works inside the knowledge base. Every requirement stays linked to its sources and must pass the deterministic checks before it is accepted.',
+              'Claude Code, Codex and other agents work on the knowledge base instead of uploaded documents alone: more complete answers, within the bounds of what is written.',
           },
           {
             title: 'Built for regulated industries.',
@@ -807,12 +834,13 @@ export const content: Record<Lang, Content> = {
         ],
         table: {
           caption: 'The comparison',
-          head: ['', 'Generative AI only', 'Indexable'],
+          head: ['', 'Generative AI only', 'With Indexable'],
           rows: [
-            ['Same question, twice', 'May give different answers', 'Same answer, from the knowledge base'],
-            ['Where the answer comes from', 'Not always stated', 'Exact source, for every statement'],
+            ['Rebuilding the knowledge base', 'A different graph for each model', 'Always the same graph'],
+            ['Where the answer comes from', 'Not always stated', 'Exact citations, for every statement'],
+            ['Why the system answered that way', 'Hard to reconstruct', 'Step-by-step trail'],
+            ['How complete the answers are', 'Depends on the uploaded documents', 'Every source linked in the graph'],
             ['Checking requirements', 'Probabilistic', 'Deterministic, with explicit rules'],
-            ['An auditor’s review', 'Hard to reconstruct', 'Complete, verifiable trail'],
             ['A document changes', 'Start over', 'See what changes, and where'],
           ],
         },
