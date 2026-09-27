@@ -524,7 +524,7 @@ export const content: Record<Lang, Content> = {
         {
           title: 'Ci pensiamo noi.',
           body:
-            'Affidaci un’esigenza concreta: consolidare la documentazione, definire i requisiti, valutare un cambiamento o verificare un’implementazione. Concordiamo il perimetro, i risultati da consegnare e i criteri per verificarli.',
+            'Ti consegniamo noi il lavoro finito: documentazione consolidata, requisiti, analisi di impatto, verifiche dell’implementazione. Tempi più brevi, senza perdere qualità, perché ogni consegna è collegata alle fonti e si può verificare. Concordiamo insieme il perimetro, cosa consegnare e come verificarlo.',
         },
       ],
       cta: {
@@ -901,7 +901,7 @@ export const content: Record<Lang, Content> = {
         {
           title: 'We take care of it.',
           body:
-            'Hand us a concrete need: consolidating documentation, defining requirements, assessing a change or verifying an implementation. We agree on the scope, the deliverables and the criteria to verify them.',
+            'We deliver the finished work: consolidated documentation, requirements, impact analysis, implementation checks. Faster, without losing quality, because every deliverable is linked to its sources and can be verified. Together we agree on the scope, what to deliver and how to verify it.',
         },
       ],
       cta: {
