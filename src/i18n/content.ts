@@ -52,15 +52,12 @@ export interface MotionCopy {
     question: string;
     genLabel: string;
     ixLabel: string;
-    run: string;
-    print: string;
     genAnswers: [string, string, string];
-    genPrints: [string, string, string];
     ixAnswer: string;
-    ixPrint: string;
     genVerdict: string;
     ixVerdict: string;
     traceLabel: string;
+    graphLabel: string;
     traceSource: string;
   };
 }
@@ -328,9 +325,9 @@ export const content: Record<Lang, Content> = {
             short: 'Codice',
           },
           {
-            eyebrow: '06 / 06 · Ripetibile e auditabile',
+            eyebrow: '06 / 06 · Ripetibile e verificabile',
             title: 'Stessa risposta, ogni volta',
-            caption: 'La base di conoscenza e i controlli non usano AI generativa: stesse fonti, stessa risposta. E ogni risultato torna alla sua fonte.',
+            caption: 'Fai tre volte la stessa domanda: un sistema solo generativo può rispondere in tre modi diversi. Indexable dà sempre la stessa risposta, e ti mostra da dove viene.',
             short: 'Ripetibile',
           },
         ],
@@ -368,24 +365,17 @@ export const content: Record<Lang, Content> = {
         outroLine: 'L’AI propone. Il grafo verifica.',
         outroChain: 'PENSATO PER I SETTORI REGOLAMENTATI',
         proof: {
-          questionLabel: 'STESSA DOMANDA, STESSE FONTI, TRE VOLTE',
+          questionLabel: 'LA STESSA DOMANDA, FATTA TRE VOLTE',
           question: 'Quando va rifiutato un mandato?',
           genLabel: 'SOLO AI GENERATIVA',
           ixLabel: 'INDEXABLE',
-          run: 'PROVA',
-          print: 'IMPRONTA',
-          genAnswers: [
-            'Quando la firma manca o non è leggibile.',
-            'Se i dati sono incompleti. Meglio chiedere all’ufficio.',
-            'Senza data di firma si può accettare comunque.',
-          ],
-          genPrints: ['a91c·04e2', '3e07·b1f9', 'd52b·7a30'],
-          ixAnswer: 'Va rifiutato se manca la data di firma.  c-014',
-          ixPrint: '7f3a·9c1d',
-          genVerdict: '3 PROVE  ·  3 RISPOSTE DIVERSE',
-          ixVerdict: '3 PROVE  ·  STESSA RISPOSTA  ·  STESSA IMPRONTA',
-          traceLabel: 'PERCORSO DI VERIFICA',
-          traceSource: 'SPECIFICA v2.3 §4.5',
+          genAnswers: ['Quando manca la firma.', 'Quando i dati sono incompleti.', 'Si può accettare comunque.'],
+          ixAnswer: 'Quando manca la data di firma.',
+          genVerdict: '3 risposte diverse',
+          ixVerdict: 'Sempre la stessa risposta',
+          traceLabel: 'DA DOVE VIENE LA RISPOSTA?',
+          graphLabel: 'dal grafo della conoscenza',
+          traceSource: 'SPECIFICA v2.3  ·  §4.5',
         },
       },
       trust: {
@@ -663,9 +653,9 @@ export const content: Record<Lang, Content> = {
             short: 'Code',
           },
           {
-            eyebrow: '06 / 06 · Repeatable and auditable',
+            eyebrow: '06 / 06 · Repeatable and traceable',
             title: 'Same answer, every time',
-            caption: 'The knowledge base and the checks use no generative AI: same sources, same answer. And every result traces back to its source.',
+            caption: 'Ask the same question three times: a generative-only system may answer three different ways. Indexable always gives the same answer, and shows you where it comes from.',
             short: 'Repeatable',
           },
         ],
@@ -703,24 +693,17 @@ export const content: Record<Lang, Content> = {
         outroLine: 'AI proposes. The graph verifies.',
         outroChain: 'BUILT FOR REGULATED INDUSTRIES',
         proof: {
-          questionLabel: 'SAME QUESTION, SAME SOURCES, THREE TIMES',
+          questionLabel: 'THE SAME QUESTION, ASKED THREE TIMES',
           question: 'When must a mandate be rejected?',
           genLabel: 'GENERATIVE AI ONLY',
           ixLabel: 'INDEXABLE',
-          run: 'RUN',
-          print: 'FINGERPRINT',
-          genAnswers: [
-            'When the signature is missing or unreadable.',
-            'If data is incomplete. Better check with ops.',
-            'Without a signature date it can still be accepted.',
-          ],
-          genPrints: ['a91c·04e2', '3e07·b1f9', 'd52b·7a30'],
-          ixAnswer: 'Reject it if the signature date is missing.  c-014',
-          ixPrint: '7f3a·9c1d',
-          genVerdict: '3 RUNS  ·  3 DIFFERENT ANSWERS',
-          ixVerdict: '3 RUNS  ·  SAME ANSWER  ·  SAME FINGERPRINT',
-          traceLabel: 'AUDIT TRAIL',
-          traceSource: 'SPEC v2.3 §4.5',
+          genAnswers: ['When the signature is missing.', 'When the data is incomplete.', 'It can be accepted anyway.'],
+          ixAnswer: 'When the signature date is missing.',
+          genVerdict: '3 different answers',
+          ixVerdict: 'Always the same answer',
+          traceLabel: 'WHERE DOES THE ANSWER COME FROM?',
+          graphLabel: 'from the knowledge graph',
+          traceSource: 'SPECIFICATION v2.3  ·  §4.5',
         },
       },
       trust: {
