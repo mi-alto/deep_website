@@ -504,7 +504,7 @@ export const content: Record<Lang, Content> = {
       label: 'Deep4IT',
       title: 'Costruita sulla ricerca. Applicata a esigenze reali.',
       body:
-        'Uniamo tecnologia AI proprietaria ed esperienza nella realizzazione di prodotti e servizi complessi.',
+        'Nei settori regolamentati non basta una risposta plausibile: serve una risposta che si può dimostrare. Per questo Indexable usa gli stessi metodi di verifica formale nati nell’aerospazio, un’analisi del codice che dà sempre lo stesso risultato e la ricerca più recente sui grafi di conoscenza.',
       clientsLabel: 'Tra i nostri clienti',
       clients: clientLogos,
       innovationLabel: 'Percorso di innovazione',
@@ -881,7 +881,7 @@ export const content: Record<Lang, Content> = {
       label: 'Deep4IT',
       title: 'Built on research. Applied to real needs.',
       body:
-        'We combine proprietary AI technology with hands-on experience in delivering complex products and services.',
+        'In regulated industries a plausible answer is not enough: you need an answer you can prove. That is why Indexable uses the same formal verification methods born in aerospace, code analysis that always gives the same result, and the latest research on knowledge graphs.',
       clientsLabel: 'Our clients include',
       clients: clientLogos,
       innovationLabel: 'Innovation track record',
