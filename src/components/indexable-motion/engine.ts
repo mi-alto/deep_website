@@ -501,8 +501,10 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   /* ---------- render ---------- */
   function render(realT: number) {
     const t = toAnim(realT);
-    glowEl.setAttribute('cx', (960 + Math.sin(t * 0.25) * 140).toFixed(1));
-    glowEl.setAttribute('cy', (440 + Math.cos(t * 0.19) * 50).toFixed(1));
+    // ambient motion (background, node drift, flowing dots, pulses) keeps running during reading pauses
+    const amb = realT / PACE;
+    glowEl.setAttribute('cx', (960 + Math.sin(amb * 0.25) * 140).toFixed(1));
+    glowEl.setAttribute('cy', (440 + Math.cos(amb * 0.19) * 50).toFixed(1));
 
     // intro
     set(intro, 1 - eio(seg(t, 3.2, 4.0)));
@@ -565,8 +567,8 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
       nodes.forEach((n, i) => {
         const p = eo(seg(t, appear[i], appear[i] + 0.5));
         const drift = i ? 5 : 0;
-        n.cx = n.x + Math.sin(t * 0.6 + i * 1.7) * drift;
-        n.cy = n.y + Math.cos(t * 0.5 + i * 1.3) * drift;
+        n.cx = n.x + Math.sin(amb * 0.6 + i * 1.7) * drift;
+        n.cy = n.y + Math.cos(amb * 0.5 + i * 1.3) * drift;
         set(nodeEls[i].g, p, n.cx, n.cy, 0.4 + 0.6 * p);
         const imp = IMPACTED.indexOf(i);
         const impT = 37.0 + imp * 0.35;
@@ -589,7 +591,7 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
         const dimChange = imp >= 0 ? 1 : 1 - 0.65 * eio(seg(t, 36.8, 37.4));
         nodeEls[i].g.setAttribute('opacity', (p * dimPlug * dimChange).toFixed(3));
         const hlp = queried ? eo(seg(t, qT, qT + 0.4)) * (1 - eio(seg(t, 27.8, 28.4))) : 0;
-        const pulse = hlp > 0 ? 1 + 0.25 * Math.sin((t - qT) * 5) : 1;
+        const pulse = hlp > 0 ? 1 + 0.25 * Math.sin((amb - qT) * 5) : 1;
         nodeEls[i].halo.setAttribute('transform', `scale(${(1 + hlp * 0.7 * pulse).toFixed(3)})`);
         nodeEls[i].ring.setAttribute('opacity', (imp >= 0 ? eo(seg(t, impT, impT + 0.35)) : 0).toFixed(3));
       });
@@ -617,7 +619,7 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
           const st = 16.0 + i * 0.1;
           const q = eo(seg(t, st, st + 0.9));
           p.setAttribute('opacity', q.toFixed(3));
-          const tp = (((t - st) * 0.45) % 1 + 1) % 1;
+          const tp = (((amb - st) * 0.45) % 1 + 1) % 1;
           if (t > st && t < 20) {
             const pt = p.getPointAtLength(p.getTotalLength() * tp);
             dot.setAttribute('cx', pt.x.toFixed(1));
