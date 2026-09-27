@@ -362,7 +362,7 @@ export const content: Record<Lang, Content> = {
         summaryCheck: 'CONTROLLO DETERMINISTICO  ·  4 REQUISITI  ·  3 COERENTI  ·  1 CONFLITTO',
         summaryCode: '2 COPERTI  ·  1 MANCANTE  ·  3 TEST GENERATI',
         missingComment: '// nessuna chiamata a notifyDebtor()',
-        outroLine: 'AI controllata per sistemi regolamentati.',
+        outroLine: 'AI spiegabile e verificabile per i settori regolamentati.',
         outroChain: 'RIPETIBILE  ·  VERIFICABILE  ·  COLLEGATA ALLE FONTI',
         proof: {
           questionLabel: 'LA STESSA DOMANDA, FATTA TRE VOLTE',
@@ -380,9 +380,9 @@ export const content: Record<Lang, Content> = {
       },
       trust: {
         label: 'Perché fidarsi',
-        title: 'AI controllata per sistemi regolamentati.',
+        title: 'AI spiegabile e verificabile per i settori regolamentati.',
         lead:
-          'Molti strumenti costruiscono un “cervello aziendale” tutto su AI generativa: la stessa domanda può avere risposte diverse, e non sempre si sa da dove vengono. Indexable è un’AI controllata. La lettura dei documenti, il grafo e i controlli sono deterministici e ripetibili. L’AI generativa interviene in un solo punto, la stesura dei requisiti, e lavora dentro i confini del grafo.',
+          'Molti strumenti costruiscono un “cervello aziendale” tutto su AI generativa: la stessa domanda può avere risposte diverse, e non sempre si sa da dove vengono. Indexable è un’AI spiegabile e verificabile. La lettura dei documenti, il grafo e i controlli sono deterministici e ripetibili. L’AI generativa interviene in un solo punto, la stesura dei requisiti, e lavora dentro i confini del grafo.',
         pillars: [
           {
             title: 'Ripetibile.',
@@ -690,7 +690,7 @@ export const content: Record<Lang, Content> = {
         summaryCheck: 'DETERMINISTIC CHECK  ·  4 REQUIREMENTS  ·  3 CONSISTENT  ·  1 CONFLICT',
         summaryCode: '2 COVERED  ·  1 MISSING  ·  3 TESTS GENERATED',
         missingComment: '// no call to notifyDebtor() found',
-        outroLine: 'Controlled AI for regulated systems.',
+        outroLine: 'Explainable, auditable AI for regulated industries.',
         outroChain: 'REPEATABLE  ·  TRACEABLE  ·  LINKED TO ITS SOURCES',
         proof: {
           questionLabel: 'THE SAME QUESTION, ASKED THREE TIMES',
@@ -708,9 +708,9 @@ export const content: Record<Lang, Content> = {
       },
       trust: {
         label: 'Why you can trust it',
-        title: 'Controlled AI for regulated systems.',
+        title: 'Explainable, auditable AI for regulated industries.',
         lead:
-          'Many tools build a “company brain” entirely on generative AI: the same question can get different answers, and it is not always clear where they come from. Indexable is controlled AI. Reading the documents, the graph and the checks are deterministic and repeatable. Generative AI is used at one point only, writing requirements, and works within the bounds of the graph.',
+          'Many tools build a “company brain” entirely on generative AI: the same question can get different answers, and it is not always clear where they come from. Indexable is explainable, auditable AI. Reading the documents, the graph and the checks are deterministic and repeatable. Generative AI is used at one point only, writing requirements, and works within the bounds of the graph.',
         pillars: [
           {
             title: 'Repeatable.',
