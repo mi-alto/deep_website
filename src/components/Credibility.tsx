@@ -32,6 +32,9 @@ function LogoRow({ logos, styles }: { logos: { src: string; alt: string; note?: 
 export default function Credibility() {
   const { t } = useLang();
   const c = t.credibility;
+  const cut = c.body.indexOf('. ');
+  const lead = cut > 0 ? c.body.slice(0, cut + 1) : c.body;
+  const rest = cut > 0 ? c.body.slice(cut + 2) : '';
 
   return (
     <section className="relative bg-black/35 pb-20 md:pb-36">
@@ -41,7 +44,13 @@ export default function Credibility() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <Reveal delay={80}>
-              <p className="max-w-md text-[15px] leading-relaxed text-[#B7B7B7] md:text-base">{c.body}</p>
+              {/* the first sentence is the claim: set it large; the rest explains it */}
+              <div className="max-w-xl border-l-2 border-[hsl(var(--brand-1)/0.7)] pl-5 md:pl-6">
+                <p className="font-display text-xl font-semibold leading-snug tracking-tight text-white md:text-[1.7rem] md:leading-[1.25]">
+                  {lead}
+                </p>
+                {rest && <p className="mt-4 text-[15px] leading-relaxed text-[#B7B7B7] md:text-lg">{rest}</p>}
+              </div>
             </Reveal>
           </div>
 
