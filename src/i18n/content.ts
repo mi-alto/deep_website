@@ -35,14 +35,15 @@ export interface MotionCopy {
     /** claim formula tokens, colored by role index (-1 = neutral, 5 = modality) */
     claim: [string, number][];
   };
-  docs: [string, string, string, string];
+  docs: string[];
+  sourcesLine: string;
   nodes: string[];
   modality: { obligation: string; permission: string };
   reqs: { id: string; text: string; source: string; permission?: boolean }[];
   chips: { ok: string; conflict: string; covered: string; missing: string };
   conflict: [string, string, string];
   reqsLabel: string;
-  plugin: { tabs: [string, string]; header: string; q1: string; call1: string; answer: string; source: string; q2: string; call2: string; done: string };
+  plugin: { tabs: [string, string]; header: string; q1: string; call1: string; answer: string; source: string; q2: string; call2: string; done: string; versus: [string, string, string] };
   modules: { label: string; families: { name: string; items: string[] }[] };
   change: { tag: string; text: string; impactLabel: string; impacts: string[] };
   summaryCheck: string;
@@ -295,36 +296,36 @@ export const content: Record<Lang, Content> = {
         ariaLabel:
           'Animazione: come funziona Indexable, dall’estrazione grammaticale alla verifica del codice',
         controls: { play: 'Riproduci', pause: 'Pausa', replay: 'Da capo', goTo: 'Vai al passaggio' },
-        introSub: 'DAI DOCUMENTI AL GRAFO DELLA CONOSCENZA',
+        introSub: 'DAI DOCUMENTI ALLA BASE DI CONOSCENZA',
         steps: [
           {
-            eyebrow: '01 / 07 · Lettura dei documenti',
-            title: 'Leggi i documenti',
-            caption: 'Specifiche, verbali, manuali e codice: ogni frase diventa un insieme di affermazioni elementari, chi deve fare cosa e a quale condizione.',
-            short: 'Lettura',
+            eyebrow: '01 / 07 · Estrazione grammaticale',
+            title: 'Analizza il linguaggio',
+            caption: 'Specifiche, verbali, requisiti, manuali e codice: ogni frase diventa un insieme di affermazioni elementari, chi deve fare cosa e a quale condizione.',
+            short: 'Linguaggio',
           },
           {
-            eyebrow: '02 / 07 · Grafo della conoscenza',
+            eyebrow: '02 / 07 · Grafo della conoscenza del prodotto',
             title: 'Costruisci il grafo',
-            caption: 'Le affermazioni di tutte le fonti si collegano in un unico grafo. Ogni nodo conserva la sua fonte.',
+            caption: 'Tutte le fonti diventano un grafo semantico del prodotto o del servizio: una base di conoscenza per persone e agenti, dove ogni elemento conserva la sua fonte.',
             short: 'Grafo',
           },
           {
             eyebrow: '03 / 07 · Plugin per Claude Code e Codex',
-            title: 'Il grafo nei tuoi agenti',
-            caption: 'Con il plugin, Claude Code e Codex interrogano il grafo: risposte con la fonte, e modifiche al codice scritte con i requisiti giusti.',
+            title: 'Indexable nei tuoi agenti',
+            caption: 'Un agente con Indexable batte un agente a cui carichi i documenti: risponde con la fonte e scrive le modifiche con i requisiti giusti.',
             short: 'Plugin',
           },
           {
             eyebrow: '04 / 07 · Servizi',
-            title: 'Un grafo, tanti servizi',
-            caption: 'Sulla stessa base: conoscere il prodotto, verificare, gestire i cambiamenti, collaudare.',
+            title: 'Una base, tanti servizi',
+            caption: 'Sulla stessa base di conoscenza, per persone e agenti: conoscere il prodotto, verificare, gestire i cambiamenti, collaudare.',
             short: 'Servizi',
           },
           {
             eyebrow: '05 / 07 · Impatto dei cambiamenti',
             title: 'Valuta una Change Request',
-            caption: 'Arriva una richiesta di modifica: il grafo mostra subito quali requisiti, parti di codice e test sono coinvolti.',
+            caption: 'Arriva una richiesta di modifica: la base di conoscenza mostra subito quali requisiti, parti di codice e test sono coinvolti.',
             short: 'Cambiare',
           },
           {
@@ -352,7 +353,8 @@ export const content: Record<Lang, Content> = {
             ['mandato', 3], [' | ', -1], ['data_firma = null', 4], [')', -1],
           ],
         },
-        docs: ['SPECIFICA', 'VERBALI', 'MANUALE', 'CODICE'],
+        docs: ['SPECIFICHE', 'VERBALI', 'REQUISITI', 'MANUALI', 'CODICE'],
+        sourcesLine: 'SPECIFICHE  ·  VERBALI  ·  REQUISITI  ·  MANUALI  ·  CODICE',
         nodes: [
           'rifiuta mandato', 'banca debitore', 'mandato', 'data di firma', 'creditore', 'invia incasso', 'scadenza D-1',
           'operatore', 'accetta senza firma', 'avvisa debitore', 'codice di rifiuto', 'stato mandato', 'incasso',
@@ -367,20 +369,21 @@ export const content: Record<Lang, Content> = {
         ],
         chips: { ok: 'COERENTE', conflict: 'CONFLITTO', covered: 'COPERTO', missing: 'MANCANTE' },
         conflict: ['CONFLITTO', 'deve rifiutare', 'vs può accettare'],
-        reqsLabel: 'REQUISITI RICAVATI DAL GRAFO  ·  CONTROLLO DETERMINISTICO',
+        reqsLabel: 'REQUISITI RICAVATI DALLA BASE DI CONOSCENZA  ·  CONTROLLO DETERMINISTICO',
         plugin: {
           tabs: ['CLAUDE CODE', 'CODEX'],
           header: 'PLUGIN INDEXABLE',
           q1: 'Quando va rifiutato un mandato?',
-          call1: 'interroga il grafo',
+          call1: 'interroga la base di conoscenza',
           answer: 'Quando manca la data di firma.',
           source: 'FONTE  ·  SPECIFICA v2.3  §4.5',
           q2: 'Aggiungi il controllo in MandateValidator.java',
           call2: 'requisiti collegati: REQ-014, REQ-022',
           done: 'L’agente scrive la modifica con i requisiti giusti.',
+          versus: ['Agente + Indexable', '  batte  ', 'agente + documenti caricati'],
         },
         modules: {
-          label: 'UN GRAFO, TANTI SERVIZI',
+          label: 'UNA BASE DI CONOSCENZA, PER PERSONE E AGENTI',
           families: [
             { name: 'Conoscere', items: ['Domande sul prodotto', 'Passaggio di consegne'] },
             { name: 'Verificare', items: ['Coerenza e completezza', 'Requisiti e codice'] },
@@ -392,13 +395,13 @@ export const content: Record<Lang, Content> = {
           tag: 'CHANGE REQUEST  ·  CR-07',
           text: 'Accettare mandati con firma digitale.',
           impactLabel: 'IMPATTO',
-          impacts: ['3 requisiti da rivedere', '1 conflitto con i verbali', '2 parti di codice', '4 test da rifare'],
+          impacts: ['12 requisiti da rivedere', '2 conflitti con i verbali', '9 componenti di codice', '123 test da rifare'],
         },
         summaryCheck: '4 REQUISITI  ·  3 COERENTI  ·  1 CONFLITTO',
         summaryCode: '2 COPERTI  ·  1 MANCANTE  ·  3 TEST GENERATI',
         missingComment: '// nessuna chiamata a notifyDebtor()',
         outroLine: 'AI spiegabile e verificabile per i settori regolamentati.',
-        outroChain: 'RIPETIBILE  ·  VERIFICABILE  ·  COLLEGATA ALLE FONTI',
+        outroChain: 'PER PERSONE E AGENTI  ·  RIPETIBILE  ·  VERIFICABILE',
         proof: {
           questionLabel: 'LA STESSA DOMANDA, FATTA TRE VOLTE',
           question: 'Quando va rifiutato un mandato?',
@@ -409,7 +412,7 @@ export const content: Record<Lang, Content> = {
           genVerdict: '3 risposte diverse',
           ixVerdict: 'Sempre la stessa risposta',
           traceLabel: 'DA DOVE VIENE LA RISPOSTA?',
-          graphLabel: 'dal grafo della conoscenza',
+          graphLabel: 'dalla base di conoscenza',
           traceSource: 'SPECIFICA v2.3  ·  §4.5',
         },
       },
@@ -417,12 +420,12 @@ export const content: Record<Lang, Content> = {
         label: 'Perché fidarsi',
         title: 'AI spiegabile e verificabile per i settori regolamentati.',
         lead:
-          'Molti strumenti costruiscono un “cervello aziendale” tutto su AI generativa: la stessa domanda può avere risposte diverse, e non sempre si sa da dove vengono. Indexable è un’AI spiegabile e verificabile. La lettura dei documenti, il grafo e i controlli sono deterministici e ripetibili. L’AI generativa interviene in un solo punto, la stesura dei requisiti, e lavora dentro i confini del grafo.',
+          'Molti strumenti costruiscono un “cervello aziendale” tutto su AI generativa: la stessa domanda può avere risposte diverse, e non sempre si sa da dove vengono. Indexable è un’AI spiegabile e verificabile. La lettura dei documenti, la base di conoscenza e i controlli sono deterministici e ripetibili. L’AI generativa interviene in un solo punto, la stesura dei requisiti, e lavora dentro i confini della base di conoscenza.',
         pillars: [
           {
             title: 'Ripetibile.',
             body:
-              'Estrazione, grafo e controlli di coerenza non usano AI generativa: a parità di fonti il risultato è sempre lo stesso, oggi come tra un anno. Quando un documento cambia, vedi cosa cambia e perché.',
+              'Estrazione, base di conoscenza e controlli di coerenza non usano AI generativa: a parità di fonti il risultato è sempre lo stesso, oggi come tra un anno. Quando un documento cambia, vedi cosa cambia e perché.',
           },
           {
             title: 'Auditabile.',
@@ -432,7 +435,7 @@ export const content: Record<Lang, Content> = {
           {
             title: 'AI generativa sotto controllo.',
             body:
-              'L’AI generativa serve solo a stendere i requisiti e lavora dentro il grafo. Ogni requisito resta collegato alle sue fonti e deve superare i controlli deterministici prima di essere accettato.',
+              'L’AI generativa serve solo a stendere i requisiti e lavora dentro la base di conoscenza. Ogni requisito resta collegato alle sue fonti e deve superare i controlli deterministici prima di essere accettato.',
           },
           {
             title: 'Pensato per i settori regolamentati.',
@@ -444,7 +447,7 @@ export const content: Record<Lang, Content> = {
           caption: 'Il confronto',
           head: ['', 'Solo AI generativa', 'Indexable'],
           rows: [
-            ['Stessa domanda, due volte', 'Può dare risposte diverse', 'Stessa risposta, dal grafo'],
+            ['Stessa domanda, due volte', 'Può dare risposte diverse', 'Stessa risposta, dalla base di conoscenza'],
             ['Da dove viene la risposta', 'Non sempre dichiarato', 'Fonte esatta, per ogni affermazione'],
             ['Controllo dei requisiti', 'Probabilistico', 'Deterministico, con regole esplicite'],
             ['Controllo di un revisore', 'Difficile da ricostruire', 'Percorso completo e verificabile'],
@@ -655,36 +658,36 @@ export const content: Record<Lang, Content> = {
         label: 'How it works',
         ariaLabel: 'Animation: how Indexable works, from grammatical extraction to code verification',
         controls: { play: 'Play', pause: 'Pause', replay: 'Replay', goTo: 'Go to step' },
-        introSub: 'FROM DOCUMENTS TO A KNOWLEDGE GRAPH',
+        introSub: 'FROM DOCUMENTS TO A KNOWLEDGE BASE',
         steps: [
           {
-            eyebrow: '01 / 07 · Reading the documents',
-            title: 'Read the documents',
-            caption: 'Specs, minutes, manuals and code: every sentence becomes atomic claims, who must do what, under which condition.',
-            short: 'Read',
+            eyebrow: '01 / 07 · Grammatical extraction',
+            title: 'Parse the language',
+            caption: 'Specs, minutes, requirements, manuals and code: every sentence becomes atomic claims, who must do what, under which condition.',
+            short: 'Language',
           },
           {
-            eyebrow: '02 / 07 · Knowledge graph',
+            eyebrow: '02 / 07 · Product knowledge graph',
             title: 'Build the graph',
-            caption: 'Claims from every source are linked in one graph. Every node keeps its source.',
+            caption: 'Every source becomes a semantic graph of your product or service: a knowledge base for people and agents, where every item keeps its source.',
             short: 'Graph',
           },
           {
             eyebrow: '03 / 07 · Plugin for Claude Code and Codex',
-            title: 'Plugged into your agents',
-            caption: 'With the plugin, Claude Code and Codex query the graph: answers with their source, and code changes written with the right requirements.',
+            title: 'Indexable in your agents',
+            caption: 'An agent with Indexable beats an agent you just feed documents to: it answers with the source and writes changes with the right requirements.',
             short: 'Plugin',
           },
           {
             eyebrow: '04 / 07 · Services',
-            title: 'One graph, many services',
-            caption: 'On the same foundation: know the product, verify, manage change, test.',
+            title: 'One base, many services',
+            caption: 'On the same knowledge base, for people and agents: know the product, verify, manage change, test.',
             short: 'Services',
           },
           {
             eyebrow: '05 / 07 · Change impact',
             title: 'Assess a Change Request',
-            caption: 'A change request comes in: the graph instantly shows which requirements, code and tests are affected.',
+            caption: 'A change request comes in: the knowledge base instantly shows which requirements, code and tests are affected.',
             short: 'Change',
           },
           {
@@ -712,7 +715,8 @@ export const content: Record<Lang, Content> = {
             ['mandate', 3], [' | ', -1], ['signature_date = null', 4], [')', -1],
           ],
         },
-        docs: ['SPEC', 'MINUTES', 'MANUAL', 'CODE'],
+        docs: ['SPECS', 'MINUTES', 'REQUIREMENTS', 'MANUALS', 'CODE'],
+        sourcesLine: 'SPECS  ·  MINUTES  ·  REQUIREMENTS  ·  MANUALS  ·  CODE',
         nodes: [
           'reject mandate', 'debtor bank', 'mandate', 'signature date', 'creditor', 'submit collection', 'D-1 cut-off',
           'operator', 'accept w/o signature', 'notify debtor', 'rejection code', 'mandate status', 'collection',
@@ -727,20 +731,21 @@ export const content: Record<Lang, Content> = {
         ],
         chips: { ok: 'CONSISTENT', conflict: 'CONFLICT', covered: 'COVERED', missing: 'MISSING' },
         conflict: ['CONFLICT', 'shall reject', 'vs may accept'],
-        reqsLabel: 'REQUIREMENTS DERIVED FROM THE GRAPH  ·  DETERMINISTIC CHECK',
+        reqsLabel: 'REQUIREMENTS DERIVED FROM THE KNOWLEDGE BASE  ·  DETERMINISTIC CHECK',
         plugin: {
           tabs: ['CLAUDE CODE', 'CODEX'],
           header: 'INDEXABLE PLUGIN',
           q1: 'When must a mandate be rejected?',
-          call1: 'querying the graph',
+          call1: 'querying the knowledge base',
           answer: 'When the signature date is missing.',
           source: 'SOURCE  ·  SPEC v2.3  §4.5',
           q2: 'Add the check to MandateValidator.java',
           call2: 'linked requirements: REQ-014, REQ-022',
           done: 'The agent writes the change with the right requirements.',
+          versus: ['Agent + Indexable', '  beats  ', 'agent + uploaded documents'],
         },
         modules: {
-          label: 'ONE GRAPH, MANY SERVICES',
+          label: 'ONE KNOWLEDGE BASE, FOR PEOPLE AND AGENTS',
           families: [
             { name: 'Know', items: ['Product questions', 'Team handover'] },
             { name: 'Verify', items: ['Consistency and completeness', 'Requirements vs code'] },
@@ -752,13 +757,13 @@ export const content: Record<Lang, Content> = {
           tag: 'CHANGE REQUEST  ·  CR-07',
           text: 'Accept mandates with a digital signature.',
           impactLabel: 'IMPACT',
-          impacts: ['3 requirements to review', '1 conflict with the minutes', '2 pieces of code', '4 tests to redo'],
+          impacts: ['12 requirements to review', '2 conflicts with the minutes', '9 code components', '123 tests to redo'],
         },
         summaryCheck: '4 REQUIREMENTS  ·  3 CONSISTENT  ·  1 CONFLICT',
         summaryCode: '2 COVERED  ·  1 MISSING  ·  3 TESTS GENERATED',
         missingComment: '// no call to notifyDebtor() found',
         outroLine: 'Explainable, auditable AI for regulated industries.',
-        outroChain: 'REPEATABLE  ·  TRACEABLE  ·  LINKED TO ITS SOURCES',
+        outroChain: 'FOR PEOPLE AND AGENTS  ·  REPEATABLE  ·  TRACEABLE',
         proof: {
           questionLabel: 'THE SAME QUESTION, ASKED THREE TIMES',
           question: 'When must a mandate be rejected?',
@@ -769,7 +774,7 @@ export const content: Record<Lang, Content> = {
           genVerdict: '3 different answers',
           ixVerdict: 'Always the same answer',
           traceLabel: 'WHERE DOES THE ANSWER COME FROM?',
-          graphLabel: 'from the knowledge graph',
+          graphLabel: 'from the knowledge base',
           traceSource: 'SPECIFICATION v2.3  ·  §4.5',
         },
       },
@@ -777,12 +782,12 @@ export const content: Record<Lang, Content> = {
         label: 'Why you can trust it',
         title: 'Explainable, auditable AI for regulated industries.',
         lead:
-          'Many tools build a “company brain” entirely on generative AI: the same question can get different answers, and it is not always clear where they come from. Indexable is explainable, auditable AI. Reading the documents, the graph and the checks are deterministic and repeatable. Generative AI is used at one point only, writing requirements, and works within the bounds of the graph.',
+          'Many tools build a “company brain” entirely on generative AI: the same question can get different answers, and it is not always clear where they come from. Indexable is explainable, auditable AI. Reading the documents, the knowledge base and the checks are deterministic and repeatable. Generative AI is used at one point only, writing requirements, and works within the bounds of the knowledge base.',
         pillars: [
           {
             title: 'Repeatable.',
             body:
-              'Extraction, graph and consistency checks use no generative AI: given the same sources, the result is always the same, today or a year from now. When a document changes, you see what changes and why.',
+              'Extraction, knowledge base and consistency checks use no generative AI: given the same sources, the result is always the same, today or a year from now. When a document changes, you see what changes and why.',
           },
           {
             title: 'Auditable.',
@@ -792,7 +797,7 @@ export const content: Record<Lang, Content> = {
           {
             title: 'Generative AI, kept in check.',
             body:
-              'Generative AI is used only to write requirements, and works inside the graph. Every requirement stays linked to its sources and must pass the deterministic checks before it is accepted.',
+              'Generative AI is used only to write requirements, and works inside the knowledge base. Every requirement stays linked to its sources and must pass the deterministic checks before it is accepted.',
           },
           {
             title: 'Built for regulated industries.',
@@ -804,7 +809,7 @@ export const content: Record<Lang, Content> = {
           caption: 'The comparison',
           head: ['', 'Generative AI only', 'Indexable'],
           rows: [
-            ['Same question, twice', 'May give different answers', 'Same answer, from the graph'],
+            ['Same question, twice', 'May give different answers', 'Same answer, from the knowledge base'],
             ['Where the answer comes from', 'Not always stated', 'Exact source, for every statement'],
             ['Checking requirements', 'Probabilistic', 'Deterministic, with explicit rules'],
             ['An auditor’s review', 'Hard to reconstruct', 'Complete, verifiable trail'],

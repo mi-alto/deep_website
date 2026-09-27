@@ -7,9 +7,42 @@ import type { MotionCopy } from '../../i18n/content';
  * The SVG uses viewBox 0 120 1920 700 (the stage only; captions live in HTML).
  */
 
-export const DURATION = 63;
-/** [start, end] of each of the five steps, in seconds */
-export const STEPS: [number, number][] = [
+/*
+ * Timing. The scenes are written on an "animation clock" (0-63 s). The real
+ * clock is slower (PACE) and stops at READING PAUSES: moments where a scene is
+ * complete on screen and people need time to read it.
+ */
+const PACE = 1.1;
+const HOLDS: [number, number][] = [
+  [2.8, 1.0], // intro
+  [9.4, 2.5], // parsed sentence and claim
+  [18.6, 1.5], // graph with its sources
+  [23.9, 1.5], // first answer from the knowledge base
+  [27.3, 3.0], // agent + Indexable beats agent + documents
+  [33.8, 4.0], // the four families of services
+  [41.0, 3.0], // change request impact
+  [47.8, 3.0], // consistency check
+  [52.6, 2.0], // three different answers vs always the same
+  [56.2, 2.5], // traced back to the source
+];
+const ANIM_END = 63;
+/** real seconds at which the animation clock reaches `a` */
+export function fromAnim(a: number) {
+  return a * PACE + HOLDS.reduce((acc, [h, d]) => (h < a ? acc + d : acc), 0);
+}
+/** animation clock at real second `r` */
+function toAnim(r: number) {
+  let prev = 0;
+  for (const [h, d] of HOLDS) {
+    const start = h * PACE + prev;
+    if (r < start) return (r - prev) / PACE;
+    if (r < start + d) return h;
+    prev += d;
+  }
+  return (r - prev) / PACE;
+}
+export const DURATION = fromAnim(ANIM_END);
+const A_STEPS: [number, number][] = [
   [4, 12],
   [12, 20],
   [20, 28],
@@ -17,7 +50,9 @@ export const STEPS: [number, number][] = [
   [35, 42],
   [42, 49],
   [49, 57],
-]
+];
+/** [start, end] of each step, in real seconds */
+export const STEPS: [number, number][] = A_STEPS.map(([a, b]) => [fromAnim(a), fromAnim(b)]);
 
 const NS = 'http://www.w3.org/2000/svg';
 const C = {
@@ -55,15 +90,15 @@ const NODES = [
   { x: 170, y: -150, k: 'ent', s: 0 },
   { x: -60, y: 170, k: 'cond', s: 0 },
   { x: 330, y: -30, k: 'ent', s: 0 },
-  { x: 420, y: 150, k: 'obl', s: 0 },
+  { x: 420, y: 150, k: 'obl', s: 2 },
   { x: 590, y: 30, k: 'cond', s: 0 },
-  { x: -390, y: 40, k: 'ent', s: 2 },
+  { x: -390, y: 40, k: 'ent', s: 3 },
   { x: -290, y: 200, k: 'perm', s: 1 },
   { x: 210, y: 230, k: 'obl', s: 1 },
-  { x: -400, y: -150, k: 'fact', s: 3 },
-  { x: 30, y: -250, k: 'fact', s: 2 },
-  { x: 480, y: -200, k: 'ent', s: 0 },
-  { x: -560, y: -40, k: 'fact', s: 3 },
+  { x: -400, y: -150, k: 'fact', s: 4 },
+  { x: 30, y: -250, k: 'fact', s: 3 },
+  { x: 480, y: -200, k: 'ent', s: 2 },
+  { x: -560, y: -40, k: 'fact', s: 4 },
   { x: 600, y: 240, k: 'fact', s: 1 },
 ] as const;
 const EDGES: [number, number][] = [
@@ -71,7 +106,7 @@ const EDGES: [number, number][] = [
   [9, 1], [7, 8], [8, 3], [8, 2], [7, 10], [10, 13], [5, 14], [11, 0], [9, 14], [7, 13],
 ];
 const KIND: Record<string, string> = { obl: C.b3, perm: C.warn, ent: C.b1, cond: C.mag, fact: C.lil };
-const DOC_Y = [215, 355, 495, 635];
+const DOC_Y = [200, 320, 440, 560, 680];
 // nodes touched by the example Change Request, in cascade order
 const IMPACTED = [0, 3, 2, 8, 11];
 const GX = 1010;
@@ -146,6 +181,7 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   const ROLE_COL = [C.b1, C.b3, C.ink, C.lil, C.mag];
   const s1 = h('g');
   const s1doc = h('g', {}, s1);
+  mono(s1doc, 960, 236, copy.sourcesLine, 16, C.b1, 'middle', 0.26, 500);
   mono(s1doc, 960, 300, copy.sentence.header, 14, C.grey, 'middle', 0.22);
   [[340, 1180], [372, 980], [596, 1120], [628, 760]].forEach(([y, w]) =>
     h('rect', { x: 370, y, width: w, height: 8, rx: 4, fill: '#fff', 'fill-opacity': 0.07 }, s1doc)
@@ -260,6 +296,8 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   const done = h('g', {}, sP);
   h('path', { d: `M${P2X + 36} ${PL(448)} l7 7 l13 -15`, stroke: C.b3, 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, done);
   h('text', { x: P2X + 70, y: PL(456), 'font-size': 24, fill: C.b3, 'font-weight': 500 }, done, pl.done);
+  const versus = h('text', { x: P2X + P2W / 2, y: 768, 'font-size': 30, 'text-anchor': 'middle', 'font-weight': 600, class: 'font-display' }, sP);
+  pl.versus.forEach((part, k) => h('tspan', { fill: k === 0 ? C.b3 : C.grey, style: 'white-space:pre' }, versus, part));
   const firstEx = [q1, call1, ans, src1];
   const qLinks = [0, 1, 2].map(() => h('path', { stroke: C.b1, 'stroke-width': 1.6, fill: 'none', 'stroke-dasharray': '4 6' }, backG) as Path);
 
@@ -458,7 +496,8 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   const typed = (str: string, p: number) => (p >= 1 ? str : str.slice(0, Math.floor(str.length * p)) + '_');
 
   /* ---------- render ---------- */
-  function render(t: number) {
+  function render(realT: number) {
+    const t = toAnim(realT);
     glowEl.setAttribute('cx', (960 + Math.sin(t * 0.25) * 140).toFixed(1));
     glowEl.setAttribute('cy', (440 + Math.cos(t * 0.19) * 50).toFixed(1));
 
@@ -529,7 +568,7 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
         const imp = IMPACTED.indexOf(i);
         const impT = 37.0 + imp * 0.35;
         const queried = i === 0 || i === 5;
-        const qT = i === 0 ? 23.2 : 26.6;
+        const qT = i === 0 ? 22.7 : 25.8;
         // labels: full while the graph is built, faint beside the plugin, hidden around the services,
         // and back (bigger, orange) for the nodes hit by the change request
         let labO = eo(seg(t, appear[i] + 0.3, appear[i] + 0.8)) * (1 - 0.75 * eio(seg(t, 20.2, 21.0))) * (1 - eio(seg(t, 28.3, 29.0)));
@@ -595,23 +634,25 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
       const all = 1 - eio(seg(t, 27.8, 28.4));
       const pp = eo(seg(t, 20.6, 21.3));
       set(pPanel, pp * all, (1 - pp) * 40, 0);
-      const sw = eio(seg(t, 24.9, 25.3)); // Claude Code -> Codex
+      const sw = eio(seg(t, 24.2, 24.6)); // Claude Code -> Codex
       tabPill.setAttribute('transform', `translate(${(sw * 180).toFixed(1)} 0)`);
       tabTxt.forEach((tt, k) => tt.setAttribute('fill', (k === 0 ? sw < 0.5 : sw >= 0.5) ? C.ink : C.grey));
-      q1.textContent = `> ${typed(pl.q1, seg(t, 21.6, 22.8))}`;
+      q1.textContent = `> ${typed(pl.q1, seg(t, 21.4, 22.4))}`;
       set(q1, pp * all);
-      set(call1, eo(seg(t, 23.2, 23.5)) * all);
-      set(ans, eo(seg(t, 23.8, 24.2)) * all, 0, (1 - eo(seg(t, 23.8, 24.2))) * 8);
-      set(src1, eo(seg(t, 24.2, 24.5)) * all);
-      const dimFirst = 1 - 0.55 * eio(seg(t, 24.9, 25.3));
+      set(call1, eo(seg(t, 22.7, 23.0)) * all);
+      set(ans, eo(seg(t, 23.1, 23.5)) * all, 0, (1 - eo(seg(t, 23.1, 23.5))) * 8);
+      set(src1, eo(seg(t, 23.5, 23.8)) * all);
+      const dimFirst = 1 - 0.55 * eio(seg(t, 24.2, 24.6));
       firstEx.forEach((el) => el.setAttribute('opacity', (Number(el.getAttribute('opacity')) * dimFirst).toFixed(3)));
-      q2.textContent = `> ${typed(pl.q2, seg(t, 25.4, 26.4))}`;
-      set(q2, eo(seg(t, 25.3, 25.4)) * all);
-      set(call2, eo(seg(t, 26.6, 26.9)) * all);
-      const dp = eo(seg(t, 27.1, 27.5));
+      q2.textContent = `> ${typed(pl.q2, seg(t, 24.7, 25.6))}`;
+      set(q2, eo(seg(t, 24.6, 24.7)) * all);
+      set(call2, eo(seg(t, 25.8, 26.1)) * all);
+      const dp = eo(seg(t, 26.2, 26.6));
       set(done, dp * all, (1 - dp) * 10, 0);
+      const vp = eo(seg(t, 26.7, 27.2));
+      set(versus, vp * all, 0, (1 - vp) * 12);
       // query lines from the graph to the panel
-      ([[0, 23.2, PL(166)], [0, 26.6, PL(390)], [5, 26.6, PL(390)]] as const).forEach(([ni, st, ty], k) => {
+      ([[0, 22.7, PL(166)], [0, 25.8, PL(390)], [5, 25.8, PL(390)]] as const).forEach(([ni, st, ty], k) => {
         const n = nodeAt(ni, gxNow);
         const L = qLinks[k];
         L.setAttribute('d', `M${n.x.toFixed(1)} ${n.y.toFixed(1)} C ${(n.x + 160).toFixed(1)} ${n.y.toFixed(1)}, ${P2X - 160} ${ty}, ${P2X} ${ty}`);
