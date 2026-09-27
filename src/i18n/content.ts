@@ -309,7 +309,7 @@ export const content: Record<Lang, Content> = {
           {
             eyebrow: '03 / 06 · Requisiti',
             title: 'Estrai i requisiti',
-            caption: 'Partendo dal grafo, l’AI generativa propone i requisiti. Ciascuno resta collegato al passaggio da cui nasce.',
+            caption: 'I requisiti vengono ricavati dal grafo, con l’AI generativa usata in modo controllato. Ciascuno resta collegato al passaggio da cui nasce.',
             short: 'Requisiti',
           },
           {
@@ -358,12 +358,12 @@ export const content: Record<Lang, Content> = {
         ],
         chips: { ok: 'COERENTE', conflict: 'CONFLITTO', covered: 'COPERTO', missing: 'MANCANTE' },
         conflict: ['CONFLITTO', 'deve rifiutare', 'vs può accettare'],
-        reqsLabel: 'PROPOSTE DALL’AI GENERATIVA  ·  OGNUNA COLLEGATA AL GRAFO',
+        reqsLabel: 'RICAVATI DAL GRAFO  ·  AI GENERATIVA CONTROLLATA',
         summaryCheck: 'CONTROLLO DETERMINISTICO  ·  4 REQUISITI  ·  3 COERENTI  ·  1 CONFLITTO',
         summaryCode: '2 COPERTI  ·  1 MANCANTE  ·  3 TEST GENERATI',
         missingComment: '// nessuna chiamata a notifyDebtor()',
-        outroLine: 'L’AI propone. Il grafo verifica.',
-        outroChain: 'PENSATO PER I SETTORI REGOLAMENTATI',
+        outroLine: 'AI controllata per sistemi regolamentati.',
+        outroChain: 'RIPETIBILE  ·  VERIFICABILE  ·  COLLEGATA ALLE FONTI',
         proof: {
           questionLabel: 'LA STESSA DOMANDA, FATTA TRE VOLTE',
           question: 'Quando va rifiutato un mandato?',
@@ -380,9 +380,9 @@ export const content: Record<Lang, Content> = {
       },
       trust: {
         label: 'Perché fidarsi',
-        title: 'L’AI propone. Il grafo verifica.',
+        title: 'AI controllata per sistemi regolamentati.',
         lead:
-          'Molti strumenti costruiscono un “cervello aziendale” tutto su AI generativa: la stessa domanda può avere risposte diverse, e non sempre si sa da dove vengono. In Indexable l’AI generativa ha un solo compito: proporre i requisiti. Tutto il resto, dalla lettura dei documenti al grafo fino ai controlli, è deterministico e ripetibile.',
+          'Molti strumenti costruiscono un “cervello aziendale” tutto su AI generativa: la stessa domanda può avere risposte diverse, e non sempre si sa da dove vengono. Indexable è un’AI controllata. La lettura dei documenti, il grafo e i controlli sono deterministici e ripetibili. L’AI generativa interviene in un solo punto, la stesura dei requisiti, e lavora dentro i confini del grafo.',
         pillars: [
           {
             title: 'Ripetibile.',
@@ -397,7 +397,7 @@ export const content: Record<Lang, Content> = {
           {
             title: 'AI generativa sotto controllo.',
             body:
-              'L’AI generativa scrive le proposte di requisito partendo dal grafo. Ogni proposta resta collegata alle sue fonti e deve superare i controlli deterministici prima di essere accettata.',
+              'L’AI generativa serve solo a stendere i requisiti e lavora dentro il grafo. Ogni requisito resta collegato alle sue fonti e deve superare i controlli deterministici prima di essere accettato.',
           },
           {
             title: 'Pensato per i settori regolamentati.',
@@ -637,7 +637,7 @@ export const content: Record<Lang, Content> = {
           {
             eyebrow: '03 / 06 · Requirements',
             title: 'Extract requirements',
-            caption: 'Starting from the graph, generative AI proposes the requirements. Each stays linked to the passage it comes from.',
+            caption: 'Requirements are derived from the graph, with generative AI used in a controlled way. Each stays linked to the passage it comes from.',
             short: 'Requirements',
           },
           {
@@ -686,12 +686,12 @@ export const content: Record<Lang, Content> = {
         ],
         chips: { ok: 'CONSISTENT', conflict: 'CONFLICT', covered: 'COVERED', missing: 'MISSING' },
         conflict: ['CONFLICT', 'shall reject', 'vs may accept'],
-        reqsLabel: 'PROPOSED BY GENERATIVE AI  ·  EACH LINKED TO THE GRAPH',
+        reqsLabel: 'DERIVED FROM THE GRAPH  ·  CONTROLLED GENERATIVE AI',
         summaryCheck: 'DETERMINISTIC CHECK  ·  4 REQUIREMENTS  ·  3 CONSISTENT  ·  1 CONFLICT',
         summaryCode: '2 COVERED  ·  1 MISSING  ·  3 TESTS GENERATED',
         missingComment: '// no call to notifyDebtor() found',
-        outroLine: 'AI proposes. The graph verifies.',
-        outroChain: 'BUILT FOR REGULATED INDUSTRIES',
+        outroLine: 'Controlled AI for regulated systems.',
+        outroChain: 'REPEATABLE  ·  TRACEABLE  ·  LINKED TO ITS SOURCES',
         proof: {
           questionLabel: 'THE SAME QUESTION, ASKED THREE TIMES',
           question: 'When must a mandate be rejected?',
@@ -708,9 +708,9 @@ export const content: Record<Lang, Content> = {
       },
       trust: {
         label: 'Why you can trust it',
-        title: 'AI proposes. The graph verifies.',
+        title: 'Controlled AI for regulated systems.',
         lead:
-          'Many tools build a “company brain” entirely on generative AI: the same question can get different answers, and it is not always clear where they come from. In Indexable, generative AI has one job: proposing requirements. Everything else, from reading the documents to the graph and the checks, is deterministic and repeatable.',
+          'Many tools build a “company brain” entirely on generative AI: the same question can get different answers, and it is not always clear where they come from. Indexable is controlled AI. Reading the documents, the graph and the checks are deterministic and repeatable. Generative AI is used at one point only, writing requirements, and works within the bounds of the graph.',
         pillars: [
           {
             title: 'Repeatable.',
@@ -725,7 +725,7 @@ export const content: Record<Lang, Content> = {
           {
             title: 'Generative AI, kept in check.',
             body:
-              'Generative AI drafts requirement proposals from the graph. Each proposal stays linked to its sources and must pass the deterministic checks before it is accepted.',
+              'Generative AI is used only to write requirements, and works inside the graph. Every requirement stays linked to its sources and must pass the deterministic checks before it is accepted.',
           },
           {
             title: 'Built for regulated industries.',

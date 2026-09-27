@@ -245,7 +245,16 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   const appear = nodes.map((n, i) => (i === 0 ? 12.3 : 12.35 + (n.d / 700) * 2.6));
 
   /* ---------- requirement cards (scenes 3-5) ---------- */
+  // links from graph nodes to cards sit behind the graph, so they never cross over a node
   const linkG = h('g');
+  root.insertBefore(linkG, s2);
+  // per-link bezier handles [c1dx, c1dy, c2dx, c2dy]: the lower links dip under the graph
+  const LINK_CURVE: [number, number, number, number][] = [
+    [180, 0, -180, 0],
+    [180, 0, -180, 0],
+    [150, 190, -300, 130],
+    [140, 130, -240, 70],
+  ];
   const cardsG = h('g');
   const reqsLab = mono(root, 960, 166, copy.reqsLabel, 13, C.b1, 'start', 0.2, 500);
   const reqLinks = copy.reqs.map(() => h('path', { stroke: C.b3, 'stroke-width': 1.6, fill: 'none', 'stroke-opacity': 0.8 }, linkG) as Path);
@@ -546,7 +555,8 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
           const ex = pos.x;
           const ey = pos.y + CH / 2;
           const L = reqLinks[i];
-          L.setAttribute('d', `M${nx.toFixed(1)} ${ny.toFixed(1)} C ${(nx + 180).toFixed(1)} ${ny.toFixed(1)}, ${(ex - 180).toFixed(1)} ${ey.toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}`);
+          const [a1, b1, a2, b2] = LINK_CURVE[i];
+          L.setAttribute('d', `M${nx.toFixed(1)} ${ny.toFixed(1)} C ${(nx + a1).toFixed(1)} ${(ny + b1).toFixed(1)}, ${(ex + a2).toFixed(1)} ${(ey + b2).toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}`);
           L.__len = null;
           draw(L, eo(seg(t, st, st + 0.6)));
           L.setAttribute('stroke', r.permission ? C.warn : C.b3);
