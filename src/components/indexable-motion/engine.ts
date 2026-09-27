@@ -7,16 +7,17 @@ import type { MotionCopy } from '../../i18n/content';
  * The SVG uses viewBox 0 120 1920 700 (the stage only; captions live in HTML).
  */
 
-export const DURATION = 57;
+export const DURATION = 63;
 /** [start, end] of each of the five steps, in seconds */
 export const STEPS: [number, number][] = [
   [4, 12],
   [12, 20],
   [20, 28],
   [28, 35],
-  [35, 43],
-  [43, 51],
-];
+  [35, 42],
+  [42, 49],
+  [49, 57],
+]
 
 const NS = 'http://www.w3.org/2000/svg';
 const C = {
@@ -59,10 +60,10 @@ const NODES = [
   { x: -390, y: 40, k: 'ent', s: 2 },
   { x: -290, y: 200, k: 'perm', s: 1 },
   { x: 210, y: 230, k: 'obl', s: 1 },
-  { x: -400, y: -150, k: 'fact', s: 2 },
+  { x: -400, y: -150, k: 'fact', s: 3 },
   { x: 30, y: -250, k: 'fact', s: 2 },
   { x: 480, y: -200, k: 'ent', s: 0 },
-  { x: -560, y: -40, k: 'fact', s: 2 },
+  { x: -560, y: -40, k: 'fact', s: 3 },
   { x: 600, y: 240, k: 'fact', s: 1 },
 ] as const;
 const EDGES: [number, number][] = [
@@ -70,31 +71,13 @@ const EDGES: [number, number][] = [
   [9, 1], [7, 8], [8, 3], [8, 2], [7, 10], [10, 13], [5, 14], [11, 0], [9, 14], [7, 13],
 ];
 const KIND: Record<string, string> = { obl: C.b3, perm: C.warn, ent: C.b1, cond: C.mag, fact: C.lil };
-const REQ_NODE = [0, 5, 8, 9];
-const DOC_Y = [250, 430, 610];
+const DOC_Y = [215, 355, 495, 635];
+// nodes touched by the example Change Request, in cascade order
+const IMPACTED = [0, 3, 2, 8, 11];
 const GX = 1010;
 const GY = 430;
 const CW = 760;
 const CH = 112;
-const PX = 1060;
-const PY = 188;
-const PW = 720;
-const PH = 482;
-const LH = 38;
-const L0 = PY + 98;
-const CODE: [string, string][][] = [
-  [['public ', 'k'], ['Result ', 't'], ['validate', 'f'], ['(Mandate m) {', 'p']],
-  [['  if ', 'k'], ['(m.getSignatureDate() == ', 'p'], ['null', 'k'], [') {', 'p']],
-  [['    return ', 'k'], ['Result.', 'p'], ['reject', 'f'], ['(', 'p'], ['MISSING_SIGNATURE', 'c'], [');', 'p']],
-  [['  }', 'p']],
-  [['  if ', 'k'], ['(now().isAfter(', 'p'], ['cutoff', 'f'], ['(m, ', 'p'], ['D_MINUS_1', 'c'], ['))) {', 'p']],
-  [['    return ', 'k'], ['Result.', 'p'], ['reject', 'f'], ['(', 'p'], ['LATE_SUBMISSION', 'c'], [');', 'p']],
-  [['  }', 'p']],
-  [['  return ', 'k'], ['Result.', 'p'], ['accept', 'f'], ['();', 'p']],
-  [['}', 'p']],
-];
-const TOK: Record<string, string> = { k: C.b1, t: C.lil, f: C.ink, p: '#cfcbe0', c: C.b3 };
-
 export interface Motion {
   render: (t: number) => void;
   destroy: () => void;
@@ -213,10 +196,10 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   const docsG = h('g', {}, s2);
   const docEls = DOC_Y.map((y, i) => {
     const g = h('g', {}, docsG);
-    h('path', { d: `M180 ${y - 58} h62 l22 22 v94 h-84 z`, fill: C.panel, stroke: 'rgba(255,255,255,.35)', 'stroke-width': 1.5 }, g);
-    h('path', { d: `M242 ${y - 58} v22 h22`, fill: 'none', stroke: 'rgba(255,255,255,.35)', 'stroke-width': 1.5 }, g);
-    [-24, -10, 4, 18].forEach((dy, j) => h('rect', { x: 194, y: y + dy, width: j === 3 ? 34 : 54, height: 4, rx: 2, fill: '#fff', 'fill-opacity': 0.25 }, g));
-    mono(g, 222, y + 84, copy.docs[i], 13, C.grey, 'middle', 0.2);
+    h('path', { d: `M180 ${y - 45} h48 l18 18 v72 h-66 z`, fill: C.panel, stroke: 'rgba(255,255,255,.35)', 'stroke-width': 1.5 }, g);
+    h('path', { d: `M228 ${y - 45} v18 h18`, fill: 'none', stroke: 'rgba(255,255,255,.35)', 'stroke-width': 1.5 }, g);
+    [-16, -5, 6, 17].forEach((dy, j) => h('rect', { x: 191, y: y + dy, width: j === 3 ? 28 : 42, height: 4, rx: 2, fill: '#fff', 'fill-opacity': 0.25 }, g));
+    mono(g, 213, y + 66, copy.docs[i] ?? '', 13, C.grey, 'middle', 0.2);
     return g;
   });
   const provG = h('g', {}, s2);
@@ -235,8 +218,9 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
     } else {
       h('circle', { r: n.k === 'ent' ? 9 : 6.5, fill: col }, g);
     }
+    const ring = h('circle', { r: big ? 24 : 18, fill: 'none', stroke: C.warn, 'stroke-width': 3, opacity: 0 }, g);
     const lab = mono(g, 0, big ? 40 : 28, n.l, 13, C.grey, 'middle', 0.08);
-    return { g, halo, lab };
+    return { g, halo, ring, lab };
   });
   const provEls = nodes.map(() => ({
     p: h('path', { stroke: C.b1, 'stroke-opacity': 0.35, 'stroke-width': 1.2, fill: 'none', 'stroke-dasharray': '3 6' }, provG) as Path,
@@ -245,19 +229,79 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   const appear = nodes.map((n, i) => (i === 0 ? 12.3 : 12.35 + (n.d / 700) * 2.6));
 
   /* ---------- requirement cards (scenes 3-5) ---------- */
-  // links from graph nodes to cards sit behind the graph, so they never cross over a node
-  const linkG = h('g');
-  root.insertBefore(linkG, s2);
-  // per-link bezier handles [c1dx, c1dy, c2dx, c2dy]: the lower links dip under the graph
-  const LINK_CURVE: [number, number, number, number][] = [
-    [180, 0, -180, 0],
-    [180, 0, -180, 0],
-    [150, 190, -300, 130],
-    [140, 130, -240, 70],
-  ];
+  // lines drawn from graph nodes to other panels sit behind the graph
+  const backG = h('g');
+  root.insertBefore(backG, s2);
+
+  /* ---------- scene 3: plugin for Claude Code and Codex ---------- */
+  const pl = copy.plugin;
+  const P2X = 900;
+  const P2Y = 176;
+  const P2W = 880;
+  const P2H = 520;
+  const sP = h('g');
+  const pPanel = h('g', {}, sP);
+  h('rect', { x: P2X, y: P2Y, width: P2W, height: P2H, rx: 12, fill: C.panel, 'fill-opacity': 0.95, stroke: 'rgba(255,255,255,.18)', 'stroke-width': 1.2 }, pPanel);
+  h('path', { d: `M${P2X} ${P2Y + 70} h${P2W}`, stroke: 'rgba(255,255,255,.10)' }, pPanel);
+  const tabPill = h('rect', { x: P2X + 22, y: P2Y + 18, width: 170, height: 34, rx: 17, fill: '#fff', 'fill-opacity': 0.1, stroke: 'rgba(255,255,255,.35)' }, pPanel);
+  const tabTxt = pl.tabs.map((tb, k) => mono(pPanel, P2X + 107 + k * 180, P2Y + 41, tb, 14, C.grey, 'middle', 0.16, 500));
+  mono(pPanel, P2X + P2W - 26, P2Y + 41, pl.header, 13, C.b3, 'end', 0.22, 500);
+  const PL = (dy: number) => P2Y + dy;
+  const q1 = mono(sP, P2X + 34, PL(124), '', 21, C.ink, 'start', 0, 400);
+  const call1 = h('text', { x: P2X + 34, y: PL(172), 'font-size': 18, class: 'font-mono', fill: C.b1 }, sP);
+  h('tspan', { fill: C.b3 }, call1, '●  ');
+  h('tspan', {}, call1, `indexable  ·  ${pl.call1}`);
+  const ans = h('text', { x: P2X + 34, y: PL(236), 'font-size': 30, fill: C.ink, 'font-weight': 500 }, sP, pl.answer);
+  const src1 = mono(sP, P2X + 34, PL(272), pl.source, 14, C.grey, 'start', 0.18, 500);
+  const q2 = mono(sP, P2X + 34, PL(348), '', 21, C.ink, 'start', 0, 400);
+  const call2 = h('text', { x: P2X + 34, y: PL(396), 'font-size': 18, class: 'font-mono', fill: C.b1 }, sP);
+  h('tspan', { fill: C.b3 }, call2, '●  ');
+  h('tspan', {}, call2, `indexable  ·  ${pl.call2}`);
+  const done = h('g', {}, sP);
+  h('path', { d: `M${P2X + 36} ${PL(448)} l7 7 l13 -15`, stroke: C.b3, 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, done);
+  h('text', { x: P2X + 70, y: PL(456), 'font-size': 24, fill: C.b3, 'font-weight': 500 }, done, pl.done);
+  const firstEx = [q1, call1, ans, src1];
+  const qLinks = [0, 1, 2].map(() => h('path', { stroke: C.b1, 'stroke-width': 1.6, fill: 'none', 'stroke-dasharray': '4 6' }, backG) as Path);
+
+  /* ---------- scene 4: services around the graph ---------- */
+  const md = copy.modules;
+  const FAM_COL = [C.b1, C.b3, C.mag, C.lil];
+  const FAM_BOX: [number, number][] = [[140, 170], [1280, 170], [140, 590], [1280, 590]];
+  const FAM_CORNER: [number, number][] = [[640, 370], [1280, 370], [640, 590], [1280, 590]];
+  const sM = h('g');
+  const mLab = mono(sM, 960, 186, md.label, 15, C.grey, 'middle', 0.26, 500);
+  const famLinks = FAM_CORNER.map(() => h('path', { stroke: 'rgba(255,255,255,.35)', 'stroke-width': 1.4, fill: 'none' }, backG) as Path);
+  const famEls = md.families.map((f, i) => {
+    const [x, y] = FAM_BOX[i];
+    const g = h('g', {}, sM);
+    h('rect', { x, y, width: 500, height: 200, rx: 12, fill: C.panel, 'fill-opacity': 0.94, stroke: FAM_COL[i], 'stroke-opacity': 0.55, 'stroke-width': 1.4 }, g);
+    mono(g, x + 28, y + 40, `0${i + 1}`, 13, C.grey, 'start', 0.2, 500);
+    h('text', { x: x + 28, y: y + 86, 'font-size': 36, fill: FAM_COL[i], class: 'font-display', 'font-weight': 600 }, g, f.name.toUpperCase());
+    const items = f.items.map((it, j) => h('text', { x: x + 28, y: y + 128 + j * 30, 'font-size': 20, fill: '#cfcbe0' }, g, it));
+    return { g, items };
+  });
+
+  /* ---------- scene 5: change request impact ---------- */
+  const ch = copy.change;
+  const sC = h('g');
+  const crCard = h('g', {}, sC);
+  h('rect', { x: 90, y: 140, width: 520, height: 110, rx: 12, fill: C.panel, 'fill-opacity': 0.95, stroke: C.warn, 'stroke-opacity': 0.7, 'stroke-width': 1.6 }, crCard);
+  mono(crCard, 114, 178, ch.tag, 14, C.warn, 'start', 0.2, 500);
+  h('text', { x: 114, y: 222, 'font-size': 22, fill: C.ink, 'font-weight': 500 }, crCard, ch.text);
+  const crArrow = h('path', { stroke: C.warn, 'stroke-width': 2, fill: 'none' }, backG) as Path;
+  const impPanel = h('g', {}, sC);
+  h('rect', { x: 1360, y: 470, width: 460, height: 260, rx: 12, fill: C.panel, 'fill-opacity': 0.95, stroke: C.warn, 'stroke-opacity': 0.55, 'stroke-width': 1.4 }, impPanel);
+  mono(impPanel, 1386, 510, ch.impactLabel, 14, C.warn, 'start', 0.24, 500);
+  const impLines = ch.impacts.map((tx, j) => {
+    const g = h('g', {}, impPanel);
+    h('circle', { cx: 1394, cy: 552 + j * 44, r: 5, fill: C.warn }, g);
+    h('text', { x: 1412, y: 560 + j * 44, 'font-size': 23, fill: C.ink, 'font-weight': 500 }, g, tx);
+    return g;
+  });
+
+  /* ---------- scene 6: consistency of the requirements ---------- */
   const cardsG = h('g');
-  const reqsLab = mono(root, 960, 166, copy.reqsLabel, 13, C.b1, 'start', 0.2, 500);
-  const reqLinks = copy.reqs.map(() => h('path', { stroke: C.b3, 'stroke-width': 1.6, fill: 'none', 'stroke-opacity': 0.8 }, linkG) as Path);
+  const reqsLab = mono(root, 520, 166, copy.reqsLabel, 13, C.b1, 'start', 0.2, 500);
   type Card = { g: SVGGElement; warnBox: SVGElement; chip: SVGGElement; chipBg: SVGElement; chipIcon: SVGElement; chipTxt: SVGElement; cur: string };
   const cards: Card[] = copy.reqs.map((r) => {
     const g = h('g', {}, cardsG);
@@ -310,29 +354,6 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   mono(conflictLab, 0, 30, copy.conflict[1], 15, C.grey, 'start', 0.04);
   mono(conflictLab, 0, 54, copy.conflict[2], 15, C.grey, 'start', 0.04);
   const s4sum = mono(s4, 960, 748, copy.summaryCheck, 15, C.grey, 'middle', 0.22);
-
-  /* ---------- scene 5: code ---------- */
-  const s5 = h('g');
-  const panel = h('g', {}, s5);
-  h('rect', { x: PX, y: PY, width: PW, height: PH, rx: 10, fill: C.panel, stroke: 'rgba(255,255,255,.16)', 'stroke-width': 1.2 }, panel);
-  h('path', { d: `M${PX} ${PY + 52} h${PW}`, stroke: 'rgba(255,255,255,.10)' }, panel);
-  mono(panel, PX + 26, PY + 33, 'MandateValidator.java', 13, C.grey, 'start', 0.08);
-  mono(panel, PX + PW - 26, PY + 33, 'payments-core', 12, C.grey, 'end', 0.16);
-  const hl = [[1, 3], [4, 6]].map(([a, b]) =>
-    h('rect', { x: PX + 12, y: L0 + (a - 1) * LH - 26, width: PW - 24, height: (b - a + 1) * LH - 2, rx: 6, fill: C.b3, 'fill-opacity': 0.1, stroke: C.b3, 'stroke-opacity': 0.5 }, s5)
-  );
-  const codeLines = CODE.map((toks, i) => {
-    const g = h('g', {}, s5);
-    mono(g, PX + 46, L0 + i * LH, String(i + 1), 15, 'rgba(255,255,255,.3)', 'end', 0);
-    const t = h('text', { x: PX + 66, y: L0 + i * LH, 'font-size': 18, class: 'font-mono' }, g);
-    t.style.whiteSpace = 'pre';
-    toks.forEach(([s, k]) => h('tspan', { fill: TOK[k] }, t, s));
-    return g;
-  });
-  const missNote = h('g', {}, s5);
-  h('rect', { x: PX + 12, y: L0 + 9 * LH - 26, width: PW - 24, height: LH - 2, rx: 6, fill: C.warn, 'fill-opacity': 0.08, stroke: C.warn, 'stroke-opacity': 0.6, 'stroke-dasharray': '5 5' }, missNote);
-  mono(missNote, PX + 66, L0 + 9 * LH, copy.missingComment, 17, C.warn, 'start', 0);
-  const s5sum = mono(s5, 960, 748, copy.summaryCode, 15, C.grey, 'middle', 0.22);
 
   /* ---------- scene 6: repeatable and traceable ----------
      Beat A: the same question three times; generative-only gives three
@@ -409,20 +430,32 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   h('rect', { x: 0, y: 120, width: 1920, height: 700, fill: u('vig'), 'pointer-events': 'none' });
 
   /* ---------- geometry ---------- */
+  // graph position and scale over time: [t, cx, cy, scale]
+  const GK: [number, number, number, number][] = [
+    [0, GX, GY, 1],
+    [20.2, GX, GY, 1],
+    [21.6, 440, 440, 0.56],
+    [28.3, 440, 440, 0.56],
+    [29.3, 960, 480, 0.42],
+    [34.9, 960, 480, 0.42],
+    [35.9, 820, 450, 0.8],
+    [999, 820, 450, 0.8],
+  ];
   function graphXform(t: number) {
-    const p = eio(seg(t, 20.2, 21.6));
-    return { s: lerp(1, 0.56, p), cx: lerp(GX, 440, p), cy: lerp(GY, 430, p) };
+    for (let i = 0; i < GK.length - 1; i++) {
+      const [t0, x0, y0, s0] = GK[i];
+      const [t1, x1, y1, s1] = GK[i + 1];
+      if (t <= t1) {
+        const p = eio(seg(t, t0, t1));
+        return { cx: lerp(x0, x1, p), cy: lerp(y0, y1, p), s: lerp(s0, s1, p) };
+      }
+    }
+    return { cx: 820, cy: 450, s: 0.8 };
   }
-  function cardPos(i: number, t: number) {
-    let x = 960;
-    let y = 186 + i * (CH + 20);
-    x = lerp(x, 520, eio(seg(t, 28.2, 29.2)));
-    const p5 = eio(seg(t, 35.4, 36.6));
-    const y5 = [230, 368, 368, 506][i];
-    x = lerp(x, 140, p5);
-    y = lerp(y, y5, p5);
-    return { x, y };
-  }
+  const nodeAt = (i: number, gx: { cx: number; cy: number; s: number }) => ({ x: gx.cx + nodes[i].cx * gx.s, y: gx.cy + nodes[i].cy * gx.s });
+  const CARD_X = 520;
+  const cardY = (i: number) => 186 + i * (CH + 20);
+  const typed = (str: string, p: number) => (p >= 1 ? str : str.slice(0, Math.floor(str.length * p)) + '_');
 
   /* ---------- render ---------- */
   function render(t: number) {
@@ -476,12 +509,12 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
     }
 
     // scene 2 (graph stays through scene 3)
-    const s2on = t >= 12.3 && t < 28.6;
+    const s2on = t >= 12.3 && t < 42.3;
     set(s2, s2on ? 1 : 0);
     if (s2on) {
       const gx = graphXform(t);
       graphG.setAttribute('transform', `translate(${gx.cx.toFixed(2)} ${gx.cy.toFixed(2)}) scale(${gx.s.toFixed(4)})`);
-      graphG.setAttribute('opacity', (1 - eio(seg(t, 27.9, 28.6))).toFixed(3));
+      graphG.setAttribute('opacity', (1 - eio(seg(t, 41.5, 42.2))).toFixed(3));
       const docO = inout(t, 12.6, 13.4, 20.0, 20.7);
       docEls.forEach((d, i) => {
         const p = eo(seg(t, 12.6 + i * 0.2, 13.3 + i * 0.2));
@@ -493,14 +526,30 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
         n.cx = n.x + Math.sin(t * 0.6 + i * 1.7) * drift;
         n.cy = n.y + Math.cos(t * 0.5 + i * 1.3) * drift;
         set(nodeEls[i].g, p, n.cx, n.cy, 0.4 + 0.6 * p);
-        const labO = eo(seg(t, appear[i] + 0.3, appear[i] + 0.8)) * (1 - 0.75 * eio(seg(t, 20.2, 21.0)));
-        nodeEls[i].lab.setAttribute('opacity', labO.toFixed(3));
-        const isReq = REQ_NODE.includes(i);
-        const hlp = isReq ? eo(seg(t, 21.2, 21.8)) : 0;
-        const dim = isReq ? 1 : lerp(1, 0.45, eio(seg(t, 20.8, 21.6)));
-        nodeEls[i].g.setAttribute('opacity', (p * dim).toFixed(3));
-        const pulse = isReq && t > 21.2 ? 1 + 0.25 * Math.sin((t - 21.2) * 4) : 1;
-        nodeEls[i].halo.setAttribute('transform', `scale(${(1 + hlp * 0.6 * pulse).toFixed(3)})`);
+        const imp = IMPACTED.indexOf(i);
+        const impT = 37.0 + imp * 0.35;
+        const queried = i === 0 || i === 5;
+        const qT = i === 0 ? 23.2 : 26.6;
+        // labels: full while the graph is built, faint beside the plugin, hidden around the services,
+        // and back (bigger, orange) for the nodes hit by the change request
+        let labO = eo(seg(t, appear[i] + 0.3, appear[i] + 0.8)) * (1 - 0.75 * eio(seg(t, 20.2, 21.0))) * (1 - eio(seg(t, 28.3, 29.0)));
+        const L = nodeEls[i].lab;
+        if (t > 35.3) {
+          labO = imp >= 0 ? eo(seg(t, impT, impT + 0.4)) : 0.3 * eo(seg(t, 35.8, 36.4)) * (1 - 0.7 * eio(seg(t, 36.8, 37.4)));
+          L.setAttribute('font-size', imp >= 0 ? '19' : '13');
+          L.setAttribute('fill', imp >= 0 ? C.warn : C.grey);
+        } else {
+          L.setAttribute('font-size', '13');
+          L.setAttribute('fill', C.grey);
+        }
+        L.setAttribute('opacity', labO.toFixed(3));
+        const dimPlug = queried ? 1 : 1 - 0.5 * eio(seg(t, 21.6, 22.4)) * (1 - eio(seg(t, 28.3, 29.0)));
+        const dimChange = imp >= 0 ? 1 : 1 - 0.65 * eio(seg(t, 36.8, 37.4));
+        nodeEls[i].g.setAttribute('opacity', (p * dimPlug * dimChange).toFixed(3));
+        const hlp = queried ? eo(seg(t, qT, qT + 0.4)) * (1 - eio(seg(t, 27.8, 28.4))) : 0;
+        const pulse = hlp > 0 ? 1 + 0.25 * Math.sin((t - qT) * 5) : 1;
+        nodeEls[i].halo.setAttribute('transform', `scale(${(1 + hlp * 0.7 * pulse).toFixed(3)})`);
+        nodeEls[i].ring.setAttribute('opacity', (imp >= 0 ? eo(seg(t, impT, impT + 0.35)) : 0).toFixed(3));
       });
       EDGES.forEach(([a, b], i) => {
         const st = Math.max(appear[a], appear[b]) + 0.25;
@@ -509,7 +558,11 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
         e.__len = null;
         const p = eo(seg(t, st, st + 0.6));
         draw(e, p);
-        e.setAttribute('opacity', (p > 0 ? lerp(1, 0.5, eio(seg(t, 20.8, 21.6))) : 0).toFixed(3));
+        const hot = IMPACTED.includes(a) && IMPACTED.includes(b) && t > 37.0 + Math.max(IMPACTED.indexOf(a), IMPACTED.indexOf(b)) * 0.35;
+        const eo2 = (1 - 0.5 * eio(seg(t, 21.6, 22.4)) * (1 - eio(seg(t, 28.3, 29.0)))) * (hot ? 1 : 1 - 0.6 * eio(seg(t, 36.8, 37.4)));
+        e.setAttribute('stroke', hot ? C.warn : 'rgba(255,255,255,.28)');
+        e.setAttribute('stroke-width', hot ? '2.4' : '1.4');
+        e.setAttribute('opacity', (p > 0 ? eo2 : 0).toFixed(3));
       });
       provG.setAttribute('opacity', inout(t, 16.0, 16.4, 19.8, 20.5).toFixed(3));
       if (t > 15.9 && t < 20.6) {
@@ -518,7 +571,7 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
           const dy = DOC_Y[n.s];
           const x1 = GX + n.cx;
           const y1 = GY + n.cy;
-          p.setAttribute('d', `M268 ${dy} C 428 ${dy}, ${(x1 - 160).toFixed(1)} ${y1.toFixed(1)}, ${x1.toFixed(1)} ${y1.toFixed(1)}`);
+          p.setAttribute('d', `M250 ${dy} C 410 ${dy}, ${(x1 - 160).toFixed(1)} ${y1.toFixed(1)}, ${x1.toFixed(1)} ${y1.toFixed(1)}`);
           const st = 16.0 + i * 0.1;
           const q = eo(seg(t, st, st + 0.9));
           p.setAttribute('opacity', q.toFixed(3));
@@ -533,124 +586,133 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
       }
     }
 
-    // cards
-    const cardsOn = t >= 21 && t < 43.9;
+    const gxNow = graphXform(t);
+
+    // scene 3: plugin
+    const sPon = t >= 20.4 && t < 28.6;
+    sP.style.display = sPon ? '' : 'none';
+    if (sPon) {
+      const all = 1 - eio(seg(t, 27.8, 28.4));
+      const pp = eo(seg(t, 20.6, 21.3));
+      set(pPanel, pp * all, (1 - pp) * 40, 0);
+      const sw = eio(seg(t, 24.9, 25.3)); // Claude Code -> Codex
+      tabPill.setAttribute('transform', `translate(${(sw * 180).toFixed(1)} 0)`);
+      tabTxt.forEach((tt, k) => tt.setAttribute('fill', (k === 0 ? sw < 0.5 : sw >= 0.5) ? C.ink : C.grey));
+      q1.textContent = `> ${typed(pl.q1, seg(t, 21.6, 22.8))}`;
+      set(q1, pp * all);
+      set(call1, eo(seg(t, 23.2, 23.5)) * all);
+      set(ans, eo(seg(t, 23.8, 24.2)) * all, 0, (1 - eo(seg(t, 23.8, 24.2))) * 8);
+      set(src1, eo(seg(t, 24.2, 24.5)) * all);
+      const dimFirst = 1 - 0.55 * eio(seg(t, 24.9, 25.3));
+      firstEx.forEach((el) => el.setAttribute('opacity', (Number(el.getAttribute('opacity')) * dimFirst).toFixed(3)));
+      q2.textContent = `> ${typed(pl.q2, seg(t, 25.4, 26.4))}`;
+      set(q2, eo(seg(t, 25.3, 25.4)) * all);
+      set(call2, eo(seg(t, 26.6, 26.9)) * all);
+      const dp = eo(seg(t, 27.1, 27.5));
+      set(done, dp * all, (1 - dp) * 10, 0);
+      // query lines from the graph to the panel
+      ([[0, 23.2, PL(166)], [0, 26.6, PL(390)], [5, 26.6, PL(390)]] as const).forEach(([ni, st, ty], k) => {
+        const n = nodeAt(ni, gxNow);
+        const L = qLinks[k];
+        L.setAttribute('d', `M${n.x.toFixed(1)} ${n.y.toFixed(1)} C ${(n.x + 160).toFixed(1)} ${n.y.toFixed(1)}, ${P2X - 160} ${ty}, ${P2X} ${ty}`);
+        L.__len = null;
+        const lp = eio(seg(t, st, st + 0.5));
+        L.setAttribute('stroke-dasharray', lp < 1 ? `${(L.getTotalLength() * lp).toFixed(1)} 9999` : '4 6');
+        L.setAttribute('opacity', (lp > 0 ? all * (k === 0 ? dimFirst : 1) : 0).toFixed(3));
+      });
+    } else qLinks.forEach((L) => L.setAttribute('opacity', '0'));
+
+    // scene 4: services
+    const sMon = t >= 28.8 && t < 35.2;
+    sM.style.display = sMon ? '' : 'none';
+    if (sMon) {
+      const all = 1 - eio(seg(t, 34.4, 35.0));
+      set(mLab, eo(seg(t, 29.2, 29.7)) * all);
+      famEls.forEach((f, i) => {
+        const st = 29.5 + i * 0.55;
+        const [cx, cy] = FAM_CORNER[i];
+        const L = famLinks[i];
+        // short connector from the edge of the graph to the inner corner of the box
+        const sx = gxNow.cx + (i % 2 ? 150 : -150);
+        const sy = gxNow.cy + (i < 2 ? -60 : 60);
+        L.setAttribute('d', `M${sx.toFixed(1)} ${sy.toFixed(1)} L${cx} ${cy}`);
+        L.__len = null;
+        draw(L, eio(seg(t, st, st + 0.5)));
+        L.setAttribute('stroke', FAM_COL[i]);
+        L.setAttribute('opacity', (0.7 * all).toFixed(3));
+        const bp = eo(seg(t, st + 0.35, st + 0.8));
+        set(f.g, bp * all, 0, (1 - bp) * (i < 2 ? -14 : 14));
+        f.items.forEach((it, j) => it.setAttribute('opacity', eo(seg(t, st + 0.6 + j * 0.15, st + 0.9 + j * 0.15)).toFixed(3)));
+      });
+    } else famLinks.forEach((L) => L.setAttribute('opacity', '0'));
+
+    // scene 5: change request
+    const sCon = t >= 35.3 && t < 42.2;
+    sC.style.display = sCon ? '' : 'none';
+    if (sCon) {
+      const all = 1 - eio(seg(t, 41.4, 42.0));
+      const cp = eo(seg(t, 35.7, 36.3));
+      set(crCard, cp * all, (1 - cp) * -30, 0);
+      const n0 = nodeAt(0, gxNow);
+      crArrow.setAttribute('d', `M610 195 C 760 195, ${n0.x.toFixed(1)} ${(n0.y - 160).toFixed(1)}, ${n0.x.toFixed(1)} ${(n0.y - 22).toFixed(1)}`);
+      crArrow.__len = null;
+      draw(crArrow, eio(seg(t, 36.4, 37.0)));
+      crArrow.setAttribute('opacity', all.toFixed(3));
+      const ip = eo(seg(t, 38.8, 39.3));
+      set(impPanel, ip * all, (1 - ip) * 30, 0);
+      impLines.forEach((g, j) => set(g, eo(seg(t, 39.2 + j * 0.3, 39.6 + j * 0.3))));
+    } else crArrow.setAttribute('opacity', '0');
+
+    // scene 6: requirement cards and consistency check
+    const cardsOn = t >= 42.1 && t < 49.1;
     cardsG.style.display = cardsOn ? '' : 'none';
-    linkG.style.display = cardsOn ? '' : 'none';
+    set(reqsLab, inout(t, 42.4, 42.9, 48.2, 48.8));
     if (cardsOn) {
-      const gx = graphXform(t);
-      const allOut = 1 - eio(seg(t, 43, 43.8));
-      copy.reqs.forEach((r, i) => {
+      const allOut = 1 - eio(seg(t, 48.3, 48.9));
+      copy.reqs.forEach((_, i) => {
         const c = cards[i];
-        const st = 21.9 + i * 0.85;
-        const p = eo(seg(t, st + 0.45, st + 1.0));
-        const pos = cardPos(i, t);
-        let o = p * allOut;
-        if (i === 2) o *= 1 - eio(seg(t, 35.1, 35.7));
-        set(c.g, o, pos.x + (1 - p) * 40, pos.y);
-        if (t < 35) {
-          const n = nodes[REQ_NODE[i]];
-          const nx = gx.cx + n.cx * gx.s;
-          const ny = gx.cy + n.cy * gx.s;
-          const ex = pos.x;
-          const ey = pos.y + CH / 2;
-          const L = reqLinks[i];
-          const [a1, b1, a2, b2] = LINK_CURVE[i];
-          L.setAttribute('d', `M${nx.toFixed(1)} ${ny.toFixed(1)} C ${(nx + a1).toFixed(1)} ${(ny + b1).toFixed(1)}, ${(ex + a2).toFixed(1)} ${(ey + b2).toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}`);
-          L.__len = null;
-          draw(L, eo(seg(t, st, st + 0.6)));
-          L.setAttribute('stroke', r.permission ? C.warn : C.b3);
-          L.setAttribute('opacity', (1 - eio(seg(t, 27.6, 28.3))).toFixed(3));
-        }
-        let chip = '';
-        let chipT = 0;
-        const scanT = 29.2 + ((186 + i * (CH + 20) + CH / 2 - 170) / 560) * 1.6;
+        const p = eo(seg(t, 42.3 + i * 0.2, 42.8 + i * 0.2));
+        set(c.g, p * allOut, CARD_X + (1 - p) * 40, cardY(i));
+        const scanT = 43.6 + ((cardY(i) + CH / 2 - 170) / 560) * 1.6;
         const conflicted = i === 0 || i === 2;
-        if (t >= scanT && t < 35.2) {
-          chip = conflicted ? 'conflict' : 'ok';
-          chipT = scanT;
-        }
-        c.warnBox.setAttribute('opacity', (conflicted ? inout(t, scanT, scanT + 0.3, 35.0, 35.6) : 0).toFixed(3));
-        const covT = [37.8, 38.9, 0, 40.0][i];
-        if (covT && t >= covT + 0.5) {
-          chip = i === 3 ? 'missing' : 'covered';
-          chipT = covT + 0.5;
-        }
+        const chip = t >= scanT ? (conflicted ? 'conflict' : 'ok') : '';
+        c.warnBox.setAttribute('opacity', (conflicted ? eo(seg(t, scanT, scanT + 0.3)) : 0).toFixed(3));
         setChip(c, chip);
-        c.chip.setAttribute('opacity', (chip ? eo(seg(t, chipT, chipT + 0.35)) : 0).toFixed(3));
+        c.chip.setAttribute('opacity', (chip ? eo(seg(t, scanT, scanT + 0.35)) : 0).toFixed(3));
       });
     }
-
-    // label over the proposed requirements (scene 3 only)
-    set(reqsLab, inout(t, 22.2, 22.8, 27.4, 28.0));
-
-    // scene 4
-    const s4on = t >= 28 && t < 35.8;
+    const s4on = t >= 43.4 && t < 49.1;
     s4.style.display = s4on ? '' : 'none';
     if (s4on) {
-      const sy = lerp(170, 730, eio(seg(t, 29.2, 30.8)));
-      const so = inout(t, 29.1, 29.3, 30.6, 30.9);
-      set(scanLine, so, 480, sy);
-      set(scanGlow, so * 0.9, 480, sy);
-      const bx = 520 + CW;
-      const y0 = 186 + CH / 2;
-      const y2 = 186 + 2 * (CH + 20) + CH / 2;
+      const allOut = 1 - eio(seg(t, 48.3, 48.9));
+      const sy = lerp(170, 730, eio(seg(t, 43.6, 45.2)));
+      const so = inout(t, 43.5, 43.7, 45.0, 45.3);
+      set(scanLine, so, CARD_X - 40, sy);
+      set(scanGlow, so * 0.9, CARD_X - 40, sy);
+      const bx = CARD_X + CW;
+      const y0 = cardY(0) + CH / 2;
+      const y2 = cardY(2) + CH / 2;
       bracket.setAttribute('d', `M${bx + 6} ${y0} H${bx + 70} V${y2} H${bx + 6}`);
-      draw(bracket, eio(seg(t, 31.0, 32.0)));
-      const bo = 1 - eio(seg(t, 34.9, 35.5));
-      bracket.setAttribute('opacity', bo.toFixed(3));
-      const lp = eo(seg(t, 31.7, 32.3));
-      set(conflictLab, Math.min(lp, bo), bx + 96 + (1 - lp) * 12, (y0 + y2) / 2 - 18);
-      set(s4sum, inout(t, 32.4, 33.0, 34.8, 35.3), 0, (1 - eo(seg(t, 32.4, 33))) * 10);
-    }
-
-    // scene 5
-    const s5on = t >= 35.3 && t < 43.9;
-    s5.style.display = s5on ? '' : 'none';
-    if (s5on) {
-      const all = 1 - eio(seg(t, 43, 43.8));
-      const pp = eo(seg(t, 35.6, 36.4));
-      set(panel, pp * all, (1 - pp) * 40, 0);
-      codeLines.forEach((g, i) => {
-        const p = eo(seg(t, 36.1 + i * 0.13, 36.4 + i * 0.13));
-        set(g, p * all, (1 - p) * 10, 0);
-      });
-      [37.8, 38.9].forEach((st, k) => hl[k].setAttribute('opacity', (eo(seg(t, st + 0.3, st + 0.7)) * all).toFixed(3)));
-      const mp = eo(seg(t, 40.4, 40.9));
-      set(missNote, mp * all, (1 - mp) * 10, 0);
-      const sm = eo(seg(t, 41.3, 41.9));
-      set(s5sum, sm * all, 0, (1 - sm) * 10);
-    }
-    if (t >= 35 && t < 43.9) {
-      const all = 1 - eio(seg(t, 43, 43.8));
-      ([[0, 37.8, 1, 3], [1, 38.9, 4, 6], [3, 40.0, 0, 0]] as const).forEach(([i, st, a, b]) => {
-        const L = reqLinks[i];
-        const pos = cardPos(i, t);
-        const sx = pos.x + CW;
-        const sy = pos.y + CH / 2;
-        const ty = a ? L0 + ((a + b) / 2 - 1) * LH - 8 : L0 + 9 * LH - 8;
-        L.setAttribute('d', `M${sx.toFixed(1)} ${sy.toFixed(1)} C ${(sx + 90).toFixed(1)} ${sy.toFixed(1)}, ${PX - 90} ${ty.toFixed(1)}, ${PX} ${ty.toFixed(1)}`);
-        L.__len = null;
-        draw(L, eo(seg(t, st, st + 0.5)));
-        L.setAttribute('stroke', a ? C.b3 : C.warn);
-        L.setAttribute('opacity', (t > st ? all : 0).toFixed(3));
-      });
-      reqLinks[2].setAttribute('opacity', '0');
+      draw(bracket, eio(seg(t, 45.5, 46.4)));
+      bracket.setAttribute('opacity', allOut.toFixed(3));
+      const lp = eo(seg(t, 46.2, 46.8));
+      set(conflictLab, lp * allOut, bx + 96 + (1 - lp) * 12, (y0 + y2) / 2 - 18);
+      set(s4sum, eo(seg(t, 46.9, 47.5)) * allOut, 0, (1 - eo(seg(t, 46.9, 47.5))) * 10);
     }
 
     // scene 6: repeatable and traceable
-    const s6on = t >= 42.9 && t < 51.2;
+    const s6on = t >= 48.9 && t < 57.2;
     s6.style.display = s6on ? '' : 'none';
     if (s6on) {
-      const all = 1 - eio(seg(t, 50.3, 51.0));
-      const beatB = eio(seg(t, 46.9, 47.7)); // 0 = comparison, 1 = trace
-      const q = eo(seg(t, 43.2, 43.8));
+      const all = 1 - eio(seg(t, 56.3, 57));
+      const beatB = eio(seg(t, 52.9, 53.7)); // 0 = comparison, 1 = trace
+      const q = eo(seg(t, 49.2, 49.8));
       set(s6q, q * (1 - beatB), 0, (1 - q) * 12);
-      const hp = eo(seg(t, 43.6, 44.1));
+      const hp = eo(seg(t, 49.6, 50.1));
       set(s6head[0], hp * (1 - beatB));
       set(s6head[1], hp * (1 - beatB));
       [0, 1, 2].forEach((r) => {
-        const st = 44.0 + r * 0.7;
+        const st = 50 + r * 0.7;
         const p = eo(seg(t, st, st + 0.45));
         const L = s6rows[0][r];
         const R = s6rows[1][r];
@@ -668,38 +730,38 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
         R.flag.setAttribute('opacity', fp.toFixed(3));
       });
       s6rows[1][0].box.setAttribute('stroke', beatB > 0.5 ? C.b3 : 'rgba(255,255,255,.16)');
-      const vv = eo(seg(t, 46.0, 46.5));
+      const vv = eo(seg(t, 52, 52.5));
       set(s6verdict[0], vv * (1 - beatB), 0, (1 - vv) * 10);
       set(s6verdict[1], vv * (1 - beatB), 0, (1 - vv) * 10);
       // trace chain
       set(s6trace, all);
-      set(traceLab, eo(seg(t, 47.5, 48.0)));
-      draw(arrow1, eio(seg(t, 47.8, 48.3)));
-      const gn = eo(seg(t, 48.2, 48.6));
+      set(traceLab, eo(seg(t, 53.5, 54)));
+      draw(arrow1, eio(seg(t, 53.8, 54.3)));
+      const gn = eo(seg(t, 54.2, 54.6));
       set(gnode, gn, 0, (1 - gn) * 8);
-      draw(arrow2, eio(seg(t, 48.6, 49.1)));
-      const sb = eo(seg(t, 49.0, 49.5));
+      draw(arrow2, eio(seg(t, 54.6, 55.1)));
+      const sb = eo(seg(t, 55, 55.5));
       set(srcBox, sb, 0, (1 - sb) * 12);
-      draw(srcLine, eio(seg(t, 49.4, 50.1)));
+      draw(srcLine, eio(seg(t, 55.4, 56.1)));
     }
 
     // outro
-    const oon = t >= 51.4;
+    const oon = t >= 57.4;
     set(outro, oon ? 1 : 0);
     if (oon) {
       outLogo.forEach((l, i) => {
-        const p = eo(seg(t, 51.6 + (2 - i) * 0.25, 52.3 + (2 - i) * 0.25));
+        const p = eo(seg(t, 57.6 + (2 - i) * 0.25, 58.3 + (2 - i) * 0.25));
         set(l, p, 0, (1 - p) * -70);
       });
-      const w = eo(seg(t, 52.4, 53.2));
+      const w = eo(seg(t, 58.4, 59.2));
       set(outWord, w, 0, (1 - w) * 24);
       outWord.setAttribute('letter-spacing', `${lerp(0.24, 0.04, w).toFixed(3)}em`);
-      const l1 = eo(seg(t, 53.0, 53.8));
+      const l1 = eo(seg(t, 59, 59.8));
       set(outLine, l1, 0, (1 - l1) * 14);
-      const l2 = eo(seg(t, 53.6, 54.3));
+      const l2 = eo(seg(t, 59.6, 60.3));
       set(outChain, l2, 0, (1 - l2) * 10);
-      set(outUrl, eo(seg(t, 54.2, 54.9)));
-      outro.setAttribute('opacity', (1 - eio(seg(t, 56.4, 57))).toFixed(3));
+      set(outUrl, eo(seg(t, 60.2, 60.9)));
+      outro.setAttribute('opacity', (1 - eio(seg(t, 62.4, 63))).toFixed(3));
     }
   }
 

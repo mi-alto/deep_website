@@ -189,7 +189,7 @@ export default function IndexableMotion() {
           ))}
         </div>
 
-        <ol className="grid grid-cols-6 gap-2 lg:col-span-5">
+        <ol className="grid grid-cols-7 gap-2 lg:col-span-5">
           {copy.steps.map((s, i) => (
             <li key={i}>
               <button

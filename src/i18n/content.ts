@@ -35,13 +35,16 @@ export interface MotionCopy {
     /** claim formula tokens, colored by role index (-1 = neutral, 5 = modality) */
     claim: [string, number][];
   };
-  docs: [string, string, string];
+  docs: [string, string, string, string];
   nodes: string[];
   modality: { obligation: string; permission: string };
   reqs: { id: string; text: string; source: string; permission?: boolean }[];
   chips: { ok: string; conflict: string; covered: string; missing: string };
   conflict: [string, string, string];
   reqsLabel: string;
+  plugin: { tabs: [string, string]; header: string; q1: string; call1: string; answer: string; source: string; q2: string; call2: string; done: string };
+  modules: { label: string; families: { name: string; items: string[] }[] };
+  change: { tag: string; text: string; impactLabel: string; impacts: string[] };
   summaryCheck: string;
   summaryCode: string;
   missingComment: string;
@@ -292,40 +295,46 @@ export const content: Record<Lang, Content> = {
         ariaLabel:
           'Animazione: come funziona Indexable, dall’estrazione grammaticale alla verifica del codice',
         controls: { play: 'Riproduci', pause: 'Pausa', replay: 'Da capo', goTo: 'Vai al passaggio' },
-        introSub: 'DAI DOCUMENTI AL CODICE VERIFICATO',
+        introSub: 'DAI DOCUMENTI AL GRAFO DELLA CONOSCENZA',
         steps: [
           {
-            eyebrow: '01 / 06 · Estrazione grammaticale',
-            title: 'Analizza il linguaggio',
-            caption: 'Ogni frase diventa un insieme di affermazioni elementari: chi deve fare cosa, e a quale condizione.',
-            short: 'Linguaggio',
+            eyebrow: '01 / 07 · Lettura dei documenti',
+            title: 'Leggi i documenti',
+            caption: 'Specifiche, verbali, manuali e codice: ogni frase diventa un insieme di affermazioni elementari, chi deve fare cosa e a quale condizione.',
+            short: 'Lettura',
           },
           {
-            eyebrow: '02 / 06 · Grafo della conoscenza',
+            eyebrow: '02 / 07 · Grafo della conoscenza',
             title: 'Costruisci il grafo',
-            caption: 'Le affermazioni di specifiche, verbali e manuali si collegano in un unico grafo. Ogni nodo conserva la sua fonte.',
+            caption: 'Le affermazioni di tutte le fonti si collegano in un unico grafo. Ogni nodo conserva la sua fonte.',
             short: 'Grafo',
           },
           {
-            eyebrow: '03 / 06 · Requisiti',
-            title: 'Estrai i requisiti',
-            caption: 'I requisiti vengono ricavati dal grafo, con l’AI generativa usata in modo controllato. Ciascuno resta collegato al passaggio da cui nasce.',
-            short: 'Requisiti',
+            eyebrow: '03 / 07 · Plugin per Claude Code e Codex',
+            title: 'Il grafo nei tuoi agenti',
+            caption: 'Con il plugin, Claude Code e Codex interrogano il grafo: risposte con la fonte, e modifiche al codice scritte con i requisiti giusti.',
+            short: 'Plugin',
           },
           {
-            eyebrow: '04 / 06 · Coerenza',
-            title: 'Verifica la coerenza',
-            caption: 'Controlli deterministici, senza AI generativa: le contraddizioni emergono prima di scrivere una riga di codice.',
-            short: 'Coerenza',
+            eyebrow: '04 / 07 · Servizi',
+            title: 'Un grafo, tanti servizi',
+            caption: 'Sulla stessa base: conoscere il prodotto, verificare, gestire i cambiamenti, collaudare.',
+            short: 'Servizi',
           },
           {
-            eyebrow: '05 / 06 · Verifica del codice',
-            title: 'Verifica il codice',
-            caption: 'I requisiti vengono confrontati con l’implementazione: cosa è coperto e cosa manca.',
-            short: 'Codice',
+            eyebrow: '05 / 07 · Impatto dei cambiamenti',
+            title: 'Valuta una Change Request',
+            caption: 'Arriva una richiesta di modifica: il grafo mostra subito quali requisiti, parti di codice e test sono coinvolti.',
+            short: 'Cambiare',
           },
           {
-            eyebrow: '06 / 06 · Ripetibile e verificabile',
+            eyebrow: '06 / 07 · Coerenza e completezza',
+            title: 'Verifica i requisiti',
+            caption: 'Controlli deterministici, senza AI generativa: contraddizioni e lacune emergono prima di scrivere una riga di codice.',
+            short: 'Verificare',
+          },
+          {
+            eyebrow: '07 / 07 · Ripetibile e verificabile',
             title: 'Stessa risposta, ogni volta',
             caption: 'Fai tre volte la stessa domanda: un sistema solo generativo può rispondere in tre modi diversi. Indexable dà sempre la stessa risposta, e ti mostra da dove viene.',
             short: 'Ripetibile',
@@ -343,7 +352,7 @@ export const content: Record<Lang, Content> = {
             ['mandato', 3], [' | ', -1], ['data_firma = null', 4], [')', -1],
           ],
         },
-        docs: ['SPECIFICA', 'VERBALI', 'MANUALE'],
+        docs: ['SPECIFICA', 'VERBALI', 'MANUALE', 'CODICE'],
         nodes: [
           'rifiuta mandato', 'banca debitore', 'mandato', 'data di firma', 'creditore', 'invia incasso', 'scadenza D-1',
           'operatore', 'accetta senza firma', 'avvisa debitore', 'codice di rifiuto', 'stato mandato', 'incasso',
@@ -358,8 +367,34 @@ export const content: Record<Lang, Content> = {
         ],
         chips: { ok: 'COERENTE', conflict: 'CONFLITTO', covered: 'COPERTO', missing: 'MANCANTE' },
         conflict: ['CONFLITTO', 'deve rifiutare', 'vs può accettare'],
-        reqsLabel: 'RICAVATI DAL GRAFO  ·  AI GENERATIVA CONTROLLATA',
-        summaryCheck: 'CONTROLLO DETERMINISTICO  ·  4 REQUISITI  ·  3 COERENTI  ·  1 CONFLITTO',
+        reqsLabel: 'REQUISITI RICAVATI DAL GRAFO  ·  CONTROLLO DETERMINISTICO',
+        plugin: {
+          tabs: ['CLAUDE CODE', 'CODEX'],
+          header: 'PLUGIN INDEXABLE',
+          q1: 'Quando va rifiutato un mandato?',
+          call1: 'interroga il grafo',
+          answer: 'Quando manca la data di firma.',
+          source: 'FONTE  ·  SPECIFICA v2.3  §4.5',
+          q2: 'Aggiungi il controllo in MandateValidator.java',
+          call2: 'requisiti collegati: REQ-014, REQ-022',
+          done: 'L’agente scrive la modifica con i requisiti giusti.',
+        },
+        modules: {
+          label: 'UN GRAFO, TANTI SERVIZI',
+          families: [
+            { name: 'Conoscere', items: ['Domande sul prodotto', 'Passaggio di consegne'] },
+            { name: 'Verificare', items: ['Coerenza e completezza', 'Requisiti e codice'] },
+            { name: 'Cambiare', items: ['Impatto delle Change Request', 'Confronto con RFI e RFP', 'Analisi funzionale e tecnica'] },
+            { name: 'Collaudare', items: ['Verifica del testbook', 'Creazione del testbook'] },
+          ],
+        },
+        change: {
+          tag: 'CHANGE REQUEST  ·  CR-07',
+          text: 'Accettare mandati con firma digitale.',
+          impactLabel: 'IMPATTO',
+          impacts: ['3 requisiti da rivedere', '1 conflitto con i verbali', '2 parti di codice', '4 test da rifare'],
+        },
+        summaryCheck: '4 REQUISITI  ·  3 COERENTI  ·  1 CONFLITTO',
         summaryCode: '2 COPERTI  ·  1 MANCANTE  ·  3 TEST GENERATI',
         missingComment: '// nessuna chiamata a notifyDebtor()',
         outroLine: 'AI spiegabile e verificabile per i settori regolamentati.',
@@ -620,40 +655,46 @@ export const content: Record<Lang, Content> = {
         label: 'How it works',
         ariaLabel: 'Animation: how Indexable works, from grammatical extraction to code verification',
         controls: { play: 'Play', pause: 'Pause', replay: 'Replay', goTo: 'Go to step' },
-        introSub: 'FROM DOCUMENTS TO VERIFIED CODE',
+        introSub: 'FROM DOCUMENTS TO A KNOWLEDGE GRAPH',
         steps: [
           {
-            eyebrow: '01 / 06 · Grammatical extraction',
-            title: 'Parse the language',
-            caption: 'Every sentence becomes atomic claims: who must do what, under which condition.',
-            short: 'Language',
+            eyebrow: '01 / 07 · Reading the documents',
+            title: 'Read the documents',
+            caption: 'Specs, minutes, manuals and code: every sentence becomes atomic claims, who must do what, under which condition.',
+            short: 'Read',
           },
           {
-            eyebrow: '02 / 06 · Knowledge graph',
+            eyebrow: '02 / 07 · Knowledge graph',
             title: 'Build the graph',
-            caption: 'Claims from specs, minutes and manuals are linked in one graph. Every node keeps its source.',
+            caption: 'Claims from every source are linked in one graph. Every node keeps its source.',
             short: 'Graph',
           },
           {
-            eyebrow: '03 / 06 · Requirements',
-            title: 'Extract requirements',
-            caption: 'Requirements are derived from the graph, with generative AI used in a controlled way. Each stays linked to the passage it comes from.',
-            short: 'Requirements',
+            eyebrow: '03 / 07 · Plugin for Claude Code and Codex',
+            title: 'Plugged into your agents',
+            caption: 'With the plugin, Claude Code and Codex query the graph: answers with their source, and code changes written with the right requirements.',
+            short: 'Plugin',
           },
           {
-            eyebrow: '04 / 06 · Consistency',
-            title: 'Check consistency',
-            caption: 'Deterministic checks, no generative AI: contradictions surface before anyone writes a line of code.',
-            short: 'Consistency',
+            eyebrow: '04 / 07 · Services',
+            title: 'One graph, many services',
+            caption: 'On the same foundation: know the product, verify, manage change, test.',
+            short: 'Services',
           },
           {
-            eyebrow: '05 / 06 · Code verification',
-            title: 'Verify the code',
-            caption: 'Requirements are matched against the implementation: what is covered, and what is missing.',
-            short: 'Code',
+            eyebrow: '05 / 07 · Change impact',
+            title: 'Assess a Change Request',
+            caption: 'A change request comes in: the graph instantly shows which requirements, code and tests are affected.',
+            short: 'Change',
           },
           {
-            eyebrow: '06 / 06 · Repeatable and traceable',
+            eyebrow: '06 / 07 · Consistency and completeness',
+            title: 'Verify the requirements',
+            caption: 'Deterministic checks, no generative AI: contradictions and gaps surface before anyone writes a line of code.',
+            short: 'Verify',
+          },
+          {
+            eyebrow: '07 / 07 · Repeatable and traceable',
             title: 'Same answer, every time',
             caption: 'Ask the same question three times: a generative-only system may answer three different ways. Indexable always gives the same answer, and shows you where it comes from.',
             short: 'Repeatable',
@@ -671,7 +712,7 @@ export const content: Record<Lang, Content> = {
             ['mandate', 3], [' | ', -1], ['signature_date = null', 4], [')', -1],
           ],
         },
-        docs: ['SPEC', 'MINUTES', 'MANUAL'],
+        docs: ['SPEC', 'MINUTES', 'MANUAL', 'CODE'],
         nodes: [
           'reject mandate', 'debtor bank', 'mandate', 'signature date', 'creditor', 'submit collection', 'D-1 cut-off',
           'operator', 'accept w/o signature', 'notify debtor', 'rejection code', 'mandate status', 'collection',
@@ -686,8 +727,34 @@ export const content: Record<Lang, Content> = {
         ],
         chips: { ok: 'CONSISTENT', conflict: 'CONFLICT', covered: 'COVERED', missing: 'MISSING' },
         conflict: ['CONFLICT', 'shall reject', 'vs may accept'],
-        reqsLabel: 'DERIVED FROM THE GRAPH  ·  CONTROLLED GENERATIVE AI',
-        summaryCheck: 'DETERMINISTIC CHECK  ·  4 REQUIREMENTS  ·  3 CONSISTENT  ·  1 CONFLICT',
+        reqsLabel: 'REQUIREMENTS DERIVED FROM THE GRAPH  ·  DETERMINISTIC CHECK',
+        plugin: {
+          tabs: ['CLAUDE CODE', 'CODEX'],
+          header: 'INDEXABLE PLUGIN',
+          q1: 'When must a mandate be rejected?',
+          call1: 'querying the graph',
+          answer: 'When the signature date is missing.',
+          source: 'SOURCE  ·  SPEC v2.3  §4.5',
+          q2: 'Add the check to MandateValidator.java',
+          call2: 'linked requirements: REQ-014, REQ-022',
+          done: 'The agent writes the change with the right requirements.',
+        },
+        modules: {
+          label: 'ONE GRAPH, MANY SERVICES',
+          families: [
+            { name: 'Know', items: ['Product questions', 'Team handover'] },
+            { name: 'Verify', items: ['Consistency and completeness', 'Requirements vs code'] },
+            { name: 'Change', items: ['Change Request impact', 'RFI and RFP gap analysis', 'Functional and technical analysis'] },
+            { name: 'Test', items: ['Test book review', 'Test book creation'] },
+          ],
+        },
+        change: {
+          tag: 'CHANGE REQUEST  ·  CR-07',
+          text: 'Accept mandates with a digital signature.',
+          impactLabel: 'IMPACT',
+          impacts: ['3 requirements to review', '1 conflict with the minutes', '2 pieces of code', '4 tests to redo'],
+        },
+        summaryCheck: '4 REQUIREMENTS  ·  3 CONSISTENT  ·  1 CONFLICT',
         summaryCode: '2 COVERED  ·  1 MISSING  ·  3 TESTS GENERATED',
         missingComment: '// no call to notifyDebtor() found',
         outroLine: 'Explainable, auditable AI for regulated industries.',
