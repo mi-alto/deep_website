@@ -6,6 +6,16 @@ import SectionHeading from './SectionHeading';
    colour. The two client marks are dark artwork on transparent (Villanova.AI is
    pure black, Nexi is #2D32AA), so they need inverting to survive a black page;
    the innovation logos already ship light or boxed. */
+// intrinsic sizes, so the browser reserves the right space before the images arrive
+const LOGO_SIZE: Record<string, [number, number]> = {
+  'villanova-ai.webp': [577, 56],
+  'nexi.svg': [88, 27],
+  'deloitte.webp': [290, 160],
+  'polihub.webp': [980, 611],
+  'levillage.webp': [164, 120],
+};
+const sizeOf = (src: string) => LOGO_SIZE[src.split('/').pop() ?? ''] ?? [160, 60];
+
 const CLIENT_STYLES = ['h-5 md:h-6 grayscale invert', 'h-6 md:h-7 grayscale invert'];
 const INNOVATION_STYLES = ['h-14 md:h-16 grayscale', 'h-11 md:h-12 grayscale', 'h-10 md:h-12 grayscale'];
 
@@ -17,6 +27,9 @@ function LogoRow({ logos, styles }: { logos: { src: string; alt: string; note?: 
           <img
             src={logo.src}
             alt={logo.alt}
+            width={sizeOf(logo.src)[0]}
+            height={sizeOf(logo.src)[1]}
+            decoding="async"
             className={`w-auto opacity-85 transition-opacity duration-500 hover:opacity-100 ${styles[i] ?? 'h-10 grayscale'}`}
             loading="lazy"
           />
@@ -56,7 +69,7 @@ export default function Credibility() {
 
           <div className="lg:col-span-7">
             <Reveal delay={160}>
-              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">{c.clientsLabel}</p>
+              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">{c.clientsLabel}</p>
               <div className="mt-7">
                 <LogoRow logos={c.clients} styles={CLIENT_STYLES} />
               </div>
@@ -64,7 +77,7 @@ export default function Credibility() {
 
             <Reveal delay={240}>
               <div className="mt-12 border-t border-white/15 pt-10">
-                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
+                <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
                   {c.innovationLabel}
                 </p>
                 <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-[#B7B7B7] md:text-base">

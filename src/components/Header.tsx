@@ -74,7 +74,7 @@ export default function Header() {
           </div>
           <a
             href="#contatti"
-            className="lang-fade font-mono text-[11px] uppercase tracking-[0.22em] text-white/80 underline-offset-4 hover:underline"
+            className="lang-fade hidden whitespace-nowrap font-mono sm:inline text-[11px] uppercase tracking-[0.22em] text-white/80 underline-offset-4 hover:underline"
           >
             {t.navCta} ↗
           </a>

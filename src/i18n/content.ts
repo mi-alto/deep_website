@@ -24,7 +24,7 @@ export interface LogoItem {
 export interface MotionCopy {
   label: string;
   ariaLabel: string;
-  controls: { play: string; pause: string; replay: string; goTo: string };
+  controls: { play: string; pause: string; replay: string; goTo: string; fullscreen: string; close: string };
   introSub: string;
   steps: { eyebrow: string; title: string; caption: string; short: string }[];
   sentence: {
@@ -295,7 +295,7 @@ export const content: Record<Lang, Content> = {
         label: 'Come funziona',
         ariaLabel:
           'Animazione: come funziona Indexable, dall’estrazione grammaticale alla verifica del codice',
-        controls: { play: 'Riproduci', pause: 'Pausa', replay: 'Da capo', goTo: 'Vai al passaggio' },
+        controls: { play: 'Riproduci', pause: 'Pausa', replay: 'Da capo', goTo: 'Vai al passaggio', fullscreen: 'Guarda a schermo intero', close: 'Chiudi' },
         introSub: 'DAI DOCUMENTI ALLA BASE DI CONOSCENZA',
         steps: [
           {
@@ -673,7 +673,7 @@ export const content: Record<Lang, Content> = {
       motion: {
         label: 'How it works',
         ariaLabel: 'Animation: how Indexable works, from grammatical extraction to code verification',
-        controls: { play: 'Play', pause: 'Pause', replay: 'Replay', goTo: 'Go to step' },
+        controls: { play: 'Play', pause: 'Pause', replay: 'Replay', goTo: 'Go to step', fullscreen: 'Watch full screen', close: 'Close' },
         introSub: 'FROM DOCUMENTS TO A KNOWLEDGE BASE',
         steps: [
           {

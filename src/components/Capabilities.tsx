@@ -30,7 +30,7 @@ export default function Capabilities({ variant }: { variant: 'business' | 'tech'
           {data.items.map((item, i) => (
             <Reveal key={i} delay={100 + i * 110} className="h-full">
               <article className="group spot flex h-full flex-col bg-black/80 p-7 transition-colors duration-500 hover:bg-black/70 md:p-9">
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
+                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
                   {String(i + 1).padStart(2, '0')} / {String(data.items.length).padStart(2, '0')}
                 </span>
                 <h3 className="font-display mt-5 text-xl font-semibold leading-tight tracking-tight text-white md:text-2xl">

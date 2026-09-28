@@ -23,8 +23,35 @@ function useDeferredFx() {
     if (nav.connection?.saveData) return;
     const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
     const go = () => setOn(true);
-    if (w.requestIdleCallback) w.requestIdleCallback(go, { timeout: 1200 });
-    else setTimeout(go, 250);
+    // wait for the page to finish loading, then for a quiet moment; phones wait a little longer,
+    // so the background never competes with the first reading of the page
+    const small = window.innerWidth < 768;
+    const idle = () => {
+      if (w.requestIdleCallback) w.requestIdleCallback(go, { timeout: small ? 2500 : 1200 });
+      else setTimeout(go, small ? 1200 : 250);
+    };
+    const later = () => setTimeout(idle, 0);
+    if (small) {
+      // phones: the field starts at the first touch or scroll, or after a few seconds
+      let done = false;
+      const kick = () => {
+        if (done) return;
+        done = true;
+        window.removeEventListener('scroll', kick);
+        window.removeEventListener('touchstart', kick);
+        idle();
+      };
+      window.addEventListener('scroll', kick, { passive: true, once: true });
+      window.addEventListener('touchstart', kick, { passive: true, once: true });
+      const timer = setTimeout(kick, 6000);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('scroll', kick);
+        window.removeEventListener('touchstart', kick);
+      };
+    }
+    if (document.readyState === 'complete') later();
+    else window.addEventListener('load', later, { once: true });
   }, []);
   return on;
 }

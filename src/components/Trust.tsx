@@ -24,7 +24,7 @@ export default function Trust() {
         {tr.pillars.map((p, i) => (
           <Reveal key={i} delay={100 + i * 110} className="h-full">
             <article className="group spot flex h-full flex-col bg-black/80 p-7 transition-colors duration-500 hover:bg-black/70 md:p-9">
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
                 {String(i + 1).padStart(2, '0')} / {String(tr.pillars.length).padStart(2, '0')}
               </span>
               <h3 className="font-display mt-5 text-xl font-semibold leading-tight tracking-tight text-white md:text-2xl">
@@ -39,7 +39,26 @@ export default function Trust() {
       </div>
 
       <Reveal delay={150}>
-        <div className="mt-12 overflow-x-auto">
+        {/* phones: one card per row of the comparison, no sideways scrolling */}
+        <div className="mt-12 md:hidden">
+          <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-white/60">{tr.table.caption}</p>
+          <ul className="flex flex-col gap-px border border-white/15 bg-white/10">
+            {tr.table.rows.map((r, i) => (
+              <li key={i} className="bg-black/85 px-5 py-4">
+                <p className="text-[15px] font-semibold text-white">{r[0]}</p>
+                <p className="mt-2 text-[14px] leading-snug text-white/60">
+                  <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/60">{tr.table.head[1]}</span>
+                  {r[1]}
+                </p>
+                <p className="mt-1.5 text-[15px] font-medium leading-snug text-white">
+                  <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[hsl(var(--brand-3))]">{tr.table.head[2]}</span>
+                  {r[2]}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="mt-12 hidden overflow-x-auto md:block">
           <table className="w-full min-w-[560px] border-collapse text-left">
             <caption className="mb-4 text-left font-mono text-[10px] uppercase tracking-[0.22em] text-white/55 md:text-[11px]">
               {tr.table.caption}

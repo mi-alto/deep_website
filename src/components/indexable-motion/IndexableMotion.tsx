@@ -32,6 +32,8 @@ export default function IndexableMotion() {
 
   const [playing, setPlaying] = useState(false);
   const [step, setStep] = useState(0);
+  // phones: the stage opens full screen, turned sideways when the phone is upright
+  const [theater, setTheater] = useState(false);
 
   const paint = useCallback((t: number) => {
     motion.current?.render(t);
@@ -126,6 +128,29 @@ export default function IndexableMotion() {
     if (!userPaused.current && visible.current) start();
   };
 
+  const openTheater = () => {
+    setTheater(true);
+    userPaused.current = false;
+    start();
+  };
+  const closeTheater = () => setTheater(false);
+
+  useEffect(() => {
+    if (!theater) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setTheater(false);
+    window.addEventListener('keydown', onKey);
+    // where the browser allows it (Android), also hide its own bars
+    const root = document.documentElement as HTMLElement & { requestFullscreen?: () => Promise<void> };
+    root.requestFullscreen?.().catch(() => {});
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
+      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    };
+  }, [theater]);
+
   const mono = 'font-mono text-[10px] uppercase tracking-[0.22em] md:text-[11px]';
 
   return (
@@ -155,19 +180,54 @@ export default function IndexableMotion() {
         </div>
       </div>
 
-      <div
-        ref={frameRef}
-        role="img"
-        aria-label={copy.ariaLabel}
-        className="relative -mx-5 overflow-hidden border-y border-white/15 bg-[#07070b] [aspect-ratio:1920/700] md:mx-0 md:border-x"
-      >
-        <svg
-          ref={svgRef}
-          viewBox="0 120 1920 700"
-          preserveAspectRatio="xMidYMid meet"
-          className="absolute inset-0 h-full w-full"
-          aria-hidden="true"
-        />
+      <div className={theater ? 'ixm-theater' : ''} role={theater ? 'dialog' : undefined} aria-modal={theater || undefined} aria-label={theater ? copy.ariaLabel : undefined}>
+        <div className={theater ? 'ixm-theater-box' : ''}>
+          {theater && (
+            <div className="flex items-center justify-between gap-4">
+              <p className="min-w-0 truncate">
+                <span className={`${mono} mr-3 text-[hsl(var(--brand-1))]`}>{String(step + 1).padStart(2, '0')} / 0{copy.steps.length}</span>
+                <span className="font-display text-sm font-semibold uppercase tracking-tight text-white">{copy.steps[step]?.title}</span>
+              </p>
+              <button
+                type="button"
+                onClick={closeTheater}
+                className={`${mono} shrink-0 rounded-full border border-white/25 px-4 py-2 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[hsl(var(--brand-1))]`}
+              >
+                {copy.controls.close} ✕
+              </button>
+            </div>
+          )}
+          <div
+            ref={frameRef}
+            role="img"
+            aria-label={copy.ariaLabel}
+            className={`relative overflow-hidden bg-[#07070b] [aspect-ratio:1920/700] ${
+              theater ? 'mx-auto max-h-full w-full border border-white/15' : '-mx-5 border-y border-white/15 md:mx-0 md:border-x'
+            }`}
+          >
+            <svg
+              ref={svgRef}
+              viewBox="0 120 1920 700"
+              preserveAspectRatio="xMidYMid meet"
+              className="absolute inset-0 h-full w-full"
+              aria-hidden="true"
+            />
+            {!theater && (
+              <button
+                type="button"
+                onClick={openTheater}
+                className="absolute inset-0 flex items-end justify-end p-3 md:hidden"
+              >
+                <span className={`${mono} flex items-center gap-2 rounded-full border border-white/30 bg-black/70 px-3 py-2 text-white backdrop-blur-sm`}>
+                  <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" className="text-[hsl(var(--brand-1))]">
+                    <path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9" stroke="currentColor" strokeWidth="1.6" fill="none" />
+                  </svg>
+                  {copy.controls.fullscreen}
+                </span>
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="mt-7 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-end">
@@ -195,13 +255,13 @@ export default function IndexableMotion() {
               <button
                 type="button"
                 onClick={() => seek(STEPS[i][0] + 0.01)}
-                aria-label={`${copy.controls.goTo} ${i + 1}: ${s.title}`}
                 aria-current={i === step ? 'step' : undefined}
                 className="group flex w-full flex-col gap-2 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[hsl(var(--brand-1))]"
               >
-                <span className={`flex flex-col gap-1 transition-colors ${i === step ? 'text-white' : 'text-white/45 group-hover:text-white/80'}`}>
+                <span className={`flex flex-col gap-1 transition-colors ${i === step ? 'text-white' : 'text-white/60 group-hover:text-white/85'}`}>
                   <span className={mono}>{String(i + 1).padStart(2, '0')}</span>
                   <span className="hidden truncate font-mono text-[10px] uppercase tracking-[0.1em] sm:block">{s.short}</span>
+                  <span className="sr-only">{`: ${s.title}`}</span>
                 </span>
                 <span className="relative block h-[3px] w-full overflow-hidden bg-white/15">
                   <span

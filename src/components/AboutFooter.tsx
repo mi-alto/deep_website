@@ -16,7 +16,7 @@ export default function AboutFooter() {
           {a.choices.map((c, i) => (
             <Reveal key={i} delay={i * 110} className="h-full">
               <article className="group spot flex h-full flex-col bg-black/80 p-7 transition-colors duration-500 hover:bg-black/70 md:p-9">
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
+                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
                   {String(i + 1).padStart(2, '0')} / {String(a.choices.length).padStart(2, '0')}
                 </span>
                 <h3 className="font-display mt-5 text-xl font-semibold leading-tight tracking-tight text-white md:text-2xl">
@@ -49,7 +49,7 @@ export default function AboutFooter() {
         {/* contacts */}
         <div id="contatti" className="mt-20 grid scroll-mt-28 grid-cols-1 gap-10 border-t border-white/15 pt-10 md:mt-28 md:grid-cols-3">
           <Reveal>
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45">
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
               {a.contacts.label}
             </span>
           </Reveal>
@@ -79,7 +79,7 @@ export default function AboutFooter() {
       </div>
 
 
-      <div className="mx-auto flex max-w-[1600px] flex-col items-start justify-between gap-4 px-5 pb-8 pt-16 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40 md:flex-row md:items-center md:px-10">
+      <div className="mx-auto flex max-w-[1600px] flex-col items-start justify-between gap-4 px-5 pb-8 pt-16 font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 md:flex-row md:items-center md:px-10">
         <span className="normal-case tracking-[0.08em]">{a.contacts.legal}</span>
         <span className="flex shrink-0 items-center gap-2">
           <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white/70" />

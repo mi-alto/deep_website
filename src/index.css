@@ -435,3 +435,51 @@ html.lang-out .lang-fade {
 @media (prefers-reduced-motion: reduce) {
   .lang-fade { transition: none; }
 }
+
+/* ── phones and touch screens: keep the look, drop the constant work ──
+   The floating words and the drifting colour ghosts of the big titles
+   re-style hundreds of elements on every frame. On touch screens there is
+   no hover to trigger them anyway, and the effect is barely visible. */
+@media (hover: none), (max-width: 767px) {
+  .word-float,
+  .numeral-float,
+  .glitch::before,
+  .glitch::after {
+    animation: none;
+  }
+  .glitch::before,
+  .glitch::after {
+    display: none;
+  }
+}
+
+/* ── "How it works" animation, full screen on phones ──
+   In portrait the stage is turned sideways, so it fills the screen at
+   more than twice the size; in landscape it simply fills the screen. */
+.ixm-theater {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #07070b;
+}
+.ixm-theater-box {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: max(10px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px))
+    max(10px, env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px));
+}
+@media (orientation: portrait) {
+  .ixm-theater-box {
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    width: 100vh;
+    width: 100dvh;
+    height: 100vw;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+}

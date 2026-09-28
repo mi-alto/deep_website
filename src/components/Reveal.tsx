@@ -88,7 +88,8 @@ export function WordReveal({
   const Wrapper = Tag as 'span';
 
   return (
-    <Wrapper ref={ref} className={`glitch ${className}`} data-text={text} aria-label={text}>
+    <Wrapper ref={ref} className={`glitch ${className}`} data-text={text}>
+      <span className="sr-only">{text}</span>
       {words.map((w, i) => (
         <span
           key={i}
