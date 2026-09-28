@@ -519,12 +519,12 @@ export const content: Record<Lang, Content> = {
       choices: [
         {
           title: 'Usalo con il tuo team.',
-          body: 'Porta Indexable nel lavoro di analisi, sviluppo e verifica dei tuoi prodotti.',
+          body: 'Il tuo team usa Indexable per produrre documentazione, definire requisiti, analizzare gli impatti e verificare l’implementazione.',
         },
         {
           title: 'Ci pensiamo noi.',
           body:
-            'Ti consegniamo noi il lavoro finito: documentazione consolidata, requisiti, analisi di impatto, verifiche dell’implementazione. Tempi più brevi, senza perdere qualità, perché ogni consegna è collegata alle fonti e si può verificare. Concordiamo insieme il perimetro, cosa consegnare e come verificarlo.',
+            'Ci affidi il lavoro. Paghi per i deliverable concordati. Usiamo Indexable e la nostra esperienza per produrre documentazione consolidata, requisiti, analisi di impatto e report di verifica dell’implementazione. Definiamo insieme perimetro, tempi, costi e criteri di accettazione, prima di iniziare.',
         },
       ],
       cta: {
@@ -896,12 +896,12 @@ export const content: Record<Lang, Content> = {
       choices: [
         {
           title: 'Use it with your team.',
-          body: 'Bring Indexable into the analysis, development and verification of your products.',
+          body: 'Your team uses Indexable to produce documentation, define requirements, assess change impacts and verify the implementation.',
         },
         {
           title: 'We take care of it.',
           body:
-            'We deliver the finished work: consolidated documentation, requirements, impact analysis, implementation checks. Faster, without losing quality, because every deliverable is linked to its sources and can be verified. Together we agree on the scope, what to deliver and how to verify it.',
+            'We do the work. You pay for the agreed deliverables. We combine Indexable with our expertise to produce consolidated documentation, requirements, impact assessments and implementation verification reports. Together, we agree on scope, timelines, pricing and acceptance criteria before work begins.',
         },
       ],
       cta: {
