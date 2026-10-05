@@ -132,18 +132,18 @@ export const content: Record<Lang, Content> = {
       title: 'Due prodotti applicano la stessa tecnologia.',
       items: [
         {
-          name: 'Juno',
-          kicker: 'Memoria per i dipendenti',
-          body:
-            'Assistenti AI su WhatsApp e Teams che usano la memoria delle conversazioni e di basi documentali legali sul diritto del lavoro.',
-          cta: { label: 'ojuno.ai', href: JUNO_URL },
-        },
-        {
           name: 'Ormentis',
           kicker: 'Memoria per lo sviluppo prodotto',
           body:
             'Memoria da basi documentali e codice del cliente per lo sviluppo di prodotti nei servizi finanziari. Per persone e agenti, con plugin per Claude Code e Codex.',
           cta: { label: 'ormentis.com', href: ORMENTIS_URL },
+        },
+        {
+          name: 'Juno',
+          kicker: 'Memoria da estratti conto e corpora legali',
+          body:
+            'Assistenti conversazionali su WhatsApp e Teams con memoria delle conversazioni, degli estratti conto dei clienti e dei corpora legali sul diritto del lavoro.',
+          cta: { label: 'ojuno.ai', href: JUNO_URL },
         },
       ],
     },
@@ -219,18 +219,18 @@ export const content: Record<Lang, Content> = {
       title: 'Two products apply the same technology.',
       items: [
         {
-          name: 'Juno',
-          kicker: 'Memory for employees',
-          body:
-            'AI assistants on WhatsApp and Teams that use the memory of conversations and of legal document bases on employment law.',
-          cta: { label: 'ojuno.ai', href: JUNO_URL },
-        },
-        {
           name: 'Ormentis',
           kicker: 'Memory for product development',
           body:
             'Memory from the client’s own document bases and code, for product development in financial services. For people and agents, with plugins for Claude Code and Codex.',
           cta: { label: 'ormentis.com', href: ORMENTIS_URL },
+        },
+        {
+          name: 'Juno',
+          kicker: 'Memory from bank statements and legal corpora',
+          body:
+            'Conversational assistants on WhatsApp and Teams with memory of conversations, of customers’ bank statements and of legal corpora on employment law.',
+          cta: { label: 'ojuno.ai', href: JUNO_URL },
         },
       ],
     },
