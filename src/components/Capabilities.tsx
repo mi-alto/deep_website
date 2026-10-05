@@ -2,40 +2,17 @@ import { useLang } from '../i18n/LanguageProvider';
 import { Reveal } from './Reveal';
 import SectionHeading from './SectionHeading';
 
-type Variant = 'interaction' | 'documents' | 'promises';
-
-/** One block of titled cards. The two memories share section 02: the first
-    carries the section heading, the second only its own kicker and cards. */
-export default function Capabilities({ variant }: { variant: Variant }) {
+/** Section 01: the technology, four cards. */
+export default function Capabilities() {
   const { t } = useLang();
-  const data =
-    variant === 'interaction' ? t.interactionMemory : variant === 'documents' ? t.documentMemory : t.promises;
-  const withHeading = variant !== 'documents';
-  const id = variant === 'interaction' ? 'tecnologia' : variant === 'documents' ? 'documenti' : 'promesse';
+  const data = t.technology;
 
   return (
-    <section className={`relative bg-black/35 pb-20 md:pb-36 ${withHeading ? '' : '-mt-6 md:-mt-16'}`}>
-      {withHeading ? (
-        <SectionHeading index={data.index} label={data.label} title={data.title} id={id} />
-      ) : (
-        <div id={id} className="scroll-mt-24" />
-      )}
+    <section className="relative bg-black/35 pb-20 pt-16 md:pb-32 md:pt-24">
+      <SectionHeading index={data.index} label={data.label} title={data.title} id="tecnologia" />
 
-      <div className={`mx-auto max-w-[1600px] px-5 md:px-10 ${withHeading ? 'mt-10 md:mt-16' : ''}`}>
-        <Reveal>
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[hsl(var(--brand-3))] md:text-xs">
-            {data.kicker}
-          </span>
-          <p className="font-display mt-3 max-w-3xl text-xl font-semibold leading-snug text-white md:text-3xl">
-            {data.subtitle}
-          </p>
-        </Reveal>
-
-        <div
-          className={`mt-10 grid grid-cols-1 gap-px border border-white/15 bg-white/10 ${
-            data.items.length === 4 ? 'sm:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'
-          }`}
-        >
+      <div className="mx-auto mt-10 max-w-[1600px] px-5 md:mt-14 md:px-10">
+        <div className="grid grid-cols-1 gap-px border border-white/15 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
           {data.items.map((item, i) => (
             <Reveal key={i} delay={100 + i * 110} className="h-full">
               <article className="group spot flex h-full flex-col bg-black/80 p-7 transition-colors duration-500 hover:bg-black/70 md:p-9">

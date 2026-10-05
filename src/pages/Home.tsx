@@ -2,12 +2,8 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { LanguageProvider } from '../i18n/LanguageProvider';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
-import Manifesto from '../components/Manifesto';
-import Problem from '../components/Problem';
 import Capabilities from '../components/Capabilities';
-import Layer from '../components/Layer';
 import Products from '../components/Products';
-import Projects from '../components/Projects';
 import Credibility from '../components/Credibility';
 import AboutFooter from '../components/AboutFooter';
 import { useSpotlight } from '../hooks/use-spotlight';
@@ -57,10 +53,9 @@ function useDeferredFx() {
   return on;
 }
 
-/* The page reads top-down as the lab's argument:
-   the question (01) → the two memories (02) → the four promises (03) →
-   how we verify it (04) → the two products (05) → the path (06) →
-   where we work (07) → working with us (08). */
+/* A landing page, nothing more: the technology (01), the two products (02),
+   clients and innovation track record (03), contacts. Product stories live on
+   ojuno.ai and ormentis.com. */
 export default function Home() {
   useSpotlight();
   const fx = useDeferredFx();
@@ -77,14 +72,8 @@ export default function Home() {
           <Header />
           <main className="lang-fade">
             <Hero />
-            <Manifesto />
-            <Problem />
-            <Capabilities variant="interaction" />
-            <Capabilities variant="documents" />
-            <Capabilities variant="promises" />
-            <Layer />
+            <Capabilities />
             <Products />
-            <Projects />
             <Credibility />
           </main>
           <div className="lang-fade">
