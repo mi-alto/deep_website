@@ -133,9 +133,9 @@ export const content: Record<Lang, Content> = {
       items: [
         {
           name: 'Ormentis',
-          kicker: 'Memoria per lo sviluppo prodotto',
+          kicker: 'Progettazione e verifica del software',
           body:
-            'Memoria da basi documentali e codice del cliente per lo sviluppo di prodotti nei servizi finanziari. Per persone e agenti, con plugin per Claude Code e Codex.',
+            'Una base di conoscenza versionata che collega documenti, requisiti, decisioni, test e codice di ogni versione di un prodotto. Persone e agenti di sviluppo capiscono cosa esiste, progettano una modifica, ne verificano la coerenza e ne vedono l’impatto. Conoscenza di settore, del cliente e di prodotto in pacchetti componibili; primo settore, i servizi finanziari.',
           cta: { label: 'ormentis.com', href: ORMENTIS_URL },
         },
         {
@@ -220,9 +220,9 @@ export const content: Record<Lang, Content> = {
       items: [
         {
           name: 'Ormentis',
-          kicker: 'Memory for product development',
+          kicker: 'Software product design and verification',
           body:
-            'Memory from the client’s own document bases and code, for product development in financial services. For people and agents, with plugins for Claude Code and Codex.',
+            'A versioned knowledge base that links documents, requirements, decisions, tests and code for every product version. People and coding agents understand what exists, design a change, verify its consistency and trace its impact. Industry, client and product knowledge in composable packs; financial services first.',
           cta: { label: 'ormentis.com', href: ORMENTIS_URL },
         },
         {
