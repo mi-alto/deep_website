@@ -2,11 +2,8 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import { LanguageProvider } from '../i18n/LanguageProvider';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
-import Manifesto from '../components/Manifesto';
-import Problem from '../components/Problem';
 import Capabilities from '../components/Capabilities';
-import Layer from '../components/Layer';
-import Projects from '../components/Projects';
+import Products from '../components/Products';
 import Credibility from '../components/Credibility';
 import AboutFooter from '../components/AboutFooter';
 import { useSpotlight } from '../hooks/use-spotlight';
@@ -56,6 +53,9 @@ function useDeferredFx() {
   return on;
 }
 
+/* A landing page, nothing more: the technology (01), the two products (02),
+   clients and innovation track record (03), contacts. Product stories live on
+   ojuno.ai and ormentis.com. */
 export default function Home() {
   useSpotlight();
   const fx = useDeferredFx();
@@ -72,12 +72,8 @@ export default function Home() {
           <Header />
           <main className="lang-fade">
             <Hero />
-            <Manifesto />
-            <Problem />
-            <Capabilities variant="business" />
-            <Capabilities variant="tech" />
-            <Layer />
-            <Projects />
+            <Capabilities />
+            <Products />
             <Credibility />
           </main>
           <div className="lang-fade">

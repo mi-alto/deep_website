@@ -183,7 +183,8 @@ export default function ParticleField({ className }: { className?: string }) {
     let targetStrength = 0;
     let scrollY = 0;
     let raf = 0;
-    const clock = new THREE.Clock();
+    // THREE.Timer replaces the deprecated THREE.Clock: update() once per frame, then read the elapsed time
+    const timer = new THREE.Timer();
 
     const onMove = (ev: PointerEvent) => {
       const nx = ev.clientX / window.innerWidth;
@@ -219,7 +220,8 @@ export default function ParticleField({ className }: { className?: string }) {
     const tick = () => {
       raf = requestAnimationFrame(tick);
       if (!visible) return;
-      uniforms.uTime.value = clock.getElapsedTime();
+      timer.update();
+      uniforms.uTime.value = timer.getElapsed();
       uniforms.uScroll.value += (scrollY - uniforms.uScroll.value) * 0.08;
       smooth.lerp(target, 0.1);
       uniforms.uMouse.value.copy(smooth);

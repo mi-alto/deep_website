@@ -1,61 +1,21 @@
 import { useLang } from '../i18n/LanguageProvider';
 import { Reveal } from './Reveal';
-import SectionHeading from './SectionHeading';
 
+/** Footer: contacts and legal line, nothing else. */
 export default function AboutFooter() {
   const { t } = useLang();
-  const a = t.about;
+  const f = t.footer;
 
   return (
-    <footer className="relative overflow-hidden bg-black/40 pb-14 pt-20 md:pb-20 md:pt-36">
-      <SectionHeading index={a.index} label={a.label} title={a.headline} id="deep4it" />
-
-      <div className="mx-auto mt-10 max-w-[1600px] px-5 md:mt-16 md:px-10">
-        {/* the two ways to work with us */}
-        <div className="grid grid-cols-1 gap-px border border-white/15 bg-white/10 sm:grid-cols-2">
-          {a.choices.map((c, i) => (
-            <Reveal key={i} delay={i * 110} className="h-full">
-              <article className="group spot flex h-full flex-col bg-black/80 p-7 transition-colors duration-500 hover:bg-black/70 md:p-9">
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
-                  {String(i + 1).padStart(2, '0')} / {String(a.choices.length).padStart(2, '0')}
-                </span>
-                <h3 className="font-display mt-5 text-xl font-semibold leading-tight tracking-tight text-white md:text-2xl">
-                  {c.title}
-                </h3>
-                <p className="mt-5 border-l-2 border-[hsl(var(--brand-1)/0.6)] pl-4 text-[15px] leading-relaxed text-[#B7B7B7] md:text-base">
-                  {c.body}
-                </p>
-                <span className="mt-auto block h-px w-16 accent-line pt-0 transition-all duration-700 group-hover:w-32" />
-              </article>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={260}>
-          <a
-            href={a.cta.href}
-            className="btn-accent mt-10 inline-block px-6 py-3 font-mono text-[11px] uppercase tracking-[0.22em]"
-          >
-            {a.cta.label} ↗
-          </a>
-        </Reveal>
-
-        <Reveal delay={320}>
-          <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.28em] text-white/55 md:text-[12px]">
-            {a.tagline}
-          </p>
-        </Reveal>
-
-        {/* contacts */}
-        <div id="contatti" className="mt-20 grid scroll-mt-28 grid-cols-1 gap-10 border-t border-white/15 pt-10 md:mt-28 md:grid-cols-3">
+    <footer className="relative overflow-hidden bg-black/40 pb-10 pt-16 md:pb-14 md:pt-24">
+      <div className="mx-auto max-w-[1600px] px-5 md:px-10">
+        <div id="contatti" className="grid scroll-mt-28 grid-cols-1 gap-10 border-t border-white/15 pt-10 md:grid-cols-3">
           <Reveal>
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
-              {a.contacts.label}
-            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">{f.contactsLabel}</span>
           </Reveal>
           <Reveal delay={100}>
             <address className="font-display text-xl font-medium not-italic leading-snug text-white md:text-2xl">
-              {a.contacts.lines.map((l, i) => (
+              {f.lines.map((l, i) => (
                 <span key={i} className="block">
                   {l}
                 </span>
@@ -64,11 +24,11 @@ export default function AboutFooter() {
           </Reveal>
           <Reveal delay={200}>
             <a
-              href={`mailto:${a.contacts.email}`}
+              href={`mailto:${f.email}`}
               className="group inline-flex items-baseline gap-2 font-display text-xl font-medium text-white md:text-2xl"
             >
               <span className="border-b border-white/40 pb-1 transition-colors duration-300 group-hover:border-white">
-                {a.contacts.email}
+                {f.email}
               </span>
               <span className="text-white/50 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1">
                 ↗
@@ -78,13 +38,8 @@ export default function AboutFooter() {
         </div>
       </div>
 
-
-      <div className="mx-auto flex max-w-[1600px] flex-col items-start justify-between gap-4 px-5 pb-8 pt-16 font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 md:flex-row md:items-center md:px-10">
-        <span className="normal-case tracking-[0.08em]">{a.contacts.legal}</span>
-        <span className="flex shrink-0 items-center gap-2">
-          <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white/70" />
-          Accelerate and de-risk change
-        </span>
+      <div className="mx-auto max-w-[1600px] px-5 pb-4 pt-14 font-mono text-[10px] normal-case tracking-[0.08em] text-white/60 md:px-10">
+        {f.legal}
       </div>
     </footer>
   );
