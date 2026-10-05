@@ -12,7 +12,7 @@ export default function AboutFooter() {
 
       <div className="mx-auto mt-10 max-w-[1600px] px-5 md:mt-16 md:px-10">
         {/* the two ways to work with us */}
-        <div className="grid grid-cols-1 gap-px border border-white/15 bg-white/10 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-px border border-white/15 bg-white/10 sm:grid-cols-3">
           {a.choices.map((c, i) => (
             <Reveal key={i} delay={i * 110} className="h-full">
               <article className="group spot flex h-full flex-col bg-black/80 p-7 transition-colors duration-500 hover:bg-black/70 md:p-9">
@@ -83,7 +83,7 @@ export default function AboutFooter() {
         <span className="normal-case tracking-[0.08em]">{a.contacts.legal}</span>
         <span className="flex shrink-0 items-center gap-2">
           <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-white/70" />
-          Accelerate and de-risk change
+          {t.marquee}
         </span>
       </div>
     </footer>

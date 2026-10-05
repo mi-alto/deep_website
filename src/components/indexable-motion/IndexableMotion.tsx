@@ -11,7 +11,7 @@ const stepAt = (t: number) => {
 };
 
 /**
- * "How Indexable works" motion graphic: five steps from grammatical
+ * "How Ormentis works" motion graphic: five steps from grammatical
  * extraction to code verification. Plays while on screen, pauses when
  * scrolled away; static frame (with a play button) for reduced motion.
  */

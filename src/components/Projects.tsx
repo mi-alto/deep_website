@@ -2,50 +2,52 @@ import { useLang } from '../i18n/LanguageProvider';
 import { Reveal } from './Reveal';
 import SectionHeading from './SectionHeading';
 
+/** Section 06, "Il percorso": the lab's projects as a timeline, one lesson about memory per stop.
+    (The file keeps its historical name: this is still the projects section.) */
 export default function Projects() {
   const { t } = useLang();
-  const p = t.projects;
+  const p = t.path;
 
   return (
     <section className="relative bg-black/35 pb-20 md:pb-36">
-      <SectionHeading index={p.index} label={p.label} title={p.title} id="progetti" />
+      <SectionHeading index={p.index} label={p.label} title={p.title} id="percorso" />
 
       <div className="mx-auto mt-10 max-w-[1600px] px-5 md:mt-16 md:px-10">
-        {/* aggregate results — not yet tied to a single project below */}
-        <div className="grid grid-cols-1 gap-px border border-white/15 bg-white/10 sm:grid-cols-2">
-          {p.results.map((r, i) => (
-            <Reveal key={i} delay={i * 100} className="h-full">
-              <div className="spot flex h-full items-center bg-black/80 p-7 md:p-9">
-                <p className="font-display text-xl font-semibold leading-snug text-white md:text-2xl">{r}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={160}>
-          <p className="mt-12 font-mono text-[10px] uppercase tracking-[0.3em] text-white/60 md:text-[11px]">
-            {p.itemsLabel}
-          </p>
+        <Reveal>
+          <p className="max-w-3xl text-[15px] leading-relaxed text-[#B7B7B7] md:text-lg">{p.intro}</p>
         </Reveal>
 
-        <div className="mt-6 grid grid-cols-1 gap-px border border-white/15 bg-white/10 md:grid-cols-3">
-          {p.items.map((item, i) => (
-            <Reveal key={i} delay={100 + i * 110} className="h-full">
-              <article className="group spot flex h-full flex-col bg-black/80 p-7 transition-colors duration-500 hover:bg-black/70 md:p-9">
-                <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
-                  {String(i + 1).padStart(2, '0')} / {String(p.items.length).padStart(2, '0')}
-                </span>
-                <h3 className="font-display mt-5 text-xl font-semibold leading-tight tracking-tight text-white md:text-2xl">
-                  {item.title}
-                </h3>
-                <p className="mt-5 border-l-2 border-[hsl(var(--brand-1)/0.6)] pl-4 text-[15px] leading-relaxed text-[#B7B7B7] md:text-base">
-                  {item.body}
-                </p>
-                <span className="mt-auto block h-px w-16 accent-line pt-0 transition-all duration-700 group-hover:w-32" />
-              </article>
-            </Reveal>
-          ))}
-        </div>
+        <ol className="relative mt-12 border-l border-white/20 md:mt-16">
+          {p.steps.map((s, i) => {
+            const last = i === p.steps.length - 1;
+            return (
+              <li key={i} className="relative pb-12 pl-8 last:pb-0 md:pl-14">
+                {/* the marker on the line; the last stop (today) is lit */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute -left-[7px] top-1.5 h-[13px] w-[13px] rounded-full border ${
+                    last
+                      ? 'border-[hsl(var(--brand-1))] bg-[hsl(var(--brand-1))] shadow-[0_0_18px_hsl(var(--brand-1)/0.6)]'
+                      : 'border-white/50 bg-black'
+                  }`}
+                />
+                <Reveal delay={80 + i * 90}>
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-12 md:gap-8">
+                    <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-[hsl(var(--brand-3))] md:col-span-2 md:pt-1">
+                      {s.when}
+                    </span>
+                    <div className="md:col-span-10">
+                      <h3 className="font-display text-xl font-semibold leading-tight tracking-tight text-white md:text-2xl">
+                        {s.title}
+                      </h3>
+                      <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-[#B7B7B7] md:text-base">{s.body}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              </li>
+            );
+          })}
+        </ol>
       </div>
     </section>
   );

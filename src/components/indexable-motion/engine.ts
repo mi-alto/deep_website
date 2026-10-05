@@ -1,7 +1,7 @@
 import type { MotionCopy } from '../../i18n/content';
 
 /**
- * Imperative renderer for the "how Indexable works" motion graphic.
+ * Imperative renderer for the "how Ormentis works" motion graphic.
  * Everything is a pure function of time: `render(t)` draws the frame at
  * second t, so playback, scrubbing and step jumps are all the same call.
  * The SVG uses viewBox 0 120 1920 700 (the stage only; captions live in HTML).
@@ -174,7 +174,7 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   /* ---------- intro ---------- */
   const intro = h('g');
   const introLogo = logo(intro, 960, 380, 190);
-  const introWord = h('text', { x: 960, y: 590, 'font-size': 118, fill: C.ink, class: 'font-display', 'font-weight': 600, 'text-anchor': 'middle', 'letter-spacing': '.04em' }, intro, 'INDEXABLE');
+  const introWord = h('text', { x: 960, y: 590, 'font-size': 118, fill: C.ink, class: 'font-display', 'font-weight': 600, 'text-anchor': 'middle', 'letter-spacing': '.04em' }, intro, 'ORMENTIS');
   const introSub = mono(intro, 960, 655, copy.introSub, 18, C.b1, 'middle', 0.32, 500);
 
   /* ---------- scene 1: grammatical extraction ---------- */
@@ -286,13 +286,13 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   const q1 = mono(sP, P2X + 34, PL(124), '', 21, C.ink, 'start', 0, 400);
   const call1 = h('text', { x: P2X + 34, y: PL(172), 'font-size': 18, class: 'font-mono', fill: C.b1 }, sP);
   h('tspan', { fill: C.b3 }, call1, '●  ');
-  h('tspan', {}, call1, `indexable  ·  ${pl.call1}`);
+  h('tspan', {}, call1, `ormentis  ·  ${pl.call1}`);
   const ans = h('text', { x: P2X + 34, y: PL(236), 'font-size': 30, fill: C.ink, 'font-weight': 500 }, sP, pl.answer);
   const src1 = mono(sP, P2X + 34, PL(272), pl.source, 14, C.grey, 'start', 0.18, 500);
   const q2 = mono(sP, P2X + 34, PL(348), '', 21, C.ink, 'start', 0, 400);
   const call2 = h('text', { x: P2X + 34, y: PL(396), 'font-size': 18, class: 'font-mono', fill: C.b1 }, sP);
   h('tspan', { fill: C.b3 }, call2, '●  ');
-  h('tspan', {}, call2, `indexable  ·  ${pl.call2}`);
+  h('tspan', {}, call2, `ormentis  ·  ${pl.call2}`);
   const done = h('g', {}, sP);
   h('path', { d: `M${P2X + 36} ${PL(448)} l7 7 l13 -15`, stroke: C.b3, 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, done);
   h('text', { x: P2X + 70, y: PL(456), 'font-size': 24, fill: C.b3, 'font-weight': 500 }, done, pl.done);
@@ -395,7 +395,7 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
 
   /* ---------- scene 7: repeatable and auditable ----------
      Beat A: the same documents, graph built three times. Three different LLMs
-     give three different graphs; Indexable gives the same graph every time.
+     give three different graphs; Ormentis gives the same graph every time.
      Beat B: the audit trail of one answer: what was retrieved and why. */
   const pr = copy.proof;
   const s6 = h('g');
@@ -463,7 +463,7 @@ export function mountMotion(svg: SVGSVGElement, copy: MotionCopy): Motion {
   /* ---------- outro ---------- */
   const outro = h('g');
   const outLogo = logo(outro, 960, 310, 150);
-  const outWord = h('text', { x: 960, y: 500, 'font-size': 104, fill: C.ink, class: 'font-display', 'font-weight': 600, 'text-anchor': 'middle', 'letter-spacing': '.04em' }, outro, 'INDEXABLE');
+  const outWord = h('text', { x: 960, y: 500, 'font-size': 104, fill: C.ink, class: 'font-display', 'font-weight': 600, 'text-anchor': 'middle', 'letter-spacing': '.04em' }, outro, 'ORMENTIS');
   const outLine = h('text', { x: 960, y: 570, 'font-size': 34, fill: C.lil, 'text-anchor': 'middle', 'font-weight': 400 }, outro, copy.outroLine);
   const outChain = mono(outro, 960, 645, copy.outroChain, 15, C.b1, 'middle', 0.26, 500);
   const outUrl = mono(outro, 960, 740, 'DEEP4IT.COM', 18, C.grey, 'middle', 0.32, 500);

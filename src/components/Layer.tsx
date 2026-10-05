@@ -19,10 +19,10 @@ export default function Layer() {
 
   return (
     <section className="relative bg-black/35 pb-20 md:pb-36">
-      <SectionHeading index={ix.index} label={ix.label} title={ix.title} id="indexable" />
+      <SectionHeading index={ix.index} label={ix.label} title={ix.title} id="verifica" />
 
       <div className="mx-auto mt-10 grid max-w-[1600px] grid-cols-1 gap-14 px-5 md:mt-16 md:px-10 lg:grid-cols-12">
-        {/* sources flow down through Indexable to the people and agents that use them */}
+        {/* sources flow down through the memory (Ormentis) to the people and agents that use it */}
         <div className="lg:col-span-6">
           <Reveal delay={100}>
             <div className="flex flex-col">
@@ -75,7 +75,7 @@ export default function Layer() {
         </div>
       </div>
 
-      {/* animated walkthrough: from grammatical extraction to code verification */}
+      {/* animated walkthrough on Ormentis: from grammatical extraction to code verification */}
       <IndexableMotion />
 
       {/* the differentiator: no generative AI, so results are repeatable and auditable */}

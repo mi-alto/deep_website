@@ -2,19 +2,28 @@ import { useLang } from '../i18n/LanguageProvider';
 import { Reveal } from './Reveal';
 import SectionHeading from './SectionHeading';
 
-/** Renders one persona's half of the Business & IT pair — same shape, own section. */
-export default function Capabilities({ variant }: { variant: 'business' | 'tech' }) {
+type Variant = 'interaction' | 'documents' | 'promises';
+
+/** One block of titled cards. The two memories share section 02: the first
+    carries the section heading, the second only its own kicker and cards. */
+export default function Capabilities({ variant }: { variant: Variant }) {
   const { t } = useLang();
-  const data = variant === 'business' ? t.businessCapabilities : t.techCapabilities;
-  const id = variant === 'business' ? 'business-it' : 'tecnologia';
+  const data =
+    variant === 'interaction' ? t.interactionMemory : variant === 'documents' ? t.documentMemory : t.promises;
+  const withHeading = variant !== 'documents';
+  const id = variant === 'interaction' ? 'tecnologia' : variant === 'documents' ? 'documenti' : 'promesse';
 
   return (
-    <section className="relative bg-black/35 pb-20 md:pb-36">
-      <SectionHeading index={data.index} label={data.label} title={data.title} id={id} />
+    <section className={`relative bg-black/35 pb-20 md:pb-36 ${withHeading ? '' : '-mt-6 md:-mt-16'}`}>
+      {withHeading ? (
+        <SectionHeading index={data.index} label={data.label} title={data.title} id={id} />
+      ) : (
+        <div id={id} className="scroll-mt-24" />
+      )}
 
-      <div className="mx-auto mt-10 max-w-[1600px] px-5 md:mt-16 md:px-10">
+      <div className={`mx-auto max-w-[1600px] px-5 md:px-10 ${withHeading ? 'mt-10 md:mt-16' : ''}`}>
         <Reveal>
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/70 md:text-xs">
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-[hsl(var(--brand-3))] md:text-xs">
             {data.kicker}
           </span>
           <p className="font-display mt-3 max-w-3xl text-xl font-semibold leading-snug text-white md:text-3xl">

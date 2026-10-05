@@ -1,5 +1,7 @@
+import { useLang } from '../i18n/LanguageProvider';
+
 export default function Manifesto() {
-  const m = { marquee: 'Accelerate and de-risk change' };
+  const { t } = useLang();
 
   return (
     <section className="relative bg-black/30 px-0 py-8 md:py-20">
@@ -15,7 +17,7 @@ export default function Manifesto() {
                       i % 2 === 0 ? 'text-white/90' : 'text-transparent [-webkit-text-stroke:1px_hsl(var(--brand-1)/0.7)]'
                     }`}
                   >
-                    {m.marquee}
+                    {t.marquee}
                   </span>
                   <svg width="22" height="22" viewBox="0 0 22 22" className="text-[hsl(var(--brand-1))]" aria-hidden="true">
                     <g stroke="currentColor" strokeWidth="1.3">

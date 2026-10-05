@@ -6,6 +6,7 @@ import Manifesto from '../components/Manifesto';
 import Problem from '../components/Problem';
 import Capabilities from '../components/Capabilities';
 import Layer from '../components/Layer';
+import Products from '../components/Products';
 import Projects from '../components/Projects';
 import Credibility from '../components/Credibility';
 import AboutFooter from '../components/AboutFooter';
@@ -56,6 +57,10 @@ function useDeferredFx() {
   return on;
 }
 
+/* The page reads top-down as the lab's argument:
+   the question (01) → the two memories (02) → the four promises (03) →
+   how we verify it (04) → the two products (05) → the path (06) →
+   where we work (07) → working with us (08). */
 export default function Home() {
   useSpotlight();
   const fx = useDeferredFx();
@@ -74,9 +79,11 @@ export default function Home() {
             <Hero />
             <Manifesto />
             <Problem />
-            <Capabilities variant="business" />
-            <Capabilities variant="tech" />
+            <Capabilities variant="interaction" />
+            <Capabilities variant="documents" />
+            <Capabilities variant="promises" />
             <Layer />
+            <Products />
             <Projects />
             <Credibility />
           </main>

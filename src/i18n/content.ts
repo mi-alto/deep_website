@@ -20,7 +20,7 @@ export interface LogoItem {
   note?: string;
 }
 
-/** Copy for the "how Indexable works" motion graphic (Layer section). */
+/** Copy for the "how Ormentis works" motion graphic (Layer section). */
 export interface MotionCopy {
   label: string;
   ariaLabel: string;
@@ -75,9 +75,27 @@ export interface TrustCopy {
   table: { caption: string; head: [string, string, string]; rows: [string, string, string][] };
 }
 
+/** One product card: the site only introduces it and sends people to the product site. */
+export interface ProductItem {
+  name: string;
+  kicker: string;
+  body: string;
+  bullets: string[];
+  cta: { label: string; href: string; external: boolean };
+}
+
+/** One stop on the lab's timeline. */
+export interface PathStep {
+  when: string;
+  title: string;
+  body: string;
+}
+
 export interface Content {
   nav: { label: string; href: string }[];
   navCta: string;
+  /** short line repeated in the marquee band and in the footer */
+  marquee: string;
   hero: {
     audience: [string, string];
     titleLines: string[];
@@ -94,9 +112,12 @@ export interface Content {
     label: string;
     title: string;
     items: { question: string; body: string }[];
+    closing: string;
   };
-  businessCapabilities: CapabilitySection;
-  techCapabilities: CapabilitySection;
+  interactionMemory: CapabilitySection;
+  documentMemory: CapabilitySection;
+  promises: CapabilitySection;
+  /** "How we verify it": the Ormentis walkthrough, kept under its historical key. */
   indexable: {
     index: string;
     label: string;
@@ -113,13 +134,19 @@ export interface Content {
     motion: MotionCopy;
     trust: TrustCopy;
   };
-  projects: {
+  products: {
     index: string;
     label: string;
     title: string;
-    results: string[];
-    itemsLabel: string;
-    items: CapabilityItem[];
+    intro: string;
+    items: ProductItem[];
+  };
+  path: {
+    index: string;
+    label: string;
+    title: string;
+    intro: string;
+    steps: PathStep[];
   };
   credibility: {
     index: string;
@@ -161,140 +188,182 @@ const innovationLogos: LogoItem[] = [
   { src: '/images/levillage.webp', alt: 'Le Village' },
 ];
 
+/* Product sites. Ormentis has no public address yet: its card points to the contacts. */
+const JUNO_URL = 'https://ojuno.ai';
+const ORMENTIS_URL = '#contatti';
+
 export const content: Record<Lang, Content> = {
   it: {
     nav: [
-      { label: 'Il prodotto', href: '#prodotto' },
-      { label: 'Business & IT', href: '#business-it' },
-      { label: 'Indexable', href: '#indexable' },
-      { label: 'Progetti', href: '#progetti' },
+      { label: 'La tecnologia', href: '#tecnologia' },
+      { label: 'Come si verifica', href: '#verifica' },
+      { label: 'I prodotti', href: '#prodotti' },
+      { label: 'Il percorso', href: '#percorso' },
       { label: 'Deep4IT', href: '#deep4it' },
     ],
     navCta: 'Contattaci',
+    marquee: 'Ricordare, con la fonte',
     hero: {
-      audience: ['Per chi decide il cambiamento', 'Per chi lo realizza'],
-      titleLines: ['Accelerate and', 'de-risk change.'],
-      lead: 'Fai evolvere i tuoi prodotti più velocemente e in sicurezza.',
+      audience: ['Laboratorio di ricerca', 'Monza · Politecnico di Milano'],
+      titleLines: ['Memoria per le AI,', 'con la fonte.'],
+      lead: 'Deep4IT costruisce la tecnologia che permette alle AI e agli agenti di ricordare.',
       intro:
-        'Indexable è la tecnologia AI di Deep4IT che amplifica la conoscenza dei tuoi prodotti digitali e la trasforma in decisioni concrete.',
+        'Recuperare ciò che è stato detto nelle conversazioni precedenti e ciò che sta scritto nei documenti: con la massima copertura, in maniera auditabile e legata alla fonte.',
       compass: [
-        { label: 'La direzione', body: 'quali obiettivi raggiungere e come misurare i risultati.' },
-        { label: 'La rotta', body: 'cosa preservare e quali cambiamenti introdurre per generare valore.' },
+        {
+          label: 'Memoria dell’interazione',
+          body: 'cosa è stato chiesto, risposto, deciso e promesso con una persona o un agente.',
+        },
+        {
+          label: 'Memoria dei documenti e del codice',
+          body: 'cosa dicono le fonti scritte: specifiche, verbali, manuali, codice.',
+        },
       ],
       outro:
-        'Lo usa il tuo team per accelerare i deliverable e ridurne il rischio, oppure lo usiamo noi per te, su un perimetro di progetto concordato.',
-      cta: { label: 'Portaci un cambiamento da realizzare', href: '#deep4it' },
-      ctaSecondary: { label: 'Scopri Indexable', href: '#indexable' },
+        'Siamo un piccolo laboratorio di ricerca. Due prodotti applicano la nostra tecnologia: Juno e Ormentis, ognuno con il suo sito.',
+      cta: { label: 'Cosa studiamo', href: '#tecnologia' },
+      ctaSecondary: { label: 'I prodotti', href: '#prodotti' },
       scrollHint: 'Scorri',
     },
     problem: {
       index: '01',
-      label: 'Il tuo prodotto digitale, sotto controllo',
-      title: 'Costruisci la conoscenza del tuo prodotto.',
+      label: 'La domanda',
+      title: 'Il problema è la memoria, non il modello.',
       items: [
         {
-          question: 'Conosci davvero il tuo prodotto digitale?',
+          question: 'Cosa ricorda un’AI tra una sessione e l’altra?',
           body:
-            'Documentazione obsoleta, incompleta o assente, e chi la conosceva davvero ha lasciato l’azienda: sapere cosa fa il prodotto diventa difficile. Ricostruisci funzionalità, regole ed eccezioni per partire da una conoscenza condivisa e verificabile.',
+            'Niente. Ogni conversazione riparte da zero. Quello che una persona ha chiesto, deciso o promesso la settimana scorsa non esiste più, a meno che qualcuno non lo abbia salvato nel modo giusto.',
         },
         {
-          question: 'Quanto puoi fidarti della sua qualità?',
+          question: 'Cosa succede con i documenti caricati alla rinfusa?',
           body:
-            'Requisiti incompleti, regole in conflitto e implementazioni incoerenti possono lasciare problemi nascosti. Fai emergere le lacune e verifica che ciò che il prodotto fa corrisponda a ciò che deve fare.',
+            'Risposte diverse a ogni esecuzione. Due costruzioni della stessa base di conoscenza, con lo stesso modello, hanno in comune solo un terzo degli elementi. Un pezzo pertinente si trova; tutti i pezzi necessari, no.',
         },
         {
-          question: 'Come puoi farlo evolvere in sicurezza?',
+          question: 'Chi può controllare cosa ha usato?',
           body:
-            'Ogni modifica può coinvolgere funzionalità, regole e sistemi collegati. Comprendi gli impatti, chiarisci cosa preservare e definisci come verificare il risultato, per realizzare il cambiamento più velocemente e con meno rischi.',
+            'Quasi nessuno. Senza il legame con la fonte, una risposta che suona bene e una risposta giusta sono indistinguibili. Nei settori regolamentati questo non è accettabile.',
         },
       ],
+      closing:
+        'La nostra domanda di ricerca: come fa un’AI a ricordare tutto ciò che serve, e a dimostrare da dove viene ciò che ricorda?',
     },
-    businessCapabilities: {
+    interactionMemory: {
       index: '02',
-      label: 'Business & IT',
-      title: 'Decisioni più solide. Meno sorprese su tempi e budget.',
-      kicker: 'Per chi guida il business',
-      subtitle: 'Requisiti chiari. Impatti visibili. Risultati verificabili.',
+      label: 'La tecnologia',
+      title: 'Due memorie, lo stesso motore.',
+      kicker: 'Memoria dell’interazione',
+      subtitle: 'Cosa è stato detto, deciso e promesso.',
       items: [
         {
-          title: 'Genera e verifica i requisiti.',
+          title: 'Estrarre i fatti che contano.',
           body:
-            'Trasforma le esigenze in requisiti strutturati e verifica la coerenza dei documenti, facendo emergere contraddizioni, funzioni mancanti e passaggi scoperti.',
+            'Da una conversazione escono pochi fatti durevoli: una preferenza, una decisione, un impegno preso. Vanno estratti, etichettati e salvati separatamente dalla storia grezza dei messaggi.',
         },
         {
-          title: 'Anticipa ciò che fa crescere tempi e costi.',
+          title: 'Sapere quale compito è aperto.',
           body:
-            'Valuta l’impatto di ogni cambiamento: quali funzionalità devono essere modificate, quali potrebbero andare perse e quali nuove richieste sono incompatibili con il funzionamento attuale del prodotto.',
+            'Un “sì” si aggancia alla domanda sbagliata se ci sono più domande aperte, e un compito abbandonato non deve pesare quanto uno attivo. Per questo ogni messaggio porta un intento strutturato: argomento, compito, se continua il turno precedente.',
         },
         {
-          title: 'Verifica che il risultato corrisponda alle attese.',
+          title: 'Mantenere gli impegni.',
           body:
-            'Definisci un piano di controlli e test automatizzati collegati ai requisiti, per verificare cosa è stato realizzato e individuare ciò che manca.',
+            'Se l’assistente ha chiesto un documento e la persona ha cambiato argomento, al ritorno deve ricordarlo, non ripartire da zero. Lo abbiamo osservato su casi reali, misurato e corretto.',
         },
       ],
     },
-    techCapabilities: {
-      index: '03',
-      label: 'Business & IT',
-      title: 'Consegne più solide. Meno sorprese in produzione.',
-      kicker: 'Per chi realizza la tecnologia',
-      subtitle: 'Requisiti coerenti. Codice verificato. Test automatizzati.',
+    documentMemory: {
+      index: '02',
+      label: 'La tecnologia',
+      title: 'Due memorie, lo stesso motore.',
+      kicker: 'Memoria dei documenti e del codice',
+      subtitle: 'Cosa dicono le fonti scritte.',
       items: [
         {
-          title: 'Verifica la qualità dei requisiti.',
+          title: 'Unità elementari, non pagine.',
           body:
-            'Individua ambiguità, contraddizioni, duplicazioni e lacune, per rendere ogni requisito chiaro, coerente e verificabile.',
+            'Ogni frase di una specifica, di un verbale o di un manuale diventa un insieme di affermazioni elementari: chi deve fare cosa, a quale condizione. Il codice entra nella stessa base.',
         },
         {
-          title: 'Comprendi il codice e l’impatto dei cambiamenti.',
+          title: 'Ogni unità conserva la fonte e il suo peso.',
           body:
-            'Esplora l’implementazione e collega i requisiti ai componenti coinvolti, per capire dove intervenire e quali dipendenze considerare.',
+            'Il legame con il documento, il paragrafo e la riga resta sempre. E le fonti non valgono tutte uguali: una specifica approvata pesa più di un verbale, e il recupero lo sa.',
         },
         {
-          title: 'Verifica che il codice risponda ai requisiti.',
+          title: 'Stesso grafo dagli stessi documenti.',
           body:
-            'Confronta l’implementazione con i comportamenti attesi e fai emergere funzionalità mancanti, regole non rispettate e discrepanze.',
+            'La base di conoscenza si costruisce in modo deterministico. Se un documento cambia, si vede esattamente cosa cambia e dove.',
         },
         {
-          title: 'Genera piani di test e test automatizzati dai requisiti.',
+          title: 'Conflitti e lacune emergono.',
           body:
-            'Deriva automaticamente i casi di test e le relative automazioni, con controlli deterministici, ripetibili e tracciabili al requisito di origine.',
+            'Quando due fonti dicono cose diverse, il motore lo dice invece di scegliere in silenzio. Quando manca un pezzo, lo segnala.',
+        },
+      ],
+    },
+    promises: {
+      index: '03',
+      label: 'Le quattro promesse',
+      title: 'Ricordare tutto ciò che serve. E poterlo dimostrare.',
+      kicker: 'Quello che chiediamo alla nostra tecnologia',
+      subtitle: 'Ricordare, organizzare, recuperare: ogni passaggio con una prova.',
+      items: [
+        {
+          title: 'Ricordare, non solo cercare.',
+          body:
+            'Estrarre le unità che contano, organizzarle per soggetto e relazione, recuperarle al momento giusto. Un errore in uno dei tre passaggi rende inutili gli altri due.',
+        },
+        {
+          title: 'La massima copertura.',
+          body:
+            'Non basta trovare un pezzo pertinente: servono tutti i pezzi necessari, comprese le eccezioni e le condizioni dette altrove. Misuriamo la copertura su domande con risposta nota, non la plausibilità.',
+        },
+        {
+          title: 'Auditabile.',
+          body:
+            'Ogni risposta si ricostruisce passo per passo: cosa è stato recuperato, perché, in che ordine. E dagli stessi dati esce sempre la stessa memoria.',
+        },
+        {
+          title: 'Legata alla fonte.',
+          body:
+            'Ogni ricordo punta al messaggio, al paragrafo o alla riga di codice da cui viene. Serve a chi legge per verificare, e al motore per accorgersi dei conflitti.',
         },
       ],
     },
     indexable: {
       index: '04',
-      label: 'Indexable',
-      title: 'Indexable: consolida o costruisci la conoscenza dei tuoi prodotti e servizi.',
+      label: 'Come si verifica',
+      title: 'Come si verifica che la memoria sia giusta.',
       intro:
-        'Indexable è la nostra tecnologia AI proprietaria che collega documentazione e codice per ricostruire come funziona il tuo prodotto, con informazioni verificabili nelle fonti originali.',
+        'Ormentis è la nostra tecnologia per la memoria dei documenti e del codice. Qui la usiamo per mostrare il metodo: come le fonti diventano una base di conoscenza, come si misura la copertura e come ogni risposta lascia la sua traccia.',
       capabilities: [
         {
-          title: 'Ricostruisci come funziona il prodotto e come può evolvere.',
+          title: 'Dalle fonti alla base di conoscenza.',
           body:
-            'Metti in relazione ciò che è descritto nei documenti, deciso nelle riunioni e realizzato nel codice. Individua i conflitti esistenti e simula l’introduzione di nuove funzionalità per valutarne gli impatti e le incompatibilità con quelle attuali.',
+            'Specifiche, verbali, manuali e codice diventano un grafo di affermazioni elementari, ognuna con la sua fonte. Le conversazioni entrano nello stesso grafo, come fatti e impegni.',
         },
         {
-          title: 'Risali alle fonti.',
-          body: 'Consulta il documento o il codice da cui deriva un’informazione, per verificarla e approfondirla.',
+          title: 'La misura: copertura, non plausibilità.',
+          body:
+            'Confrontiamo un agente con la memoria e un agente con i soli documenti sulle stesse domande, contando quante delle affermazioni necessarie ha recuperato ciascuno.',
         },
         {
-          title: 'Parti da una base comune per ogni cambiamento.',
-          body:
-            'Usa la conoscenza del prodotto per definire requisiti coerenti, verificare l’implementazione e generare piani di test e test automatizzati.',
+          title: 'La traccia di ogni risposta.',
+          body: 'Quali affermazioni sono state recuperate, perché proprio quelle, con le citazioni del testo originale.',
         },
       ],
       diagram: {
-        sources: 'Documenti · Verbali di riunione · Specifiche · Manuali · Procedure · Codice',
-        name: 'Indexable',
+        sources: 'Conversazioni · Specifiche · Verbali · Manuali · Procedure · Codice',
+        name: 'Ormentis',
         ops: 'Collega le informazioni e le riconduce alle fonti.',
-        output: 'Funzionalità · Regole · Requisiti · Dipendenze',
-        consumers: 'Una base di conoscenza consultabile da persone e agenti AI.',
+        output: 'Fatti · Regole · Requisiti · Dipendenze · Impegni',
+        consumers: 'Una memoria consultabile da persone e agenti AI.',
       },
       motion: {
         label: 'Come funziona',
         ariaLabel:
-          'Animazione: come funziona Indexable, dall’estrazione grammaticale alla verifica del codice',
+          'Animazione: come funziona Ormentis, dall’estrazione grammaticale alla verifica del codice',
         controls: { play: 'Riproduci', pause: 'Pausa', replay: 'Da capo', goTo: 'Vai al passaggio', fullscreen: 'Guarda a schermo intero', close: 'Chiudi' },
         introSub: 'DAI DOCUMENTI ALLA BASE DI CONOSCENZA',
         steps: [
@@ -312,8 +381,8 @@ export const content: Record<Lang, Content> = {
           },
           {
             eyebrow: '03 / 07 · Plugin per Claude Code e Codex',
-            title: 'Indexable nei tuoi agenti',
-            caption: 'Indexable potenzia i tuoi agenti: rispetto ai soli documenti caricati, risposte più complete e con la fonte, e modifiche scritte con i requisiti giusti.',
+            title: 'Ormentis nei tuoi agenti',
+            caption: 'Ormentis potenzia i tuoi agenti: rispetto ai soli documenti caricati, risposte più complete e con la fonte, e modifiche scritte con i requisiti giusti.',
             short: 'Plugin',
           },
           {
@@ -372,7 +441,7 @@ export const content: Record<Lang, Content> = {
         reqsLabel: 'REQUISITI RICAVATI DALLA BASE DI CONOSCENZA  ·  CONTROLLO DETERMINISTICO',
         plugin: {
           tabs: ['CLAUDE CODE', 'CODEX'],
-          header: 'PLUGIN INDEXABLE',
+          header: 'PLUGIN ORMENTIS',
           q1: 'Quando va rifiutato un mandato?',
           call1: 'interroga la base di conoscenza',
           answer: 'Quando manca la data di firma.',
@@ -380,7 +449,7 @@ export const content: Record<Lang, Content> = {
           q2: 'Aggiungi il controllo in MandateValidator.java',
           call2: 'requisiti collegati: REQ-014, REQ-022',
           done: 'L’agente scrive la modifica con i requisiti giusti.',
-          versus: ['Agente + Indexable', '  batte  ', 'agente + documenti caricati'],
+          versus: ['Agente + Ormentis', '  batte  ', 'agente + documenti caricati'],
         },
         modules: {
           label: 'UNA BASE DI CONOSCENZA, PER PERSONE E AGENTI',
@@ -400,13 +469,13 @@ export const content: Record<Lang, Content> = {
         summaryCheck: '4 REQUISITI  ·  3 COERENTI  ·  1 CONFLITTO',
         summaryCode: '2 COPERTI  ·  1 MANCANTE  ·  3 TEST GENERATI',
         missingComment: '// nessuna chiamata a notifyDebtor()',
-        outroLine: 'AI spiegabile e verificabile per i settori regolamentati.',
+        outroLine: 'Memoria spiegabile e verificabile per i settori regolamentati.',
         outroChain: 'PER PERSONE E AGENTI  ·  RIPETIBILE  ·  AUDITABILE',
         proof: {
           questionLabel: 'GLI STESSI DOCUMENTI, TRE COSTRUZIONI DEL GRAFO',
           question: 'Il grafo della conoscenza è sempre lo stesso?',
           leftLabel: 'COSTRUITO DA UN LLM, TRE VOLTE',
-          rightLabel: 'COSTRUITO DA INDEXABLE, TRE VOLTE',
+          rightLabel: 'COSTRUITO DA ORMENTIS, TRE VOLTE',
           leftTags: ['1ª VOLTA', '2ª VOLTA', '3ª VOLTA'],
           rightTags: ['1ª VOLTA', '2ª VOLTA', '3ª VOLTA'],
           leftVerdict: 'Un grafo diverso a ogni costruzione',
@@ -434,14 +503,14 @@ export const content: Record<Lang, Content> = {
       },
       trust: {
         label: 'Perché fidarsi',
-        title: 'AI spiegabile e verificabile per i settori regolamentati.',
+        title: 'Memoria spiegabile e verificabile per i settori regolamentati.',
         lead:
-          'Molti strumenti costruiscono un “cervello aziendale” tutto con l’AI generativa: la base di conoscenza cambia a ogni costruzione, anche con lo stesso modello, e non sempre si sa perché arriva una certa risposta. Indexable costruisce la base di conoscenza in modo deterministico e la mette a disposizione di persone e agenti: risposte più complete, con una traccia verificabile di ogni passaggio.',
+          'Molti strumenti costruiscono un “cervello aziendale” tutto con l’AI generativa: la base di conoscenza cambia a ogni costruzione, anche con lo stesso modello, e non sempre si sa perché arriva una certa risposta. Noi costruiamo la memoria in modo deterministico e la mettiamo a disposizione di persone e agenti: risposte più complete, con una traccia verificabile di ogni passaggio.',
         pillars: [
           {
             title: 'Ripetibile.',
             body:
-              'Dagli stessi documenti, Indexable ricostruisce sempre lo stesso grafo della conoscenza. Quando un documento cambia, vedi esattamente cosa cambia e perché.',
+              'Dagli stessi documenti, Ormentis ricostruisce sempre lo stesso grafo della conoscenza. Quando un documento cambia, vedi esattamente cosa cambia e perché.',
           },
           {
             title: 'Auditabile.',
@@ -451,7 +520,7 @@ export const content: Record<Lang, Content> = {
           {
             title: 'Potenzia i tuoi agenti.',
             body:
-              'Claude Code, Codex e gli altri agenti lavorano sulla base di conoscenza invece che sui soli documenti caricati: risposte più complete, dentro i confini di ciò che è scritto.',
+              'Claude Code, Codex e gli altri agenti lavorano sulla memoria invece che sui soli documenti caricati: risposte più complete, dentro i confini di ciò che è scritto.',
           },
           {
             title: 'Pensato per i settori regolamentati.',
@@ -461,7 +530,7 @@ export const content: Record<Lang, Content> = {
         ],
         table: {
           caption: 'Il confronto',
-          head: ['', 'Solo AI generativa', 'Con Indexable'],
+          head: ['', 'Solo AI generativa', 'Con Ormentis'],
           rows: [
             ['Ricostruire la base di conoscenza', 'Grafo diverso a ogni costruzione', 'Sempre lo stesso grafo'],
             ['Da dove viene la risposta', 'Non sempre dichiarato', 'Citazioni esatte, per ogni affermazione'],
@@ -472,39 +541,76 @@ export const content: Record<Lang, Content> = {
         },
       },
     },
-    projects: {
+    products: {
       index: '05',
-      label: 'Progetti reali',
-      title: 'Indexable è già utilizzato su sistemi complessi.',
-      results: [
-        'Documentazione consolidata in 1,5 mesi rispetto ai 3,5–4 previsti.',
-        'Un prodotto realizzato in 3 mesi rispetto ai 15 previsti.',
-      ],
-      itemsLabel: 'Tre esempi di applicazione',
+      label: 'I prodotti',
+      title: 'Due prodotti applicano la nostra tecnologia.',
+      intro:
+        'Su questo sito raccontiamo la tecnologia. Il racconto di prodotto, i casi d’uso e le prove vivono sui siti dei prodotti.',
       items: [
         {
+          name: 'Juno',
+          kicker: 'Memoria dell’interazione',
+          body:
+            'Un team di assistenti AI per il benessere finanziario dei dipendenti, su WhatsApp, Teams, email e voce. Ricorda cosa ogni persona ha chiesto e deciso, e riprende il filo da lì.',
+          bullets: ['Per aziende e studi di consulenza', 'Nessuna app, nessuna integrazione IT'],
+          cta: { label: 'Vai su ojuno.ai', href: JUNO_URL, external: true },
+        },
+        {
+          name: 'Ormentis',
+          kicker: 'Memoria dei documenti e del codice',
+          body:
+            'Trasforma specifiche, verbali, manuali e codice in una base di conoscenza ripetibile e auditabile, per persone e agenti. Nato sulle specifiche di banche centrali, sistemi di pagamento e sistemi di difesa. Prima si chiamava Indexable.',
+          bullets: ['Plugin per Claude Code e Codex', 'Impatto delle modifiche, conflitti, test dai requisiti'],
+          cta: { label: 'Sito in arrivo: scrivici', href: ORMENTIS_URL, external: false },
+        },
+      ],
+    },
+    path: {
+      index: '06',
+      label: 'Il percorso',
+      title: 'Ogni progetto ci ha insegnato qualcosa sulla memoria.',
+      intro:
+        'Il metodo non è nato a tavolino: è la somma di ciò che abbiamo costruito, misurato e corretto in progetti reali.',
+      steps: [
+        {
+          when: '2025',
+          title: 'Juno: la memoria dell’interazione',
+          body:
+            'Un assistente conversazionale per i dipendenti. Messaggi salvati, fatti estratti per persona, riassunti periodici. Poi la scoperta che la storia grezza non basta: serve sapere quale compito è aperto e cosa è stato promesso.',
+        },
+        {
+          when: '2026',
           title: 'Sistema di pagamento nazionale',
           body:
-            'Consolidamento delle specifiche e produzione della documentazione funzionale, con ogni requisito collegato alla fonte di origine.',
+            'Specifiche consolidate per un sistema di pagamento, con ogni requisito collegato alla fonte. La prima base di conoscenza ripetibile.',
         },
         {
-          title: 'Sistema antiriciclaggio di banca centrale',
+          when: '2026',
+          title: 'Antiriciclaggio di banca centrale',
           body:
-            'Consolidamento dei requisiti di una piattaforma AML: regole, funzionalità e integrazioni organizzate in una base di conoscenza verificabile e aggiornabile.',
+            'Regole, funzionalità e integrazioni di una piattaforma antiriciclaggio in una base verificabile e aggiornabile.',
         },
         {
+          when: '2026',
           title: 'Sistemi di controllo',
           body:
-            'Creazione assistita di manuali e documentazione tecnica, con revisione e validazione da parte degli esperti.',
+            'Manuali e documentazione tecnica creati con l’aiuto della memoria, rivisti e validati dagli esperti.',
+        },
+        {
+          when: 'Oggi',
+          title: 'Ormentis: il grafo con la provenienza',
+          body:
+            'Affermazioni elementari, costruzione deterministica, plugin per gli agenti, misura della copertura. È la memoria dei documenti e del codice resa prodotto.',
         },
       ],
     },
     credibility: {
-      index: '06',
-      label: 'Deep4IT',
-      title: 'Costruita sulla ricerca. Applicata a esigenze reali.',
+      index: '07',
+      label: 'Dove lavoriamo',
+      title: 'Dove sbagliare costa.',
       body:
-        'Nei settori regolamentati non basta una risposta plausibile: serve una risposta che si può dimostrare. Per questo Indexable usa gli stessi metodi di verifica formale nati nell’aerospazio, un’analisi del codice che dà sempre lo stesso risultato e la ricerca più recente sui grafi di conoscenza.',
+        'Lavoriamo dove una risposta che non si può spiegare non ha valore: pagamenti, antiriciclaggio, sistemi critici. Sono questi contesti ad aver dettato il metodo: gli stessi metodi di verifica formale nati nell’aerospazio, un’analisi del codice che dà sempre lo stesso risultato e la ricerca più recente sui grafi di conoscenza.',
       clientsLabel: 'Tra i nostri clienti',
       clients: clientLogos,
       innovationLabel: 'Percorso di innovazione',
@@ -513,25 +619,31 @@ export const content: Record<Lang, Content> = {
       logos: innovationLogos,
     },
     about: {
-      index: '07',
-      label: 'Il prossimo passo',
-      headline: 'Adotta Indexable nel tuo team. Oppure affida a noi il progetto.',
+      index: '08',
+      label: 'Lavorare con noi',
+      headline: 'Prova un prodotto. Affidaci un progetto. O facciamo ricerca insieme.',
       choices: [
         {
-          title: 'Usalo con il tuo team.',
-          body: 'Il tuo team usa Indexable per produrre documentazione, definire requisiti, analizzare gli impatti e verificare l’implementazione.',
+          title: 'Prova un prodotto.',
+          body:
+            'Juno per la memoria dell’interazione, Ormentis per la memoria dei documenti e del codice. Ognuno ha il suo sito e il suo percorso di prova.',
         },
         {
-          title: 'Ci pensiamo noi.',
+          title: 'Affidaci un progetto.',
           body:
-            'Ci affidi il lavoro. Paghi per i deliverable concordati. Usiamo Indexable e la nostra esperienza per produrre documentazione consolidata, requisiti, analisi di impatto e report di verifica dell’implementazione. Definiamo insieme perimetro, tempi, costi e criteri di accettazione, prima di iniziare.',
+            'Ci affidi il lavoro, paghi i deliverable concordati: documentazione consolidata, requisiti, analisi di impatto, verifiche dell’implementazione. Perimetro, tempi, costi e criteri di accettazione definiti prima di iniziare.',
+        },
+        {
+          title: 'Facciamo ricerca insieme.',
+          body:
+            'Tesi, articoli, interventi a eventi, esperimenti condivisi sulla memoria per AI e agenti. Siamo incubati al Politecnico di Milano e cerchiamo chi studia gli stessi problemi.',
         },
       ],
       cta: {
         label: 'Parliamo del tuo progetto',
         href: 'mailto:info@deep4it.com?subject=Il%20mio%20progetto',
       },
-      tagline: 'Dalle intenzioni del business a risultati che puoi verificare.',
+      tagline: 'Ricordare tutto ciò che serve. Poterlo dimostrare.',
       contacts: {
         label: 'Contatti',
         lines: ['Via Italia, 44', '20900 Monza, Italia'],
@@ -543,136 +655,174 @@ export const content: Record<Lang, Content> = {
   },
   en: {
     nav: [
-      { label: 'The product', href: '#prodotto' },
-      { label: 'Business & IT', href: '#business-it' },
-      { label: 'Indexable', href: '#indexable' },
-      { label: 'Projects', href: '#progetti' },
+      { label: 'The technology', href: '#tecnologia' },
+      { label: 'How we verify it', href: '#verifica' },
+      { label: 'Products', href: '#prodotti' },
+      { label: 'The path', href: '#percorso' },
       { label: 'Deep4IT', href: '#deep4it' },
     ],
     navCta: 'Get in touch',
+    marquee: 'Remember, with the source',
     hero: {
-      audience: ['For those who decide the change', 'For those who deliver it'],
-      titleLines: ['Accelerate and', 'de-risk change.'],
-      lead: 'Make your products evolve faster and more safely.',
+      audience: ['Research lab', 'Monza · Politecnico di Milano'],
+      titleLines: ['Memory for AI,', 'with the source.'],
+      lead: 'Deep4IT builds the technology that lets AI systems and agents remember.',
       intro:
-        'Indexable is Deep4IT’s AI technology that amplifies the knowledge of your digital products and turns it into concrete decisions.',
+        'Retrieving what was said in previous conversations and what is written in documents: with maximum coverage, in an auditable way, and tied to the source.',
       compass: [
-        { label: 'The direction', body: 'which objectives to reach and how to measure the results.' },
-        { label: 'The route', body: 'what to preserve and which changes to introduce to generate value.' },
+        {
+          label: 'Memory of the interaction',
+          body: 'what was asked, answered, decided and promised with a person or an agent.',
+        },
+        {
+          label: 'Memory of documents and code',
+          body: 'what the written sources say: specifications, minutes, manuals, code.',
+        },
       ],
       outro:
-        'Your team uses it to speed up deliverables and reduce their risk, or we use it for you, on an agreed project scope.',
-      cta: { label: 'Bring us a change to deliver', href: '#deep4it' },
-      ctaSecondary: { label: 'Discover Indexable', href: '#indexable' },
+        'We are a small research lab. Two products apply our technology: Juno and Ormentis, each with its own site.',
+      cta: { label: 'What we study', href: '#tecnologia' },
+      ctaSecondary: { label: 'The products', href: '#prodotti' },
       scrollHint: 'Scroll',
     },
     problem: {
       index: '01',
-      label: 'Your digital product, under control',
-      title: 'Build your product knowledge.',
+      label: 'The question',
+      title: 'The problem is memory, not the model.',
       items: [
         {
-          question: 'Do you really know your digital product?',
+          question: 'What does an AI remember between sessions?',
           body:
-            'Outdated, incomplete or missing documentation, and the people who really knew it have left the company: knowing what the product actually does gets hard. Rebuild features, rules and exceptions to start from shared, verifiable knowledge.',
+            'Nothing. Every conversation starts from zero. What a person asked, decided or promised last week no longer exists, unless someone saved it the right way.',
         },
         {
-          question: 'How much can you trust its quality?',
+          question: 'What happens with documents dumped into the context?',
           body:
-            'Incomplete requirements, conflicting rules and inconsistent implementations can leave hidden problems. Surface the gaps and verify that what the product does matches what it should do.',
+            'Different answers on every run. Two builds of the same knowledge base, with the same model, share only a third of their elements. A relevant piece gets found; all the necessary pieces do not.',
         },
         {
-          question: 'How can you evolve it safely?',
+          question: 'Who can check what it used?',
           body:
-            'Every change can involve related features, rules and systems. Understand the impacts, clarify what to preserve and define how to verify the result, to deliver change faster and with less risk.',
+            'Almost no one. Without the link to the source, an answer that sounds right and an answer that is right are indistinguishable. In regulated industries that is not acceptable.',
         },
       ],
+      closing:
+        'Our research question: how does an AI remember everything it needs, and prove where each memory comes from?',
     },
-    businessCapabilities: {
+    interactionMemory: {
       index: '02',
-      label: 'Business & IT',
-      title: 'Stronger decisions. Fewer surprises on time and budget.',
-      kicker: 'For business leaders',
-      subtitle: 'Clear requirements. Visible impacts. Verifiable results.',
+      label: 'The technology',
+      title: 'Two memories, one engine.',
+      kicker: 'Memory of the interaction',
+      subtitle: 'What was said, decided and promised.',
       items: [
         {
-          title: 'Generate and verify requirements.',
+          title: 'Extract the facts that matter.',
           body:
-            'Turn needs into structured requirements and check document consistency, surfacing contradictions, missing functions and uncovered steps.',
+            'A conversation yields a few durable facts: a preference, a decision, a commitment. They must be extracted, tagged and stored apart from the raw message history.',
         },
         {
-          title: 'Anticipate what drives up time and cost.',
+          title: 'Know which task is open.',
           body:
-            'Assess the impact of every change: which features need to change, which ones could be lost, and which new requests are incompatible with how the product currently works.',
+            'A “yes” attaches to the wrong question when several are open, and an abandoned task must not weigh as much as an active one. So every message carries a structured intent: topic, task, whether it continues the previous turn.',
         },
         {
-          title: 'Verify that the result matches expectations.',
+          title: 'Keep the commitments.',
           body:
-            'Define a plan of checks and automated tests linked to requirements, to verify what has been built and spot what is missing.',
+            'If the assistant asked for a document and the person changed subject, on return it must remember, not start over. We observed this on real cases, measured it and fixed it.',
         },
       ],
     },
-    techCapabilities: {
-      index: '03',
-      label: 'Business & IT',
-      title: 'Stronger releases. Fewer surprises in production.',
-      kicker: 'For technology teams',
-      subtitle: 'Consistent requirements. Verified code. Automated tests.',
+    documentMemory: {
+      index: '02',
+      label: 'The technology',
+      title: 'Two memories, one engine.',
+      kicker: 'Memory of documents and code',
+      subtitle: 'What the written sources say.',
       items: [
         {
-          title: 'Verify requirement quality.',
+          title: 'Atomic units, not pages.',
           body:
-            'Spot ambiguities, contradictions, duplications and gaps, to make every requirement clear, consistent and verifiable.',
+            'Every sentence of a specification, a set of minutes or a manual becomes atomic claims: who must do what, under which condition. Code enters the same base.',
         },
         {
-          title: 'Understand the code and the impact of changes.',
+          title: 'Every unit keeps its source and its weight.',
           body:
-            'Explore the implementation and link requirements to the components involved, to know where to intervene and which dependencies to consider.',
+            'The link to the document, the paragraph and the line always remains. And sources are not all equal: an approved specification outweighs meeting minutes, and retrieval knows it.',
         },
         {
-          title: 'Verify that the code matches the requirements.',
+          title: 'The same graph from the same documents.',
           body:
-            'Compare the implementation against expected behaviours and surface missing functionality, unmet rules and discrepancies.',
+            'The knowledge base is built deterministically. When a document changes, you see exactly what changes and where.',
         },
         {
-          title: 'Generate test plans and automated tests from requirements.',
+          title: 'Conflicts and gaps surface.',
           body:
-            'Automatically derive test cases and their automations, with deterministic, repeatable checks traceable back to the originating requirement.',
+            'When two sources disagree, the engine says so instead of silently picking one. When a piece is missing, it flags it.',
+        },
+      ],
+    },
+    promises: {
+      index: '03',
+      label: 'The four promises',
+      title: 'Remember everything that matters. And be able to prove it.',
+      kicker: 'What we demand of our technology',
+      subtitle: 'Remember, organise, retrieve: every step with evidence.',
+      items: [
+        {
+          title: 'Remember, not just search.',
+          body:
+            'Extract the units that matter, organise them by subject and relation, retrieve them at the right moment. A failure in any of the three steps makes the other two useless.',
+        },
+        {
+          title: 'Maximum coverage.',
+          body:
+            'Finding a relevant piece is not enough: you need all the necessary pieces, including exceptions and conditions stated elsewhere. We measure coverage on questions with known answers, not plausibility.',
+        },
+        {
+          title: 'Auditable.',
+          body:
+            'Every answer can be reconstructed step by step: what was retrieved, why, in which order. And the same data always yields the same memory.',
+        },
+        {
+          title: 'Tied to the source.',
+          body:
+            'Every memory points to the message, the paragraph or the line of code it comes from. Readers use it to verify; the engine uses it to notice conflicts.',
         },
       ],
     },
     indexable: {
       index: '04',
-      label: 'Indexable',
-      title: 'Indexable: consolidate or build your product and service knowledge.',
+      label: 'How we verify it',
+      title: 'How we verify that the memory is right.',
       intro:
-        'Indexable is our proprietary AI technology that links documentation and code to reconstruct how your product works, with information verifiable against its original sources.',
+        'Ormentis is our technology for the memory of documents and code. Here we use it to show the method: how sources become a knowledge base, how coverage is measured, and how every answer leaves its trail.',
       capabilities: [
         {
-          title: 'Reconstruct how the product works and how it can evolve.',
+          title: 'From sources to a knowledge base.',
           body:
-            'Connect what is described in documents, decided in meetings and implemented in code. Spot existing conflicts and simulate the introduction of new features to assess their impact and incompatibilities with the current ones.',
+            'Specifications, minutes, manuals and code become a graph of atomic claims, each with its source. Conversations enter the same graph, as facts and commitments.',
         },
         {
-          title: 'Trace it back to the source.',
-          body: 'Open the document or the code a piece of information comes from, to verify it and dig deeper.',
+          title: 'The measure: coverage, not plausibility.',
+          body:
+            'We compare an agent with the memory and an agent with documents alone on the same questions, counting how many of the necessary claims each one retrieved.',
         },
         {
-          title: 'Start every change from a common base.',
-          body:
-            'Use product knowledge to define consistent requirements, verify the implementation and generate test plans and automated tests.',
+          title: 'The trail of every answer.',
+          body: 'Which claims were retrieved, why those, with citations from the original text.',
         },
       ],
       diagram: {
-        sources: 'Documents · Meeting minutes · Specifications · Manuals · Procedures · Code',
-        name: 'Indexable',
+        sources: 'Conversations · Specifications · Minutes · Manuals · Procedures · Code',
+        name: 'Ormentis',
         ops: 'Connects information and traces it back to its sources.',
-        output: 'Features · Rules · Requirements · Dependencies',
-        consumers: 'A knowledge base people and AI agents can query.',
+        output: 'Facts · Rules · Requirements · Dependencies · Commitments',
+        consumers: 'A memory people and AI agents can query.',
       },
       motion: {
         label: 'How it works',
-        ariaLabel: 'Animation: how Indexable works, from grammatical extraction to code verification',
+        ariaLabel: 'Animation: how Ormentis works, from grammatical extraction to code verification',
         controls: { play: 'Play', pause: 'Pause', replay: 'Replay', goTo: 'Go to step', fullscreen: 'Watch full screen', close: 'Close' },
         introSub: 'FROM DOCUMENTS TO A KNOWLEDGE BASE',
         steps: [
@@ -690,8 +840,8 @@ export const content: Record<Lang, Content> = {
           },
           {
             eyebrow: '03 / 07 · Plugin for Claude Code and Codex',
-            title: 'Indexable in your agents',
-            caption: 'Indexable augments your agents: compared with just uploading documents, more complete answers with sources, and changes written with the right requirements.',
+            title: 'Ormentis in your agents',
+            caption: 'Ormentis augments your agents: compared with just uploading documents, more complete answers with sources, and changes written with the right requirements.',
             short: 'Plugin',
           },
           {
@@ -750,7 +900,7 @@ export const content: Record<Lang, Content> = {
         reqsLabel: 'REQUIREMENTS DERIVED FROM THE KNOWLEDGE BASE  ·  DETERMINISTIC CHECK',
         plugin: {
           tabs: ['CLAUDE CODE', 'CODEX'],
-          header: 'INDEXABLE PLUGIN',
+          header: 'ORMENTIS PLUGIN',
           q1: 'When must a mandate be rejected?',
           call1: 'querying the knowledge base',
           answer: 'When the signature date is missing.',
@@ -758,7 +908,7 @@ export const content: Record<Lang, Content> = {
           q2: 'Add the check to MandateValidator.java',
           call2: 'linked requirements: REQ-014, REQ-022',
           done: 'The agent writes the change with the right requirements.',
-          versus: ['Agent + Indexable', '  beats  ', 'agent + uploaded documents'],
+          versus: ['Agent + Ormentis', '  beats  ', 'agent + uploaded documents'],
         },
         modules: {
           label: 'ONE KNOWLEDGE BASE, FOR PEOPLE AND AGENTS',
@@ -778,13 +928,13 @@ export const content: Record<Lang, Content> = {
         summaryCheck: '4 REQUIREMENTS  ·  3 CONSISTENT  ·  1 CONFLICT',
         summaryCode: '2 COVERED  ·  1 MISSING  ·  3 TESTS GENERATED',
         missingComment: '// no call to notifyDebtor() found',
-        outroLine: 'Explainable, auditable AI for regulated industries.',
+        outroLine: 'Explainable, auditable memory for regulated industries.',
         outroChain: 'FOR PEOPLE AND AGENTS  ·  REPEATABLE  ·  AUDITABLE',
         proof: {
           questionLabel: 'THE SAME DOCUMENTS, THREE GRAPH BUILDS',
           question: 'Is the knowledge graph always the same?',
           leftLabel: 'BUILT BY AN LLM, THREE TIMES',
-          rightLabel: 'BUILT BY INDEXABLE, THREE TIMES',
+          rightLabel: 'BUILT BY ORMENTIS, THREE TIMES',
           leftTags: ['RUN 1', 'RUN 2', 'RUN 3'],
           rightTags: ['RUN 1', 'RUN 2', 'RUN 3'],
           leftVerdict: 'A different graph every time',
@@ -812,14 +962,14 @@ export const content: Record<Lang, Content> = {
       },
       trust: {
         label: 'Why you can trust it',
-        title: 'Explainable, auditable AI for regulated industries.',
+        title: 'Explainable, auditable memory for regulated industries.',
         lead:
-          'Many tools build a “company brain” entirely with generative AI: the knowledge base changes with every build, even with the same model, and it is not always clear why a given answer comes back. Indexable builds the knowledge base deterministically and makes it available to people and agents: more complete answers, with a verifiable trail of every step.',
+          'Many tools build a “company brain” entirely with generative AI: the knowledge base changes with every build, even with the same model, and it is not always clear why a given answer comes back. We build the memory deterministically and make it available to people and agents: more complete answers, with a verifiable trail of every step.',
         pillars: [
           {
             title: 'Repeatable.',
             body:
-              'From the same documents, Indexable always rebuilds the same knowledge graph. When a document changes, you see exactly what changes and why.',
+              'From the same documents, Ormentis always rebuilds the same knowledge graph. When a document changes, you see exactly what changes and why.',
           },
           {
             title: 'Auditable.',
@@ -829,7 +979,7 @@ export const content: Record<Lang, Content> = {
           {
             title: 'Augments your agents.',
             body:
-              'Claude Code, Codex and other agents work on the knowledge base instead of uploaded documents alone: more complete answers, within the bounds of what is written.',
+              'Claude Code, Codex and other agents work on the memory instead of uploaded documents alone: more complete answers, within the bounds of what is written.',
           },
           {
             title: 'Built for regulated industries.',
@@ -839,7 +989,7 @@ export const content: Record<Lang, Content> = {
         ],
         table: {
           caption: 'The comparison',
-          head: ['', 'Generative AI only', 'With Indexable'],
+          head: ['', 'Generative AI only', 'With Ormentis'],
           rows: [
             ['Rebuilding the knowledge base', 'A different graph every build', 'Always the same graph'],
             ['Where the answer comes from', 'Not always stated', 'Exact citations, for every statement'],
@@ -850,38 +1000,76 @@ export const content: Record<Lang, Content> = {
         },
       },
     },
-    projects: {
+    products: {
       index: '05',
-      label: 'Real projects',
-      title: 'Indexable is already in use on complex systems.',
-      results: [
-        'Documentation consolidated in 1.5 months against an estimated 3.5–4.',
-        'A product delivered in 3 months against an estimated 15.',
-      ],
-      itemsLabel: 'Three examples in practice',
+      label: 'The products',
+      title: 'Two products apply our technology.',
+      intro:
+        'This site is about the technology. The product story, the use cases and the evidence live on the product sites.',
       items: [
         {
+          name: 'Juno',
+          kicker: 'Memory of the interaction',
+          body:
+            'A team of AI assistants for employees’ financial wellbeing, on WhatsApp, Teams, email and voice. It remembers what each person asked and decided, and picks up the thread from there.',
+          bullets: ['For companies and advisory firms', 'No app, no IT integration'],
+          cta: { label: 'Go to ojuno.ai', href: JUNO_URL, external: true },
+        },
+        {
+          name: 'Ormentis',
+          kicker: 'Memory of documents and code',
+          body:
+            'Turns specifications, minutes, manuals and code into a repeatable, auditable knowledge base for people and agents. Born on specifications for central banks, payment systems and defence systems. Formerly known as Indexable.',
+          bullets: ['Plugin for Claude Code and Codex', 'Change impact, conflicts, tests from requirements'],
+          cta: { label: 'Site coming soon: write to us', href: ORMENTIS_URL, external: false },
+        },
+      ],
+    },
+    path: {
+      index: '06',
+      label: 'The path',
+      title: 'Every project taught us something about memory.',
+      intro:
+        'The method was not designed at a desk: it is the sum of what we built, measured and corrected in real projects.',
+      steps: [
+        {
+          when: '2025',
+          title: 'Juno: the memory of the interaction',
+          body:
+            'A conversational assistant for employees. Saved messages, facts extracted per person, periodic summaries. Then the discovery that raw history is not enough: you need to know which task is open and what was promised.',
+        },
+        {
+          when: '2026',
           title: 'National payment system',
           body:
-            'Consolidation of the specifications and production of the functional documentation, with every requirement linked to its originating source.',
+            'Consolidated specifications for a payment system, with every requirement linked to its source. The first repeatable knowledge base.',
         },
         {
-          title: 'Central bank anti-money-laundering system',
+          when: '2026',
+          title: 'Central bank anti-money-laundering',
           body:
-            'Consolidation of the requirements of an AML platform: rules, features and integrations organised into a verifiable, updatable knowledge base.',
+            'Rules, features and integrations of an AML platform in a verifiable, updatable knowledge base.',
         },
         {
+          when: '2026',
           title: 'Control systems',
-          body: 'Assisted creation of manuals and technical documentation, with review and validation by domain experts.',
+          body:
+            'Manuals and technical documentation created with the help of the memory, reviewed and validated by domain experts.',
+        },
+        {
+          when: 'Today',
+          title: 'Ormentis: the graph with provenance',
+          body:
+            'Atomic claims, deterministic construction, plugins for agents, coverage measurement. The memory of documents and code, turned into a product.',
         },
       ],
     },
     credibility: {
-      index: '06',
-      label: 'Deep4IT',
-      title: 'Built on research. Applied to real needs.',
+      index: '07',
+      label: 'Where we work',
+      title: 'Where mistakes are expensive.',
       body:
-        'In regulated industries a plausible answer is not enough: you need an answer you can prove. That is why Indexable uses the same formal verification methods born in aerospace, code analysis that always gives the same result, and the latest research on knowledge graphs.',
+        'We work where an answer that cannot be explained has no value: payments, anti-money-laundering, critical systems. These contexts shaped the method: the same formal verification methods born in aerospace, code analysis that always gives the same result, and the latest research on knowledge graphs.',
       clientsLabel: 'Our clients include',
       clients: clientLogos,
       innovationLabel: 'Innovation track record',
@@ -890,25 +1078,31 @@ export const content: Record<Lang, Content> = {
       logos: innovationLogos,
     },
     about: {
-      index: '07',
-      label: 'Next step',
-      headline: 'Adopt Indexable in your team. Or hand us the project.',
+      index: '08',
+      label: 'Working with us',
+      headline: 'Try a product. Hand us a project. Or do research with us.',
       choices: [
         {
-          title: 'Use it with your team.',
-          body: 'Your team uses Indexable to produce documentation, define requirements, assess change impacts and verify the implementation.',
+          title: 'Try a product.',
+          body:
+            'Juno for the memory of the interaction, Ormentis for the memory of documents and code. Each has its own site and its own trial path.',
         },
         {
-          title: 'We take care of it.',
+          title: 'Hand us a project.',
           body:
-            'We do the work. You pay for the agreed deliverables. We combine Indexable with our expertise to produce consolidated documentation, requirements, impact assessments and implementation verification reports. Together, we agree on scope, timelines, pricing and acceptance criteria before work begins.',
+            'We do the work, you pay for the agreed deliverables: consolidated documentation, requirements, impact assessments, implementation verification. Scope, timelines, pricing and acceptance criteria are agreed before work begins.',
+        },
+        {
+          title: 'Do research with us.',
+          body:
+            'Theses, papers, talks, shared experiments on memory for AI and agents. We are incubated at Politecnico di Milano and we look for people studying the same problems.',
         },
       ],
       cta: {
         label: 'Let’s talk about your project',
         href: 'mailto:info@deep4it.com?subject=My%20project',
       },
-      tagline: 'From business intent to results you can verify.',
+      tagline: 'Remember everything that matters. Be able to prove it.',
       contacts: {
         label: 'Contact',
         lines: ['Via Italia, 44', '20900 Monza, Italy'],
