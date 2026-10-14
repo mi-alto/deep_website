@@ -140,9 +140,9 @@ export const content: Record<Lang, Content> = {
         },
         {
           name: 'Juno',
-          kicker: 'Memoria da estratti conto e corpora legali',
+          kicker: 'Conoscenza da estratti conto e corpora legali',
           body:
-            'Assistenti conversazionali su WhatsApp e Teams con memoria delle conversazioni, degli estratti conto dei clienti e dei corpora legali sul diritto del lavoro.',
+            'Assistenti conversazionali su WhatsApp e Teams con conoscenza ricavata dalle conversazioni, dagli estratti conto dei clienti e dai corpora legali sul diritto del lavoro.',
           cta: { label: 'ojuno.ai', href: JUNO_URL },
         },
       ],
@@ -227,9 +227,9 @@ export const content: Record<Lang, Content> = {
         },
         {
           name: 'Juno',
-          kicker: 'Memory from bank statements and legal corpora',
+          kicker: 'Knowledge from bank statements and legal corpora',
           body:
-            'Conversational assistants on WhatsApp and Teams with memory of conversations, of customers’ bank statements and of legal corpora on employment law.',
+            'Conversational assistants on WhatsApp and Teams with knowledge drawn from conversations, customers’ bank statements and legal corpora on employment law.',
           cta: { label: 'ojuno.ai', href: JUNO_URL },
         },
       ],
