@@ -88,7 +88,7 @@ export const content: Record<Lang, Content> = {
     ],
     navCta: 'Contattaci',
     hero: {
-      titleLines: ['Memoria per', 'agenti AI.'],
+      titleLines: ['Conoscenza per', 'agenti AI.'],
       lead: 'Un motore di retrieval che massimizza il recall.',
       intro:
         'Deep4IT costruisce la memoria degli agenti AI: recupera ciò che è stato detto nelle conversazioni e ciò che sta scritto nei documenti e nel codice, senza perdere nulla di ciò che serve.',
@@ -175,7 +175,7 @@ export const content: Record<Lang, Content> = {
     ],
     navCta: 'Get in touch',
     hero: {
-      titleLines: ['Memory for', 'AI agents.'],
+      titleLines: ['Knowledge for', 'AI agents.'],
       lead: 'A retrieval engine that maximises recall.',
       intro:
         'Deep4IT builds the memory of AI agents: it retrieves what was said in conversations and what is written in documents and code, without losing anything that matters.',
